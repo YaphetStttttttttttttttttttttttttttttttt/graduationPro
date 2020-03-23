@@ -29,7 +29,7 @@ public class LoginController {
     		}else {
     			//验证管理员信息成功
     			session.setAttribute("admin", username);
-    			mav.setViewName("redirect:manageer");
+    			mav.setViewName("manageer");
             	return mav;
     		}
         }else {
@@ -43,7 +43,7 @@ public class LoginController {
             	}else {
             		//验证教师信息成功
             		session.setAttribute("tid", uname);
-            		mav.setViewName("redirect:teacher");
+            		mav.setViewName("teacher");
                 	return mav;
             	}
             	
