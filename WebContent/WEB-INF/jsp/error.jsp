@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h3>哎呦，系统失联了...</h3>
+<h3>哎呦，系统失联了...LLLLLLL</h3>
  
       <%
           Exception ex = (Exception) request.getAttribute("exception");
