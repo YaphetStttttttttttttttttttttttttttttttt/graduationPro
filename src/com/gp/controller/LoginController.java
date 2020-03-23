@@ -65,7 +65,7 @@ public class LoginController {
 	}
 	@RequestMapping("3")
 	public String admin() {
-		return "manageer";
+		return "m-coursetj";
 	}
 	public static boolean isInteger(String str) {  
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");  
