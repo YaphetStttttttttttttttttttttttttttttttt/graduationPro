@@ -26,6 +26,7 @@ public class StudentController {
         mav.setViewName("listStudent");
         return mav;
     }
+    //test.classpath
     @RequestMapping(value="{name}")
 	public String commonHandler(@PathVariable String name) {
 		return name;
