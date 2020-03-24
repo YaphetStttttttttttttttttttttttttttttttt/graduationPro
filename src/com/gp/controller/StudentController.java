@@ -26,7 +26,7 @@ public class StudentController {
         mav.setViewName("listStudent");
         return mav;
     }
-    //test.classpath
+    //test.classpath删除
     @RequestMapping(value="{name}")
 	public String commonHandler(@PathVariable String name) {
 		return name;
