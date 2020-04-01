@@ -1,6 +1,5 @@
 package com.gp.model.pojo;
 
-import java.sql.Date;
 import java.util.List;
 
 import com.gp.model.vo.SchoolTerm;

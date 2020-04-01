@@ -7,7 +7,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.core.NestedIOException;
  
 public class BeanFactory extends SqlSessionFactoryBean {
- 
+	
     @Override
     protected SqlSessionFactory buildSqlSessionFactory() throws IOException {
         try{
