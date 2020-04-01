@@ -7,7 +7,7 @@
  
 <div  class="panel panel-primary">
   <div class="panel-heading" style="height:140px;">
-    <h1 >成绩查询系统</h1> 当前位置：教师${tid}<button type="button" class="btn btn-default btn-lg" style="float:right;">
+    <h1 >成绩查询系统</h1> 当前位置：教师${teacher.username.name}<button type="button" class="btn btn-default btn-lg" style="float:right;">
   <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销
 </button>
   </div>

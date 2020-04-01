@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+    <mapper namespace="com.gp.mapper.DepartmentMapper">
+    	<sql id="key">
+    		id,name
+    		<trim prefix=",">
+    			<if test="address != null and address != '' ">
+    				address
+    			</if>
+    			<if test="tel != null and tel != '' ">
+    				tel
+    			</if>
+    		</trim>
+    	</sql>
+    	<sql id="values">
+    		#{id},#{name}
+    		<trim prefix=",">
+    			<if test="address != null and address != '' ">
+    				#{address},
+    			</if>
+    			<if test="tel != null and tel != '' ">
+    				#{tel},
+    			</if>
+    		</trim>
+    	</sql>
+        <insert id="add" parameterType="Department">
+        	insert into department(<include refid="key"/>) values(<include refid="values"/>)
+        </insert>
+        <select id="getIdByName" resultType="Integer">
+        	select id from department where name = #{name}
+        </select>
+        <select id="getCountByIdAName" resultType="int">
+        	select count(*) from department where name = #{name} or id = #{id}
+        </select>
+    </mapper>

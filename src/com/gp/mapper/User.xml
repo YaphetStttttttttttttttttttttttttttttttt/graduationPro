@@ -4,13 +4,64 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
     <mapper namespace="com.gp.mapper.UserMapper">
-        <select id="slogin" resultType="int">
-            select count(*) from s_user where username = #{username} and password = #{password}
+    	<resultMap id="StudentUserBean" type="StudentUser">
+    		<result column="password" property="password" />
+    		<result column="nickname" property="nickname" />
+    		<result column="prp" property="prp" />
+    		<result column="pra" property="pra" />
+    		<result column="rlip" property="rlip" />
+    		<result column="rltime" property="rltime" />
+    		<association  property="username" javaType="Student">
+                <id column="id" property="id" />
+                <result column="name" property="name" />
+                <result column="age" property="age" />
+                <result column="tel" property="tel" />
+                <result column="address" property="address" />
+                <result column="e_mail" property="e_mail" />
+                <association property="sex" javaType="com.gp.model.vo.Sex">
+                	<result column="sex" property="num"/>
+                </association>
+            </association >	
+    	</resultMap>
+    	<resultMap id="TeacherUserBean" type="TeacherUser">
+    		<result column="password" property="password" />
+    		<result column="nickname" property="nickname" />
+    		<result column="prp" property="prp" />
+    		<result column="pra" property="pra" />
+    		<result column="rlip" property="rlip" />
+    		<result column="rltime" property="rltime" />
+    		<association  property="username" javaType="Teacher">
+                <id column="id" property="id" />
+                <result column="name" property="name" />
+                <result column="title" property="title" />
+                <result column="tel" property="tel" />
+                <result column="address" property="address" />
+                <result column="e_mail" property="e_mail" />
+                <association property="sex" javaType="com.gp.model.vo.Sex">
+                	<result column="sex" property="num"/>
+                </association>
+            </association >	
+    	</resultMap>
+        <select id="slogin" resultMap="StudentUserBean">
+            select user.*,s.* from s_user user
+            	left join student s on s.id = user.username
+            	where user.username = #{username} and password = #{password}
         </select>
-        <select id="tlogin" resultType="int">
-            select count(*) from t_user where username = #{username} and password = #{password}
+        <select id="tlogin" resultMap="TeacherUserBean">
+            select t.*,user.* from t_user user 
+            	left join teacher t on t.id = user.username
+            	where username = #{username} and password = #{password}
         </select>
-        <select id="alogin" resultType="int">
-            select count(*) from admin where username = #{username} and password = #{password}
+        <select id="alogin" resultType="Admin">
+            select * from admin where username = #{username} and password = #{password}
         </select>
+        <insert id="addStudent">
+        	insert into s_user(username) values(#{username})
+        </insert>
+        <insert id="addTeacher">
+        	insert into t_user(username) values(#{username})
+        </insert>
+        <insert id="addAdmin">
+        	insert into admin(username) values(#{username})
+        </insert>
     </mapper>

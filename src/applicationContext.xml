@@ -31,8 +31,8 @@
       </property>    
     </bean>
      
-    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="typeAliasesPackage" value="com.gp.pojo" />
+    <bean id="sqlSession" class="com.gp.bean.BeanFactory">
+        <property name="typeAliasesPackage" value="com.gp.model.pojo" />
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath:com/gp/mapper/*.xml"/>
     </bean>
@@ -40,5 +40,25 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.gp.mapper"/>
     </bean>
+    
+    <!--     <tx:annotation-driven transaction-manager="transactionManager"/> -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+     
+    <tx:advice id="txadvice" transaction-manager="transactionManager"> 
+        <tx:attributes> 
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" /> 
+            <tx:method name="del*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="edit*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/> 
+            <tx:method name="list*" propagation="REQUIRED" rollback-for="Exception"/> 
+        </tx:attributes> 
+    </tx:advice> 
+        
+    <aop:config> 
+        <aop:pointcut id="serviceMethod" expression="execution(* com.gp.service.*.*(..))"/> 
+        <aop:advisor pointcut-ref="serviceMethod" advice-ref="txadvice"/> 
+    </aop:config>   
     
 </beans>
