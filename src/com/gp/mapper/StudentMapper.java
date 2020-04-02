@@ -2,14 +2,16 @@ package com.gp.mapper;
 
 import java.util.List;
 
-import com.gp.pojo.Student;
+import org.apache.ibatis.annotations.Param;
+
+import com.gp.model.pojo.Student;
 
 public interface StudentMapper {
 	public int add(Student student); 
     
+    public int getById(@Param("id") long id); 
+	
     public void delete(int id); 
-        
-    public String get(int id); 
       
     public int update(Student student);  
         
