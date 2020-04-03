@@ -7,17 +7,16 @@
  
 <div  class="panel panel-primary" style="height:500px;width:1100px;">
   <div class="panel-heading" style="height:auto;">
-   当前位置：学生>学生选课
+   当前位置：教师>课程详细信息
   </div>
    <div class="panel-body"  style="margin:50px; height:550px;">
     <table class="table table-striped table-bordered table-hover  table-condensed">
   <thead>
      <th>序号</th>
-     <th>课程代码</th>
      <th>课程名称</th>
-     <th>课程性质</th>
-     <th>学分</th>
-     <th></th>
+     <th>上课地点</th>
+     <th>上课时间</th>
+     <th>选课学生</th>
     
   </thead>
   <tbody>
@@ -26,40 +25,40 @@
         <td></td>  
         <td></td>  
         <td></td>
-        <td></td>  
-        <td><center><button type="button" class="btn btn-primary">选课</button></center></td>   
+        <td></td>
+         
      </tr>
  <tr>
        <td>2</td> 
         <td></td>  
         <td></td>  
         <td></td>
-        <td></td>  
-        <td><center><button type="button" class="btn btn-primary">选课</button></center></td>    
+        <td></td>
+        
      </tr>
  <tr>
       <td>3</td> 
         <td></td>  
         <td></td>  
         <td></td>
-        <td></td>  
-        <td><center><button type="button" class="btn btn-primary">选课</button></center></td>    
+        <td></td>
+           
      </tr>
       <tr>
        <td>4</td> 
         <td></td>  
-        <td></td>  
+        <td></td> 
+        <td></td> 
         <td></td>
-        <td></td>  
-        <td><center><button type="button" class="btn btn-primary">选课</button></center></td>    
+        
      </tr>
       <tr>
        <td>5</td> 
         <td></td>  
         <td></td>  
         <td></td>
-        <td></td>  
-        <td><center><button type="button" class="btn btn-primary">选课</button></center></td>   
+        <td></td>
+         
      </tr>
   </tbody>
 </table>
