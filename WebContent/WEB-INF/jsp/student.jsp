@@ -22,66 +22,41 @@
   <li class="list-group-item list-group-item-info" data-id="cjcx">成绩查询</li>
   <li class="list-group-item list-group-item-warning" data-id="grxxgl">个人信息管理</li>
   <li class="list-group-item list-group-item-danger" data-id="xsxk">学生选课</li>
-</ul>
-            
-
+</ul>     
         </div>
         <div id="content" style="float:left;margin-left:1px;"></div>
   </div>
 </div>
 <script>
     $(function() {
-
         $(".list-group").on("click", "li", function() {
-
             var sId = $(this).data("id"); //获取data-id的值
             window.location.hash = sId; //设置锚点
-
             loadInner(sId);
-
         });
         function loadInner(sId) {
-
             var sId = window.location.hash;
-
             var pathn, i;
-
             switch(sId) {
             case "#yhzx":
-
                 pathn = "studentcenter";
-
                 i = 0;
-
                 break;
             case "#cjcx":
-
                 pathn = "studentscore";
-
                 i = 1;
-
                 break;
             case "#grxxgl":
-
                 pathn = "studentinfo";
-
                 i = 2;
-
                 break;
             case "#xsxk":
-
                 pathn = "studentchoose";
-
                 i = 3;
-
-                break;
-         
+                break;   
             default:
-
                 pathn = "studentcenter";
-
                 i = 0;
-
                 break;
             }
             $("#content").load(pathn); //加载相对应的内容

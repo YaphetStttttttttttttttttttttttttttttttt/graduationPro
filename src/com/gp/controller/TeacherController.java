@@ -2,6 +2,7 @@ package com.gp.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,18 +111,27 @@ public class TeacherController {
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
 	}
-	private Teacher getTeacherFormData(HttpServletRequest httpServletRequest) {
+	private Teacher getTeacherFormData(HttpServletRequest httpServletRequest) throws UnsupportedEncodingException {
+		httpServletRequest.setCharacterEncoding("UTF-8");
 		Teacher teacher = new Teacher();
 		Sex sex = new Sex();
 		Department deid = new Department();
-		teacher.setId( Long.valueOf( httpServletRequest.getParameter("id") ) );
-		teacher.setName( httpServletRequest.getParameter("name") );
+		System.out.println(httpServletRequest.getParameter("tid"));
+		System.out.println(httpServletRequest.getParameter("tname"));
+		teacher.setId( Long.valueOf( httpServletRequest.getParameter("tid") ) );
+		teacher.setName( httpServletRequest.getParameter("tname") );
 		sex.setSex( httpServletRequest.getParameter("sex") );
 		teacher.setSex(sex);
 		deid.setName( httpServletRequest.getParameter("department") );
 		teacher.setDeid(deid);
 		teacher.setTitle( httpServletRequest.getParameter("title") );
-		teacher.setTel( Long.valueOf( httpServletRequest.getParameter("tel") ) );
+		String tel = httpServletRequest.getParameter("tel");
+		if(tel ==null || tel.equals("")) {
+			
+		}else {
+			teacher.setTel( Long.valueOf(tel) );
+		}
+		
 		teacher.setE_mail( httpServletRequest.getParameter("e_mail") );
 		return teacher;	
 	}

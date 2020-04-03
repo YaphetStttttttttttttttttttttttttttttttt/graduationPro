@@ -27,6 +27,7 @@ import com.gp.model.vo.SchoolTerm;
 import com.gp.service.CoursePlanService;
 import com.gp.service.CourseService;
 import com.gp.service.TeacherService;
+import com.microsoft.schemas.office.visio.x2012.main.RowType;
 
 @Controller
 public class CoursePlanController {
@@ -50,9 +51,16 @@ public class CoursePlanController {
 			// 2.读取页脚sheet
 			Sheet sheetAt = wb.getSheetAt(0);
 			// 3.循环读取某一行
+			Cell cell = null;
 			for (Row row : sheetAt) {
 				// 4.读取每一行的单元格
 				if(row.getRowNum() == 0) continue;
+				boolean[] isBlankRow = {false,false,false,false,false};
+				for(int count = 0; count < 5; count++) {
+					cell = row.getCell(count);
+					if(cell == null || cell.getCellType() == CellType.BLANK) isBlankRow[count] = true;		
+				}
+				if(isBlankRow[0] == isBlankRow[1] == isBlankRow[2] == isBlankRow[3] == isBlankRow[4] == true) continue;
 				if(!rowFlag) break;
 				//处理这一行数据
 				CoursePlanVo coursePlanVo = new CoursePlanVo();
