@@ -18,21 +18,21 @@
   <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 功能菜单
   </div>
         <ul class="list-group">
-  <li class="list-group-item list-group-item-info" data-id="xsxxgl" style="height:80px;"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>学生信息管理</li>
+  <li class="list-group-item list-group-item-info" data-id="xsxxgl" style="height:80px;"data-toggle="tooltip" data-placement="right" title="学生信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>学生信息管理</li>
   
-  <li class="list-group-item list-group-item-warning" data-id="jsxxgl"style="height:80px;"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>教师信息管理</li>
+  <li class="list-group-item list-group-item-warning" data-id="jsxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="教师信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>教师信息管理</li>
 
-  <li class="list-group-item list-group-item-success" data-id="bjxxgl"style="height:80px;"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>班级信息管理</li>
+  <li class="list-group-item list-group-item-success" data-id="bjxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="班级信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>班级信息管理</li>
  
-  <li class="list-group-item list-group-item-warning" data-id="kcapgl"style="height:80px;"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程安排管理</li>
+  <li class="list-group-item list-group-item-warning" data-id="kcapgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="课程安排管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程安排管理</li>
   
-  <li class="list-group-item list-group-item-success" data-id="kcxxgl"style="height:80px;"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程信息管理</li>
+  <li class="list-group-item list-group-item-success" data-id="kcxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="课程信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程信息管理</li>
   
-  <li class="list-group-item list-group-item-warning" data-id="yxxxgl"style="height:80px;"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>院系信息管理</li>
+  <li class="list-group-item list-group-item-warning" data-id="yxxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="院系信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>院系信息管理</li>
   
-  <li class="list-group-item list-group-item-success" data-id="zyxxgl"style="height:80px;"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>专业信息管理</li>
+  <li class="list-group-item list-group-item-success" data-id="zyxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="专业信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>专业信息管理</li>
  
-  <li class="list-group-item list-group-item-warning" data-id="xkxxgl"style="height:80px;"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>选课信息管理</li>
+  <li class="list-group-item list-group-item-warning" data-id="xkxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="选课信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>选课信息管理</li>
 
 </ul>
             
@@ -42,6 +42,8 @@
   </div>
 </div>
 <script>
+$(function () { $("[data-toggle='tooltip']").tooltip(); });
+
     $(function() {
 
         $(".list-group").on("click", "li", function() {

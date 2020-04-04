@@ -77,83 +77,14 @@
      </tr>
   </tbody>
 </table>
-
-  <div id="haha"  style="display:none;background-color:LightCyan;margin-top:110px;margin-left:140px;position:absolute;width:800px;">
-  <div class="col-lg-6"style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">学号</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-<div class="col-lg-6"style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">姓名</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">性别</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">班级</button>
-      </span>
-      <input type="text" class="form-control">
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">年龄</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">联系电话</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">家庭住址</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">电子邮箱</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <button type="button" id="queren" style="margin-top:50px; margin-left:350px;" class="btn btn-success">确认</button>
-  <button type="button" id="quxiao" style="margin-top:50px;" class="btn btn-warning">取消</button>
-  </div>
-   <div id="heihei"  style="display:none;background-color:LightCyan;margin-top:70px;margin-left:140px;position:absolute;width:800px;">
+   <div id="haha"  style="display:none;background-color:LightCyan;margin-top:70px;margin-left:140px;position:absolute;width:800px;">
    <form name="myForm" action="demo_form.php" onsubmit="return validateForm()" method="post">
   <div class="col-lg-6"style="margin-top:50px;">
     <div class="input-group">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">学号</button>
       </span>
-      <input type="text" class="form-control" name="xuehao" required="required" >
+      <input id="sid" type="text" class="form-control"   >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
 <div class="col-lg-6"style="margin-top:50px;">
@@ -161,7 +92,7 @@
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">姓名</button>
       </span>
-      <input type="text" class="form-control" name="xingming" required="required">
+      <input id="sname" type="text" class="form-control" >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   <div class="col-lg-6" style="margin-top:50px;">
@@ -169,7 +100,7 @@
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">性别</button>
       </span>
-      <input type="text" class="form-control" name="sex" required="required">
+      <input id="sex" type="text" class="form-control" >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   <div class="col-lg-6" style="margin-top:50px;" >
@@ -177,7 +108,7 @@
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">班级</button>
       </span>
-      <input type="text" class="form-control" required="required" >
+      <input id="classes" type="text" class="form-control" >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   <div class="col-lg-6" style="margin-top:50px;">
@@ -185,7 +116,7 @@
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">年龄</button>
       </span>
-      <input type="text" class="form-control" >
+      <input  id="age" type="text" class="form-control" >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   <div class="col-lg-6" style="margin-top:50px;">
@@ -193,7 +124,7 @@
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">联系电话</button>
       </span>
-      <input type="text" class="form-control" >
+      <input id="tel" type="text" class="form-control" >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   <div class="col-lg-6" style="margin-top:50px;">
@@ -201,7 +132,7 @@
       <span class="input-group-btn">
         <button class="btn btn-default" type="button" >家庭住址</button>
       </span>
-      <input type="text" class="form-control" >
+      <input id="address" type="text" class="form-control" >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   <div class="col-lg-6" style="margin-top:50px;">
@@ -209,13 +140,13 @@
       <span class="input-group-btn">
         <button class="btn btn-default" type="button" >电子邮箱</button>
       </span>
-      <input type="text" class="form-control" name="email" >
+      <input id="e_mail" type="text" class="form-control" name="email" >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
-  <input type="submit" value="添加" style="margin-top:20px; margin-left:350px;" class="btn btn-success">
-  <button type="button" id="quxiao1" style="margin-top:20px;" class="btn btn-warning">取消</button>
-  
- <div class="form-group" id="Student" class="col-sm-10" style="float: left; margin-left: 150px;margin-top: 35px;">
+  <button type="button" id="queren" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success" onclick="putFormData()">添加</button>
+    <button type="button" id="xgai" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success">修改</button>
+    <button type="button" id="quxiao" style="margin-top:50px;" class="btn btn-warning">取消</button>
+ <div class="form-group" id="StudentExcelInput" class="col-sm-10" style="float: left; margin-left: 150px;margin-top: 35px;">
  通过excel表单添加：
 	<input id="StudentExcelFile" name="excelFile" type="file" class="form-control"style="width: 300px; display: inline;" />
 	<input id="insertStudentExcelButton" type="button" class="btn btn-primary" onclick="inputStudent()" style="width: 60px;height: 35px;" value="上传" />
@@ -236,16 +167,28 @@ $(function(){
 	  
 	});
 $(function(){
-	var div = $("#heihei");
-	   $("#quxiao1").click(function(){
-	      div.hide();
-	   });
-	   $("#tjxsxx").click(function(){
-	      div.show();
-	   });
-	  
+	var div = $("#haha");
+	$("#quxiao").click(function(){
+		div.hide();   
+		$("#xgai").hide();
+		$("#queren").hide();
+		$("#StudentExcelInput").hide();
 	});
-
+	$("#xiugai").click(function(){
+		div.hide(); 
+		$("#queren").hide();
+		$("#StudentExcelInput").hide();
+		$("#xgai").show();
+		div.show();
+	});
+	$("#tjxsxx").click(function(){
+		div.hide(); 
+		$("#xgai").hide();
+		$("#StudentExcelInput").show();
+		$("#queren").show();
+		div.show(); 
+	});
+});
 $(document).ready(function(){
 });
 
@@ -279,25 +222,30 @@ function inputStudent(){
 	});
 }
 function validateForm() {
-    var x = document.forms["myForm"]["xuehao"].value;
+	var sid = document.getElementById("sid").value;
+	var sname = document.getElementById("sname").value;
+	var sex = document.getElementById("sex").value;
+	var classes = document.getElementById("classes").value;
     var reg = /^[0-9]+$/; 
-    if(x!=""&&!reg.test(x)){ 
-    alert('学号为数字！'); 
-    return false; 
+    if(sid == "" || !reg.test(sid) ){ 
+    	alert('学号不能为空且只能为数字！'); 
+    	return false; 
     } 
-
-	 var x = document.forms["myForm"]["xingming"].value;
-	 var reg=/^[\u0391-\uFFE5]+$/; 
-	 if(x!=""&&!reg.test(x)){ 
-	 alert('姓名为中文！');
-	 return false; 
-	 } 
-	 var x = document.forms["myForm"]["sex"].value;
-	 var  reg = /^男$|^女&/; 
-	 if(!reg.test(x) || x==''){ 
-	 alert('性别只能为男或女');
-	 return false; 
-	 }
+    var reg=/^[\u0391-\uFFE5]+$/; 
+    if(sname == "" || !reg.test(sname) ){ 
+    	alert('姓名不能为空且只能为中文！');
+    	return false; 
+    } 
+    var reg = /^男$|^女$/; 
+    if(sex == '' || !reg.test(sex)){ 
+    	alert('性别不能为空且只能为男或女');
+    	return false; 
+    }
+    if(classes == ""){
+    	alert("所属班级不能为空");
+    	return false;
+    }
+    return true
 }
 
 
