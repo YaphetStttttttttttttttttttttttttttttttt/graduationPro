@@ -9,19 +9,18 @@
 <div class="panel-heading" style="height:auto;">
 当前位置：管理员>教师信息管理
 </div>
-
-<div class="btn-group" style=" width:25%; height:10%;  float:left; margin-left:1%;">
+<div class="btn-group" style=" width:13%; height:10%;  float:left; margin-left:1%;">
   <div class="input-group">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button">教师编号</button>
+        <button class="btn btn-default" type="button">姓名</button>
       </span>
       <input type="text" class="form-control" >
     </div>
 </div>
-<div class="btn-group" style=" width:20%; height:10%;  float:left; margin-left:1%;">
+<div class="btn-group" style=" width:25%; height:10%;  float:left; margin-left:1%;">
   <div class="input-group">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button">姓名</button>
+        <button class="btn btn-default" type="button">教师编号</button>
       </span>
       <input type="text" class="form-control" >
     </div>
@@ -39,15 +38,21 @@
 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
 </button>
 </div>
-<div class="btn-group" style=" width:auto; height:auto;  float:left; margin-left:15%;">
+<div class="btn-group" style=" width:auto; height:auto;  float:left; margin-left:10%;">
+  <button type="button" id="scjsxx" class="btn btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除教师信息
+  </button>
+</div>
+<div class="btn-group" style=" width:auto; height:auto;  float:left; margin-left:2%;">
   <button type="button" id="tjjsxx" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加教师信息
   </button>
 </div>
 
+
 <div class="panel-body" style="height:1000px;" >
 
-<table class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:1080px;margin-top:30px;">
+<table id="xixi" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:1080px;margin-top:30px;">
   <thead>
+  <th id="selectall"style="display:none;"><input type="checkbox" onclick="selectAll(this)" >全选</th>
      <th>教师编号</th>
      <th>姓名</th>
      <th>性别</th>
@@ -60,6 +65,7 @@
   </thead>
   <tbody>
      <tr>
+      <td  id="select" style="display:none;"><input type="checkbox" name="ids"></td>
         <td></td>  
         <td></td>  
         <td></td>  
@@ -68,18 +74,19 @@
         <td></td>  
         <td></td>    
         <td><center><button type="button" id="xiugai" class="btn btn-info"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>修改</button>
-        <button type="button" id="shanchu" class="btn btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除</button></center>
+        <button type="button" id="shanchu" class="btn btn-danger" style="display:none;"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除</button>
+        </center>
         </td> 
      </tr>
-  </tbody>
+       </tbody>
 </table>
-<div id="haha"  style="display:none;background-color:LightCyan;margin-top:110px;margin-left:140px;position:absolute;width:800px;">
+<div id="haha"  style="display:none;background-color:LightCyan;margin-top:50px;margin-left:140px;position:absolute;width:800px;">
 	<div class="col-lg-6"style="margin-top:50px;">
 		<div class="input-group">
 			<span class="input-group-btn">
 			<button class="btn btn-default" type="button">教师编号</button>
 			</span>
-			<input id="tid" type="text" class="form-control" required="required">
+			<input id="tid" type="text" class="form-control" >
 		</div><!-- /input-group -->
 	</div><!-- /.col-lg-6 -->
 	<div class="col-lg-6"style="margin-top:50px;">
@@ -87,7 +94,7 @@
 			<span class="input-group-btn">
 			<button class="btn btn-default" type="button">姓名</button>
 			</span>
-			<input id="tname" type="text" class="form-control" required="required">
+			<input id="tname" type="text" class="form-control" >
     	</div><!-- /input-group -->
     </div><!-- /.col-lg-6 -->
     <div class="col-lg-6" style="margin-top:50px;">
@@ -140,10 +147,21 @@
 		<input id="insertTeacherExcelButton" type="button" class="btn btn-primary" onclick="inputTeacher()" style="width: 60px;height: 35px;" value="上传" />
 	</div>
 </div>
+<div id="oooo"style="display:none;margin-top:580px;margin-left:420px">
+<button type="button" id="plsc"  class="btn btn-danger"  onclick="deleteFormData()">批量删除</button>
+<button type="button" id="qx" class="btn btn-warning"  >取消</button>
+</div>
 
 </div>
 </div>
 <script>
+function selectAll(choiceBtn) {
+    var arr = document.getElementsByName("ids")
+    for(var i=0;i<arr.length;i++){
+        arr[i].checked=choiceBtn.checked
+    }
+}
+
 $(document).ready(function(){
 });
 function inputTeacher(){
@@ -188,18 +206,44 @@ $(function(){
 		$("#TeacherExcelInput").hide();
 	});
 	$("#xiugai").click(function(){
-		div.hide(); 
+		div.hide();
 		$("#queren").hide();
 		$("#TeacherExcelInput").hide();
 		$("#xgai").show();
 		div.show();
 	});
 	$("#tjjsxx").click(function(){
-		div.hide(); 
+		div.hide();
 		$("#xgai").hide();
 		$("#TeacherExcelInput").show();
 		$("#queren").show();
 		div.show(); 
+	});
+	
+});
+
+$(function(){
+	var table = $("#xixi");
+	$("#scjsxx").click(function(){
+		table.hide();
+		$("#haha").hide();
+		$("#xiugai").hide();
+		$("#selectall").show();
+		$("#select").show();
+		$("#shanchu").show();
+		$("#oooo").show();
+		table.show();
+		
+	});
+	$("#qx").click(function(){
+		table.hide();
+		$("#xiugai").show();
+		$("#selectall").hide();
+		$("#select").hide();
+		$("#shanchu").hide();
+		$("#oooo").hide();
+		
+		table.show();
 	});
 });
 function putFormData(){
@@ -251,6 +295,33 @@ function putFormData(){
 			});
 		}
 	}
+}
+function deleteFormData() {
+	var flag = deleteForm();
+	if(flag){
+	if (confirm("确定删除？")) {
+		
+	}
+	else {
+	
+	
+	}
+}
+}
+function deleteForm(){
+var ids = document.getElementsByName("ids");               
+var flag = false ;               
+for(var i=0;i<ids.length;i++){
+    if(ids[i].checked){
+        flag = true ;
+        break ;
+    }
+}
+if(!flag){
+    alert("请最少选择一项！");
+    return false ;
+}
+return true;
 }
 function validateForm() {
 	var tid = document.getElementById("tid").value;
