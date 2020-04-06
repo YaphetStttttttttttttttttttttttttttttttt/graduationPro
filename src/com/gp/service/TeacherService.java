@@ -10,4 +10,6 @@ public interface TeacherService {
 	int add(Teacher teacher);
 	
 	int addMany(List<Teacher> listTeachers);
+	
+	List<Teacher> getAll();
 }

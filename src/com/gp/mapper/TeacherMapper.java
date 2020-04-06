@@ -10,4 +10,6 @@ public interface TeacherMapper {
 	public int add(Teacher teacher);
 	
 	public int getCountById(@Param("id") long id);
+	
+	public List<Teacher> getAll();
 }

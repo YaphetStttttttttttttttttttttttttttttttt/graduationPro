@@ -33,10 +33,27 @@
     			</if>
     		</trim>
     	</sql>
+    	<resultMap id="TeacherBean" type="Teacher">
+    		<id column="id" property="id" />
+    		<result column="name" property="name" />
+    		<result column="title" property="title" />
+    		<result column="tel" property="tel" />
+    		<result column="address" property="address" />
+    		<result column="e_mail" property="e_mail" />
+    		<association property="deid" javaType="Department">
+    			<result column="dename" property="name"/>
+    		</association>
+    		<association property="sex" javaType="com.gp.model.vo.Sex">
+    			<result column="sex" property="num"/>
+    		</association>
+    	</resultMap>
         <select id="getCountById" resultType="int">
         	select count(*) from teacher where id = #{id}
         </select>
         <insert id="add" parameterType="Teacher">
         	insert into teacher(<include refid="key"/>) values(<include refid="values"/>)
         </insert>
+        <select id="getAll" resultMap="TeacherBean">
+        	select t.*, de.*, de.name 'dename' from teacher t left join department de on t.deid = de.id
+        </select>
     </mapper>

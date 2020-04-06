@@ -44,4 +44,7 @@ public class TeacherServiceImpl implements TeacherService {
 		}
 		return flag;
 	}
+	public List<Teacher> getAll() {
+		return teacherMapper.getAll();
+	}
 }

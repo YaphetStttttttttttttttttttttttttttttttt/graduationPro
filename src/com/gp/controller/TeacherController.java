@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -17,16 +18,22 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Department;
 import com.gp.model.pojo.Teacher;
 import com.gp.model.vo.Sex;
 import com.gp.model.vo.TeacherVo;
 import com.gp.service.DepartmentService;
 import com.gp.service.TeacherService;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 @Controller
 public class TeacherController {
@@ -111,6 +118,18 @@ public class TeacherController {
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
 	}
+	@ResponseBody
+	@RequestMapping("jsxxgl")
+	public Object Manager_TeacherMana(HttpSession session) {
+		Admin user = (Admin) session.getAttribute("user");
+		List<Teacher> listTeachers = new ArrayList<Teacher>();
+		System.out.println(user != null);
+		if(user != null) {
+			listTeachers = teacherService.getAll();
+	//		obj.addObject("listTeachers",listTeachers);
+		}
+		return listTeachers;
+	}
 	private Teacher getTeacherFormData(HttpServletRequest httpServletRequest) throws UnsupportedEncodingException {
 		httpServletRequest.setCharacterEncoding("UTF-8");
 		Teacher teacher = new Teacher();
@@ -140,6 +159,12 @@ public class TeacherController {
 		if(sex.equals("男")) num = 1;
 		if(sex.equals("女")) num = 2;
 		return num;
+	}
+	private String sexString2Int(int num) {
+		String sex = "";
+		if(num == 1) sex = "男";
+		if(num == 2) sex = "女";
+		return sex;
 	}
 	private TeacherVo excelTeacherDataPro(Row row, boolean rowFlag) {
 		TeacherVo teacherVo = new TeacherVo();

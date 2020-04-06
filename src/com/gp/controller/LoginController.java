@@ -38,7 +38,7 @@ public class LoginController {
     			//验证管理员信息成功
     			Admin admin = user.alogin(username, password);
     			admin.setPassword(null);
-    			session.setAttribute("admin", admin);
+    			session.setAttribute("user", admin);
     			mav.setViewName("manageer");
             	return mav;
     		}
@@ -55,7 +55,7 @@ public class LoginController {
             		TeacherUser teacher = user.tlogin(uname, password);
             		teacher.setPassword(null);
             		teacher.getUsername().getSex().setSex( sexInt2String( teacher.getUsername().getSex().getNum() ) );
-            		session.setAttribute("teacher", teacher);
+            		session.setAttribute("user", teacher);
             		mav.setViewName("teacher");
                 	return mav;
             	}
@@ -65,7 +65,7 @@ public class LoginController {
             	StudentUser student = user.slogin(uname, password);
             	student.setPassword(null);
             	student.getUsername().getSex().setSex( sexInt2String( student.getUsername().getSex().getNum() ) );
-            	session.setAttribute("student", student);
+            	session.setAttribute("user", student);
             	mav.setViewName("student");
             	return mav;
             }

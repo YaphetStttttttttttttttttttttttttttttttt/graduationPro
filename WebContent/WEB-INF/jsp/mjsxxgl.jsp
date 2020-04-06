@@ -1,10 +1,229 @@
+<%@page import="com.alibaba.fastjson.JSONArray"%>
+<%@page import="com.gp.model.pojo.Teacher"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+String listTeachers = request.getParameter("listInfo");
+List<Teacher> list = JSONArray.parseArray(listTeachers,Teacher.class);
+%>
 <!DOCTYPE html>
 <script src="js/jquery.min.js"></script>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <script src="js/bootstrap.min.js"></script>
- 
+
+<script>
+$(document).ready(function(){
+	
+});
+$(function(){
+	var table = $("#TeacherInfoTable");
+	$("#DeleteTeacherBtn").click(function(){
+		$("#TeacherInfoTable").hide();
+		
+		$("#TeacherFormData").hide();
+		$("button[name='Update']").hide();
+		$("#selectall").show();
+		$("td[name='select']").show();
+		$("button[name='Delete']").show();
+		$("#MultiDelete").show();
+		
+		$("#TeacherInfoTable").show();
+	});
+	$("#MultiDeleteCancelBtn").click(function(){
+		$("#TeacherInfoTable").hide();
+		
+		$("button[name='Update']").show();
+		$("#selectall").hide();
+		$("td[name='select']").hide();
+		$("button[name='Delete']").hide();
+		$("#MultiDelete").hide();
+		
+		$("#TeacherInfoTable").show();
+	});
+	$("#AddTeacherBtn").click(function(){
+		$("#TeacherFormData").hide();
+		$("#TeacherFormData_UpdateBtn").hide();
+		$("#TeacherExcelInput").show();
+		$("#TeacherFormData_ConfirmBtn").show();
+		$("#TeacherFormData").show(); 
+	});
+});
+function updateTeacher(id, name, sex, department, title, tel, email) {
+	document.getElementById("tid").value = id;
+	document.getElementById("tname").value = name;
+	document.getElementById("sex").value = sex;
+	document.getElementById("department").value = department;
+	document.getElementById("title").value = title;
+	document.getElementById("tel").value = tel;
+	document.getElementById("e_mail").value = email;
+	var div = $("#TeacherFormData");
+	$("#TeacherFormData").hide();
+	$("#TeacherFormData_ConfirmBtn").hide();
+	$("#TeacherExcelInput").hide();
+	$("#TeacherFormData_UpdateBtn").show();
+	$("#TeacherFormData").show();
+}
+function selectAll(choiceBtn) {
+    var arr = document.getElementsByName("ids")
+    for(var i=0;i<arr.length;i++){
+        arr[i].checked=choiceBtn.checked
+    }
+}
+$(function(){
+	//TeacherFormData
+	var div = $("#TeacherFormData");
+	$("#TeacherFormData_CancelBtn").click(function(){
+		$("#TeacherFormData").hide();   
+		$("#TeacherFormData_UpdateBtn").hide();
+		$("#TeacherFormData_ConfirmBtn").hide();
+		$("#TeacherExcelInput").hide();
+	});
+/* 	 $("button[name='Update']").click(function(){
+		div.hide();
+		$("#TeacherFormData_ConfirmBtn").hide();
+		$("#TeacherExcelInput").hide();
+		$("#TeacherFormData_UpdateBtn").show();
+		div.show();
+	}); */
+});
+function inputTeacher(){
+	var formData = new FormData();
+	var name = $("#TeacherExcelFile").val();
+	formData.append("file",$("#TeacherExcelFile")[0].files[0]);
+	formData.append("name",name);//这个地方可以传递多个参数
+	$.ajax("${pageContext.request.contextPath}/addTeacherExcel",// 发送请求的URL字符串。
+			{
+		type : "post", //  请求方式 POST或GET
+		data:formData,
+		async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
+		// 请求成功后的回调函数。
+		processData : false,
+		contentType : false,
+		beforeSend:function(){
+			console.log("正在进行，请稍候");
+		},
+		success : function(data) {
+			var resq = eval("(" + data + ")");
+			if(resq.success == "false"){
+				alert(resq.msg);
+			}else{
+				alert("添加成功");
+				$("#TeacherFormData").hide();   
+				$("#TeacherFormData_UpdateBtn").hide();
+				$("#TeacherFormData_ConfirmBtn").hide();
+				$("#TeacherExcelInput").hide();
+			}
+		},
+		error : function(data){
+			
+		}
+	});
+}
+function putFormData(){
+	var flag = validateForm();
+	if(flag){
+		if(confirm("确定添加？")){
+			var tid = document.getElementById("tid").value;
+			var tname = document.getElementById("tname").value;
+			var sex = document.getElementById("sex").value;
+			var department =document.getElementById("department").value;
+			var title = document.getElementById("title").value;
+			var tel = document.getElementById("tel").value;
+			var e_mail = document.getElementById("e_mail").value;
+			alert(tid + tname + sex + department + title + tel + e_mail);
+			$.ajax("${pageContext.request.contextPath}/addTeacher",// 发送请求的URL字符串。
+					{
+				type : "post", //  请求方式 POST或GET
+				data:{
+					'tid':tid,
+					'tname':tname,
+					'sex':sex,
+					'department':department,
+					'title':title,
+					'tel':tel,
+					'e_mail':e_mail
+				},
+				contentType: "application/x-www-form-urlencoded",
+				async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
+				// 请求成功后的回调函数。
+			//	dataType:"json",
+				beforeSend:function(){
+					console.log("正在进行，请稍候");
+				},
+				success : function(data) {
+					var resq = eval("(" + data + ")");
+					if(resq.success == "false"){
+						alert(resq.msg);
+					}else{
+						alert("添加成功");
+						$("#TeacherFormData").hide();   
+						$("#TeacherFormData_UpdateBtn").hide();
+						$("#TeacherFormData_ConfirmBtn").hide();
+						$("#TeacherExcelInput").hide();
+					}
+				},
+				error : function(data){
+					
+				}
+			});
+		}
+	}
+}
+function deleteFormData() {
+	var flag = deleteForm();
+	if(flag){
+	if (confirm("确定删除？")) {
+		
+	}
+	else {
+	}
+}
+}
+function deleteForm(){
+var ids = document.getElementsByName("select");               
+var flag = false ;               
+for(var i=0; i<ids.length; i++){
+    if(ids[i].checked){
+        flag = true ;
+        break ;
+    }
+}
+if(!flag){
+    alert("请最少选择一项！");
+    return false ;
+}
+return true;
+}
+function validateForm() {
+	var tid = document.getElementById("tid").value;
+	var tname = document.getElementById("tname").value;
+	var sex = document.getElementById("sex").value;
+	var department = document.getElementById("department").value;
+    var reg = /^[0-9]+$/; 
+    if(tid == "" || !reg.test(tid) ){ 
+    	alert('教师编号不能为空且只能为数字！'); 
+    	return false; 
+    } 
+    var reg=/^[\u0391-\uFFE5]+$/; 
+    if(tname == "" || !reg.test(tname) ){ 
+    	alert('姓名不能为空且只能为中文！');
+    	return false; 
+    } 
+    var reg = /^男$|^女$/; 
+    if(sex == '' || !reg.test(sex)){ 
+    	alert('性别不能为空且只能为男或女');
+    	return false; 
+    }
+    if(department == ""){
+    	alert("所属院系不能为空");
+    	return false;
+    }
+    return true
+}
+</script>
+
 <div  class="panel panel-primary" style="height:700px;width:1100px;">
 <div class="panel-heading" style="height:auto;">
 当前位置：管理员>教师信息管理
@@ -34,53 +253,61 @@
     </div>
 </div>
 <div class="btn-group" style=" width:2%; height:10%;  float:left; margin-left:1%;">
-  <button type="button" class="btn btn-warning">
-<span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
-</button>
+  <button type="button" class="btn btn-warning" id="selectTeacherBtn">
+  <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
+  </button>
 </div>
 <div class="btn-group" style=" width:auto; height:auto;  float:left; margin-left:10%;">
-  <button type="button" id="scjsxx" class="btn btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除教师信息
+  <button type="button" id="DeleteTeacherBtn" class="btn btn-danger">
+  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除教师信息
   </button>
 </div>
 <div class="btn-group" style=" width:auto; height:auto;  float:left; margin-left:2%;">
-  <button type="button" id="tjjsxx" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加教师信息
+  <button type="button" id="AddTeacherBtn" class="btn btn-primary">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加教师信息
   </button>
 </div>
 
 
 <div class="panel-body" style="height:1000px;" >
 
-<table id="xixi" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:1080px;margin-top:30px;">
-  <thead>
-  <th id="selectall"style="display:none;"><input type="checkbox" onclick="selectAll(this)" >全选</th>
-     <th>教师编号</th>
-     <th>姓名</th>
-     <th>性别</th>
-     <th>所属院系</th>
-     <th>职称</th>
-     <th>联系电话	</th>
-     <th>电子邮箱</th>
-     <th><center>操作</center></th>
-   
-  </thead>
-  <tbody>
-     <tr>
-      <td  id="select" style="display:none;"><input type="checkbox" name="ids"></td>
-        <td></td>  
-        <td></td>  
-        <td></td>  
-        <td></td>
-        <td></td>  
-        <td></td>  
-        <td></td>    
-        <td><center><button type="button" id="xiugai" class="btn btn-info"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>修改</button>
-        <button type="button" id="shanchu" class="btn btn-danger" style="display:none;"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除</button>
-        </center>
+<table id="TeacherInfoTable" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:1080px;margin-top:30px;">
+<thead>
+	<th id="selectall"style="display:none;"><input type="checkbox" onclick="selectAll(this)" >全选</th>
+	<th>教师编号</th>
+	<th>姓名</th>
+	<th>性别</th>
+	<th>所属院系</th>
+	<th>职称</th>
+	<th>联系电话	</th>
+	<th>电子邮箱</th>
+	<th><center>操作</center></th> 
+</thead>
+<tbody>
+	
+	<c:forEach items='<%=list %>' var="teacher" varStatus="status"> 
+		<tr>
+		<td name="select" style="display:none;"><input name="ids" type="checkbox"></td>
+		<td>${teacher.id }</td>
+		<td>${teacher.name }</td>
+		<td>${teacher.sex.num==1?'男':'女' }</td>
+		<td>${teacher.deid.name }</td>
+		<td>${teacher.title==null?'还未填写':teacher.title }</td>
+		<td>${teacher.tel==0?'还未填写':teacher.tel }</td>
+		<td>${teacher.e_mail==null?'还未填写':teacher.e_mail }</td>
+		<td>
+			<center>
+			<button type="button" name="Update" class="btn btn-info" onclick='updateTeacher("${teacher.id}", "${teacher.name}", "${teacher.sex.num==1?'男':'女'}", 
+			"${teacher.deid.name}", "${teacher.title==null?'null':teacher.title}", "${teacher.tel==0?'null':teacher.tel}", "${teacher.e_mail==null?'null':teacher.e_mail}")'><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>修改</button>
+        	<button type="button" name="Delete" class="btn btn-danger" style="display:none;"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除</button>
+        	</center>
         </td> 
-     </tr>
-       </tbody>
+		</tr>
+	 </c:forEach> 
+	
+</tbody>
 </table>
-<div id="haha"  style="display:none;background-color:LightCyan;margin-top:50px;margin-left:140px;position:absolute;width:800px;">
+<div id="TeacherFormData"  style="display:none;background-color:LightCyan;margin-top:50px;margin-left:140px;position:absolute;width:800px;">
 	<div class="col-lg-6"style="margin-top:50px;">
 		<div class="input-group">
 			<span class="input-group-btn">
@@ -137,9 +364,9 @@
     		<input id="e_mail" type="text" class="form-control" >
     	</div><!-- /input-group -->
     </div><!-- /.col-lg-6 -->
-    <button type="button" id="queren" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success" onclick="putFormData()">添加</button>
-    <button type="button" id="xgai" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success">修改</button>
-    <button type="button" id="quxiao" style="margin-top:50px;" class="btn btn-warning">取消</button>
+    <button type="button" id="TeacherFormData_ConfirmBtn" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success" onclick="putFormData()">添加</button>
+    <button type="button" id="TeacherFormData_UpdateBtn" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success">修改</button>
+    <button type="button" id="TeacherFormData_CancelBtn" style="margin-top:50px;" class="btn btn-warning">取消</button>
     
     <div class="form-group" id="TeacherExcelInput" class="col-sm-10" style="display:none;float: left; margin-left: 150px;margin-top: 35px;">
 		通过excel表单添加：
@@ -147,206 +374,10 @@
 		<input id="insertTeacherExcelButton" type="button" class="btn btn-primary" onclick="inputTeacher()" style="width: 60px;height: 35px;" value="上传" />
 	</div>
 </div>
-<div id="oooo"style="display:none;margin-top:580px;margin-left:420px">
-<button type="button" id="plsc"  class="btn btn-danger"  onclick="deleteFormData()">批量删除</button>
-<button type="button" id="qx" class="btn btn-warning"  >取消</button>
+<div id="MultiDelete"style="display:none;margin-top:580px;margin-left:420px">
+	<button type="button" id="MultiDeleteBtn"  class="btn btn-danger"  onclick="deleteFormData()">批量删除</button>
+	<button type="button" id="MultiDeleteCancelBtn" class="btn btn-warning"  >取消</button>
 </div>
 
 </div>
 </div>
-<script>
-function selectAll(choiceBtn) {
-    var arr = document.getElementsByName("ids")
-    for(var i=0;i<arr.length;i++){
-        arr[i].checked=choiceBtn.checked
-    }
-}
-
-$(document).ready(function(){
-});
-function inputTeacher(){
-	var formData = new FormData();
-	var name = $("#TeacherExcelFile").val();
-	formData.append("file",$("#TeacherExcelFile")[0].files[0]);
-	formData.append("name",name);//这个地方可以传递多个参数
-	$.ajax("${pageContext.request.contextPath}/addTeacherExcel",// 发送请求的URL字符串。
-			{
-		type : "post", //  请求方式 POST或GET
-		data:formData,
-		async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
-		// 请求成功后的回调函数。
-		processData : false,
-		contentType : false,
-		beforeSend:function(){
-			console.log("正在进行，请稍候");
-		},
-		success : function(data) {
-			var resq = eval("(" + data + ")");
-			if(resq.success == "false"){
-				alert(resq.msg);
-			}else{
-				alert("添加成功");
-				$("#haha").hide();   
-				$("#xgai").hide();
-				$("#queren").hide();
-				$("#TeacherExcelInput").hide();
-			}
-		},
-		error : function(data){
-			
-		}
-	});
-}
-$(function(){
-	var div = $("#haha");
-	$("#quxiao").click(function(){
-		div.hide();   
-		$("#xgai").hide();
-		$("#queren").hide();
-		$("#TeacherExcelInput").hide();
-	});
-	$("#xiugai").click(function(){
-		div.hide();
-		$("#queren").hide();
-		$("#TeacherExcelInput").hide();
-		$("#xgai").show();
-		div.show();
-	});
-	$("#tjjsxx").click(function(){
-		div.hide();
-		$("#xgai").hide();
-		$("#TeacherExcelInput").show();
-		$("#queren").show();
-		div.show(); 
-	});
-	
-});
-
-$(function(){
-	var table = $("#xixi");
-	$("#scjsxx").click(function(){
-		table.hide();
-		$("#haha").hide();
-		$("#xiugai").hide();
-		$("#selectall").show();
-		$("#select").show();
-		$("#shanchu").show();
-		$("#oooo").show();
-		table.show();
-		
-	});
-	$("#qx").click(function(){
-		table.hide();
-		$("#xiugai").show();
-		$("#selectall").hide();
-		$("#select").hide();
-		$("#shanchu").hide();
-		$("#oooo").hide();
-		
-		table.show();
-	});
-});
-function putFormData(){
-	var flag = validateForm();
-	if(flag){
-		if(confirm("确定添加？")){
-			var tid = document.getElementById("tid").value;
-			var tname = document.getElementById("tname").value;
-			var sex = document.getElementById("sex").value;
-			var department =document.getElementById("department").value;
-			var title = document.getElementById("title").value;
-			var tel = document.getElementById("tel").value;
-			var e_mail = document.getElementById("e_mail").value;
-			alert(tid + tname + sex + department + title + tel + e_mail);
-			$.ajax("${pageContext.request.contextPath}/addTeacher",// 发送请求的URL字符串。
-					{
-				type : "post", //  请求方式 POST或GET
-				data:{
-					'tid':tid,
-					'tname':tname,
-					'sex':sex,
-					'department':department,
-					'title':title,
-					'tel':tel,
-					'e_mail':e_mail
-				},
-				contentType: "application/x-www-form-urlencoded",
-				async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
-				// 请求成功后的回调函数。
-			//	dataType:"json",
-				beforeSend:function(){
-					console.log("正在进行，请稍候");
-				},
-				success : function(data) {
-					var resq = eval("(" + data + ")");
-					if(resq.success == "false"){
-						alert(resq.msg);
-					}else{
-						alert("添加成功");
-						$("#haha").hide();   
-						$("#xgai").hide();
-						$("#queren").hide();
-						$("#TeacherExcelInput").hide();
-					}
-				},
-				error : function(data){
-					
-				}
-			});
-		}
-	}
-}
-function deleteFormData() {
-	var flag = deleteForm();
-	if(flag){
-	if (confirm("确定删除？")) {
-		
-	}
-	else {
-	
-	
-	}
-}
-}
-function deleteForm(){
-var ids = document.getElementsByName("ids");               
-var flag = false ;               
-for(var i=0;i<ids.length;i++){
-    if(ids[i].checked){
-        flag = true ;
-        break ;
-    }
-}
-if(!flag){
-    alert("请最少选择一项！");
-    return false ;
-}
-return true;
-}
-function validateForm() {
-	var tid = document.getElementById("tid").value;
-	var tname = document.getElementById("tname").value;
-	var sex = document.getElementById("sex").value;
-	var department = document.getElementById("department").value;
-    var reg = /^[0-9]+$/; 
-    if(tid == "" || !reg.test(tid) ){ 
-    	alert('教师编号不能为空且只能为数字！'); 
-    	return false; 
-    } 
-    var reg=/^[\u0391-\uFFE5]+$/; 
-    if(tname == "" || !reg.test(tname) ){ 
-    	alert('姓名不能为空且只能为中文！');
-    	return false; 
-    } 
-    var reg = /^男$|^女$/; 
-    if(sex == '' || !reg.test(sex)){ 
-    	alert('性别不能为空且只能为男或女');
-    	return false; 
-    }
-    if(department == ""){
-    	alert("所属院系不能为空");
-    	return false;
-    }
-    return true
-}
-</script>
