@@ -221,7 +221,60 @@ function inputStudent(){
 		}
 	});
 }
-function validateForm() {
+
+function putFormData(){
+	var flag = StudentvalidateForm();
+	if(flag){
+		if(confirm("确定添加？")){
+			var sid = document.getElementById("sid").value;
+			var sname = document.getElementById("sname").value;
+			var sex = document.getElementById("sex").value;
+			var classes =document.getElementById("classes").value;
+			var age = document.getElementById("age").value;
+			var tel = document.getElementById("tel").value;
+			var address = document.getElementById("address").value;
+			var e_mail = document.getElementById("e_mail").value;
+			alert(sid + sname + sex + classes + age + tel + address + e_mail);
+			$.ajax("${pageContext.request.contextPath}/addTeacher",// 发送请求的URL字符串。
+					{
+				type : "post", //  请求方式 POST或GET
+				data:{
+					'sid':sid,
+					'sname':sname,
+					'sex':sex,
+					'classes':classes,
+					'age':age ,
+					'tel':tel,
+					'address':address,
+					'e_mail':e_mail
+				},
+				contentType: "application/x-www-form-urlencoded",
+				async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
+				// 请求成功后的回调函数。
+			//	dataType:"json",
+				beforeSend:function(){
+					console.log("正在进行，请稍候");
+				},
+				success : function(data) {
+					var resq = eval("(" + data + ")");
+					if(resq.success == "false"){
+						alert(resq.msg);
+					}else{
+						alert("添加成功");
+						$("#haha").hide();   
+						$("#xgai").hide();
+						$("#queren").hide();
+						$("#TeacherExcelInput").hide();
+					}
+				},
+				error : function(data){
+					
+				}
+			});
+		}
+	}
+}
+function StudentvalidateForm() {
 	var sid = document.getElementById("sid").value;
 	var sname = document.getElementById("sname").value;
 	var sex = document.getElementById("sex").value;

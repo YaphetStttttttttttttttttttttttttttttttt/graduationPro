@@ -72,75 +72,22 @@
   </tbody>
 </table>
 
-  <div id="haha"  style="display:none;background-color:LightCyan;margin-top:110px;margin-left:140px;position:absolute;width:800px;">
-   
-  <div class="col-lg-6"style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">课程名称</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-<div class="col-lg-6"style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">授课教师</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">上课时间及地点</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">开课时间(年)</button>
-      </span>
-      <input type="text" class="form-control">
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">开课学期</button>
-      </span>
-      <input type="text" class="form-control" >
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <button type="button" id="queren" style="margin-top:50px; margin-left:350px;" class="btn btn-success">确认</button>
-  <button type="button" id="quxiao" style="margin-top:50px;" class="btn btn-warning">取消</button>
-  </div>
-   <div id="heihei"  style="display:none;background-color:LightCyan;margin-top:70px;margin-left:140px;position:absolute;width:800px;">
+   <div id="haha"  style="display:none;background-color:LightCyan;margin-top:70px;margin-left:140px;position:absolute;width:800px;">
    <form name="myForm" action="demo_form.php" onsubmit="return validateForm()" method="post">
   <div class="col-lg-6"style="margin-top:50px;">
     <div class="input-group">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">课程名称</button>
       </span>
-      <input type="text" class="form-control" name="xuehao" required="required" >
+      <input id="cid" type="text" class="form-control" >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
 <div class="col-lg-6"style="margin-top:50px;">
     <div class="input-group">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button">授课教师</button>
+        <button class="btn btn-default" type="button">授课教师ID</button>
       </span>
-      <input type="text" class="form-control" name="xingming" required="required">
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
-  <div class="col-lg-6" style="margin-top:50px;">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">上课时间及地点</button>
-      </span>
-      <input type="text" class="form-control" name="sex" required="required">
+      <input id="tid" type="text" class="form-control" >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   <div class="col-lg-6" style="margin-top:50px;" >
@@ -148,7 +95,7 @@
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">开课时间(年)</button>
       </span>
-      <input type="text" class="form-control" required="required" >
+      <input id="start_year" type="text" class="form-control"  >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
   <div class="col-lg-6" style="margin-top:50px;">
@@ -156,15 +103,23 @@
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">开课学期</button>
       </span>
-      <input type="text" class="form-control" required="required" >
+      <input id="start_term" type="text" class="form-control" " >
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
-    <input type="submit" value="添加" style="margin-top:20px; margin-left:350px;" class="btn btn-success">
-  <button type="button" id="quxiao1" style="margin-top:20px;" class="btn btn-warning">取消</button>
-  
-<div class="form-group" id="coursePlan" class="col-sm-10" style="float: left; margin-left: 150px;margin-top: 35px;"">
+  <div class="col-lg-6" style="margin-top:50px;">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">上课时间及地点</button>
+      </span>
+      <input id="time_place" type="text" class="form-control">
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+    <button type="button" id="queren" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success" onclick="putFormData()">添加</button>
+    <button type="button" id="xgai" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success">修改</button>
+    <button type="button" id="quxiao" style="margin-top:50px;" class="btn btn-warning">取消</button>
+<div class="form-group" id="CoursePlanExcelInput" class="col-sm-10" style="float: left; margin-left: 150px;margin-top: 35px;"">
 	通过excel表单添加：
-	<input id="coursePlanExcelFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
+	<input id="CoursePlanExcelFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
 	<input id="insertCoursePlanExcelButton" type="button" class="btn btn-primary" onclick="inputCoursePlans()" style="width: 60px;height: 35px;" value="上传" />
 </div>
 </form>
@@ -174,32 +129,36 @@
 <script>
 $(function(){
 	var div = $("#haha");
-	   $("#quxiao").click(function(){
-	      div.hide();
-	   });
-	   $("#xiugai").click(function(){
-	      div.show();
-	   });
-	  
+	$("#quxiao").click(function(){
+		div.hide();   
+		$("#xgai").hide();
+		$("#queren").hide();
+		$("#CoursePlanExcelInput").hide();
 	});
-$(function(){
-	var div = $("#heihei");
-	   $("#quxiao1").click(function(){
-	      div.hide();
-	   });
-	   $("#tjkcapxx").click(function(){
-	      div.show();
-	   });
-	  
+	$("#xiugai").click(function(){
+		div.hide();
+		$("#queren").hide();
+		$("#CoursePlanExcelInput").hide();
+		$("#xgai").show();
+		div.show();
 	});
+	$("#tjkcapxx").click(function(){
+		div.hide();
+		$("#xgai").hide();
+		$("#CoursePlanExcelInput").show();
+		$("#queren").show();
+		div.show(); 
+	});
+	
+});
 
 $(document).ready(function(){
 });
 
 function inputCoursePlans(){
 	var formData = new FormData();
-	var name = $("#coursePlanExcelFile").val();
-	formData.append("file",$("#coursePlanExcelFile")[0].files[0]);
+	var name = $("#CoursePlanExcelFile").val();
+	formData.append("file",$("#CoursePlanExcelFile")[0].files[0]);
 	formData.append("name",name);//这个地方可以传递多个参数
 	$.ajax("${pageContext.request.contextPath}/addCoursePlanExcel",// 发送请求的URL字符串。
 			{
@@ -224,5 +183,85 @@ function inputCoursePlans(){
 			
 		}
 	});
+}
+function CoursePlanvalidateForm() {
+	var cid = document.getElementById("cid").value;
+	var tid = document.getElementById("tid").value;
+	var start_year = document.getElementById("start_year").value;
+	var start_term = document.getElementById("start_term").value;
+	var time_place = document.getElementById("time_place").value;
+    var reg = /^[0-9]+$/; 
+    if(cid == "" || !reg.test(cid) ){ 
+    	alert('课程编号不能为空且只能为数字！'); 
+    	return false; 
+    } 
+    var reg = /^[0-9]+$/; 
+    if(tid == "" || !reg.test(tid) ){ 
+    	alert('教师ID不能为空且只能为数字！'); 
+    	return false; 
+    } 
+    var reg = /^[0-9]+$/;
+    if(start_year == "" || !reg.test(start_year) ){ 
+    	alert('开课年份不能为空且只能为数字！'); 
+    	return false; 
+    } 
+    var reg = /^上学期$|^下学期$/;
+    if(start_term == "" || !reg.test(start_term) ){ 
+    	alert('开课学期不能为空且只能为上学期或下学期！'); 
+    	return false; 
+    }
+     
+    if(time_place == ""  ){ 
+    	alert('授课时间地点不能为空！');
+    	return false; 
+    } 
+   
+    return true
+}
+function putFormData(){
+	var flag = CoursePlanvalidateForm();
+	if(flag){
+		if(confirm("确定添加？")){
+			var cid = document.getElementById("cid").value;
+			var tid = document.getElementById("tid").value;
+			var start_year = document.getElementById("start_year").value;
+			var start_term = document.getElementById("start_term").value;
+			var time_place = document.getElementById("time_place").value;
+			alert(cid + tid + start_year + start_term + time_place);
+			$.ajax("${pageContext.request.contextPath}/addCoursePlan",// 发送请求的URL字符串。
+					{
+				type : "post", //  请求方式 POST或GET
+				data:{
+					'cid':cid,
+					'tid':tid,
+					'start_year':start_year,
+					'start_term':start_term,
+					'time_place':time_place
+				},
+				contentType: "application/x-www-form-urlencoded",
+				async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
+				// 请求成功后的回调函数。
+			//	dataType:"json",
+				beforeSend:function(){
+					console.log("正在进行，请稍候");
+				},
+				success : function(data) {
+					var resq = eval("(" + data + ")");
+					if(resq.success == "false"){
+						alert(resq.msg);
+					}else{
+						alert("添加成功");
+						$("#haha").hide();   
+						$("#xgai").hide();
+						$("#queren").hide();
+						$("#CoursePlanExcelInput").hide();
+					}
+				},
+				error : function(data){
+					
+				}
+			});
+		}
+	}
 }
 </script>
