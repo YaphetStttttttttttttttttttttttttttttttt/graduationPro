@@ -155,6 +155,35 @@ function inputStudent(){
 		}
 	});
 }
+function inputDepartment(){
+	var formData = new FormData();
+	var name = $("#DepartmentExcelFile").val();
+	formData.append("file",$("#DepartmentExcelFile")[0].files[0]);
+	formData.append("name",name);//这个地方可以传递多个参数
+	$.ajax("${pageContext.request.contextPath}/addDepartmentExcel",// 发送请求的URL字符串。
+			{
+		type : "post", //  请求方式 POST或GET
+		data:formData,
+		async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
+		// 请求成功后的回调函数。
+		processData : false,
+		contentType : false,
+		beforeSend:function(){
+			console.log("正在进行，请稍候");
+		},
+		success : function(data) {
+			var resq = eval("(" + data + ")");
+			if(resq.success == "false"){
+				alert(resq.msg);
+			}else{
+				alert("添加成功");
+			}
+		},
+		error : function(data){
+			
+		}
+	});
+}
 </script>
 </head>
 <body>
@@ -180,6 +209,10 @@ function inputStudent(){
 <div class="form-group" id="Student" class="col-sm-10" style="float: left; margin-right: 50px;">
 	<input id="StudentExcelFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
 	<input id="insertStudentExcelButton" type="button" onclick="inputStudent()" style="width: 60px;height: 35px;" value="上传" />
+</div>
+<div class="form-group" id="Department" class="col-sm-10" style="float: left; margin-right: 50px;">
+	<input id="DepartmentExcelFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
+	<input id="insertDepartmentExcelButton" type="button" onclick="inputDepartment()" style="width: 60px;height: 35px;" value="上传" />
 </div>
 </body>
 </html>

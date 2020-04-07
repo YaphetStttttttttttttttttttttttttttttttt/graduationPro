@@ -171,6 +171,56 @@ function putFormData(){
 		}
 	}
 }
+function updateFormData(){
+	var flag = validateForm();
+	if(flag){
+		if(confirm("确定修改？")){
+			var tid = document.getElementById("tid").value;
+			var tname = document.getElementById("tname").value;
+			var sex = document.getElementById("sex").value;
+			var department =document.getElementById("department").value;
+			var title = document.getElementById("title").value;
+			var tel = document.getElementById("tel").value;
+			var e_mail = document.getElementById("e_mail").value;
+			alert(tid + tname + sex + department + title + tel + e_mail);
+			$.ajax("${pageContext.request.contextPath}/updateTeacher",// 发送请求的URL字符串。
+					{
+				type : "post", //  请求方式 POST或GET
+				data:{
+					'tid':tid,
+					'tname':tname,
+					'sex':sex,
+					'department':department,
+					'title':title,
+					'tel':tel,
+					'e_mail':e_mail
+				},
+				contentType: "application/x-www-form-urlencoded",
+				async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
+				// 请求成功后的回调函数。
+			//	dataType:"json",
+				beforeSend:function(){
+					console.log("正在进行，请稍候");
+				},
+				success : function(data) {
+					var resq = eval("(" + data + ")");
+					if(resq.success == "false"){
+						alert(resq.msg);
+					}else{
+						alert("修改成功");
+						$("#TeacherFormData").hide();   
+						$("#TeacherFormData_UpdateBtn").hide();
+						$("#TeacherFormData_ConfirmBtn").hide();
+						$("#TeacherExcelInput").hide();
+					}
+				},
+				error : function(data){
+					
+				}
+			});
+		}
+	}
+}
 function deleteFormData() {
 	var flag = deleteForm();
 	if(flag){
@@ -224,11 +274,13 @@ function validateForm() {
 }
 </script>
 
-<div  class="panel panel-primary" style="height:700px;width:1100px;">
+<div  class="panel panel-primary" style="height:700px;width:100%;">
 <div class="panel-heading" style="height:auto;">
 当前位置：管理员>教师信息管理
 </div>
-<div class="btn-group" style=" width:13%; height:10%;  float:left; margin-left:1%;">
+
+<div class="panel-body" style="height:1000px;" >
+<div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
   <div class="input-group">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">姓名</button>
@@ -236,7 +288,7 @@ function validateForm() {
       <input type="text" class="form-control" >
     </div>
 </div>
-<div class="btn-group" style=" width:25%; height:10%;  float:left; margin-left:1%;">
+<div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
   <div class="input-group">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">教师编号</button>
@@ -244,7 +296,7 @@ function validateForm() {
       <input type="text" class="form-control" >
     </div>
 </div>
-<div class="btn-group" style=" width:20%; height:10%;  float:left; margin-left:1%;">
+<div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
   <div class="input-group">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">所属院系</button>
@@ -252,26 +304,23 @@ function validateForm() {
       <input type="text" class="form-control" >
     </div>
 </div>
-<div class="btn-group" style=" width:2%; height:10%;  float:left; margin-left:1%;">
+<div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
   <button type="button" class="btn btn-warning" id="selectTeacherBtn">
   <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
   </button>
 </div>
-<div class="btn-group" style=" width:auto; height:auto;  float:left; margin-left:10%;">
+<div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
   <button type="button" id="DeleteTeacherBtn" class="btn btn-danger">
   <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除教师信息
   </button>
 </div>
-<div class="btn-group" style=" width:auto; height:auto;  float:left; margin-left:2%;">
+<div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
   <button type="button" id="AddTeacherBtn" class="btn btn-primary">
   <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加教师信息
   </button>
 </div>
 
-
-<div class="panel-body" style="height:1000px;" >
-
-<table id="TeacherInfoTable" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:1080px;margin-top:30px;">
+<table id="TeacherInfoTable" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:79%;margin-top:4%;">
 <thead>
 	<th id="selectall"style="display:none;"><input type="checkbox" onclick="selectAll(this)" >全选</th>
 	<th>教师编号</th>
@@ -307,74 +356,71 @@ function validateForm() {
 	
 </tbody>
 </table>
-<div id="TeacherFormData"  style="display:none;background-color:LightCyan;margin-top:50px;margin-left:140px;position:absolute;width:800px;">
-	<div class="col-lg-6"style="margin-top:50px;">
-		<div class="input-group">
+<div id="TeacherFormData"  style="display:none;background-color:LightCyan;margin-top:4%;margin-left:15%;position:absolute;width:50%;">
+	
+		<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:2%;">
 			<span class="input-group-btn">
 			<button class="btn btn-default" type="button">教师编号</button>
 			</span>
 			<input id="tid" type="text" class="form-control" >
 		</div><!-- /input-group -->
-	</div><!-- /.col-lg-6 -->
-	<div class="col-lg-6"style="margin-top:50px;">
-		<div class="input-group">
+
+	
+		<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:2%;">
 			<span class="input-group-btn">
 			<button class="btn btn-default" type="button">姓名</button>
 			</span>
 			<input id="tname" type="text" class="form-control" >
     	</div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
-    <div class="col-lg-6" style="margin-top:50px;">
-    	<div class="input-group">
+
+    
+    	<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%">
     		<span class="input-group-btn">
     		<button class="btn btn-default" type="button">性别</button>
     		</span>
     		<input id="sex" type="text" class="form-control" >
     	</div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
-    <div class="col-lg-6" style="margin-top:50px;">
-    	<div class="input-group">
+    
+   
+    	<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%">
     		<span class="input-group-btn">
     		<button class="btn btn-default" type="button">所属院系</button>
     		</span>
     		<input id="department" type="text" class="form-control">
     	</div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
-    <div class="col-lg-6" style="margin-top:50px;">
-    	<div class="input-group">
+   
+    	<div class="input-group"style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%">
     		<span class="input-group-btn">
     		<button class="btn btn-default" type="button">职称</button>
     		</span>
     		<input id="title" type="text" class="form-control" >
     	</div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
-    <div class="col-lg-6" style="margin-top:50px;">
-    	<div class="input-group">
+   
+    	<div class="input-group"style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%" >
     		<span class="input-group-btn">
     		<button class="btn btn-default" type="button">联系电话</button>
     		</span>
     		<input id="tel" type="text" class="form-control" >
     	</div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
-    <div class="col-lg-6" style="margin-top:50px;">
-    	<div class="input-group">
+   
+    	<div class="input-group" style=" width:49%; height:10%;float:left; margin-right:50%;margin-left:1%;margin-top:3%">
     		<span class="input-group-btn">
     		<button class="btn btn-default" type="button">电子邮箱</button>
     		</span>
     		<input id="e_mail" type="text" class="form-control" >
     	</div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
-    <button type="button" id="TeacherFormData_ConfirmBtn" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success" onclick="putFormData()">添加</button>
-    <button type="button" id="TeacherFormData_UpdateBtn" style="display:none;margin-top:50px; margin-left:350px;" class="btn btn-success">修改</button>
-    <button type="button" id="TeacherFormData_CancelBtn" style="margin-top:50px;" class="btn btn-warning">取消</button>
-    
-    <div class="form-group" id="TeacherExcelInput" class="col-sm-10" style="display:none;float: left; margin-left: 150px;margin-top: 35px;">
-		通过excel表单添加：
-		<input id="TeacherExcelFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
-		<input id="insertTeacherExcelButton" type="button" class="btn btn-primary" onclick="inputTeacher()" style="width: 60px;height: 35px;" value="上传" />
+  
+    <button type="button" id="TeacherFormData_ConfirmBtn" style="display:none;width:20%;   float:left; margin-left:20%;margin-top:3%" class="btn btn-success" onclick="putFormData()">添加</button>
+    <button type="button" id="TeacherFormData_UpdateBtn" style="display:none;width:20%;  float:left; margin-left:20%;margin-top:3%" class="btn btn-success"   onclick="updateFormData()">修改</button>
+    <button type="button" id="TeacherFormData_CancelBtn" style="width:20%;   float:left; margin-left:20%;margin-top:3%" class="btn btn-warning">取消</button>
+   
+    <div class="form-group" id="TeacherExcelInput" class="col-sm-10" style="display:none;float:left;margin-left:5%;margin-top:3%;">
+	   通过excel表单添加：
+	<input id="TeacherExcelFile" name="excelFile" type="file" class="form-control" style="width:45%; display: inline;" />
+	<input id="insertTeacherExcelButton" type="button" class="btn btn-primary" onclick="inputTeacher()" style="width: 15%;height: 35px;" value="上传" />
 	</div>
 </div>
-<div id="MultiDelete"style="display:none;margin-top:580px;margin-left:420px">
+<div id="MultiDelete"style="display:none;margin-top:580px;margin-left:40%;width:100%;">
 	<button type="button" id="MultiDeleteBtn"  class="btn btn-danger"  onclick="deleteFormData()">批量删除</button>
 	<button type="button" id="MultiDeleteCancelBtn" class="btn btn-warning"  >取消</button>
 </div>
