@@ -14,30 +14,23 @@
 		<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销
 	</button>
 </div>
-<div class="panel-body" style="height:800px;" >
-<div class="panel panel-primary" style="width:15%; height:700px;float:left;margin-left:1px;">
+<div class="panel-body" style="height:100%;" >
+<div class="panel panel-primary" style="width:15%; height:700px;float:left;margin-left:1%;">
 	<div class="panel-heading" style="height:auto;">
 		<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 功能菜单
 	</div>
 	<ul class="list-group">
-	<li class="list-group-item list-group-item-info" data-id="xsxxgl" style="height:80px;"data-toggle="tooltip" data-placement="right" title="学生信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>学生信息管理</li>
-	
-	<li class="list-group-item list-group-item-warning" data-id="jsxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="教师信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>教师信息管理</li>
-	
-	<li class="list-group-item list-group-item-success" data-id="bjxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="班级信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>班级信息管理</li>
-	
-	<li class="list-group-item list-group-item-warning" data-id="kcapgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="课程安排管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程安排管理</li>
-	
-	<li class="list-group-item list-group-item-success" data-id="kcxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="课程信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程信息管理</li>
-	
-	<li class="list-group-item list-group-item-warning" data-id="yxxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="院系信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>院系信息管理</li>
-	
-	<li class="list-group-item list-group-item-success" data-id="zyxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="专业信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>专业信息管理</li>
-	
-	<li class="list-group-item list-group-item-warning" data-id="xkxxgl"style="height:80px;"data-toggle="tooltip" data-placement="right" title="选课信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>选课信息管理</li>
+	<li class="list-group-item list-group-item-info" data-id="StudentMana" style="height:80px;"data-toggle="tooltip" data-placement="right" title="学生信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>学生信息管理</li>
+	<li class="list-group-item list-group-item-warning" data-id="TeacherMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="教师信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>教师信息管理</li>
+	<li class="list-group-item list-group-item-success" data-id="ClassMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="班级信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>班级信息管理</li>
+	<li class="list-group-item list-group-item-warning" data-id="Course_planMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="课程安排管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程安排管理</li>
+	<li class="list-group-item list-group-item-success" data-id="CourseMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="课程信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程信息管理</li>
+	<li class="list-group-item list-group-item-warning" data-id="DepartmentMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="院系信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>院系信息管理</li>
+	<li class="list-group-item list-group-item-success" data-id="DisciplineMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="专业信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>专业信息管理</li>
+	<li class="list-group-item list-group-item-warning" data-id="Select_courseMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="选课信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>选课信息管理</li>
 	</ul>
 </div>
-<div id="content" style="float:left;margin-left:1px;width:60%"></div>
+<div id="content" style="float:left;margin-left:1%;width:83%"></div>
  </div>
 </div>
 <script>
@@ -56,7 +49,7 @@ $(function() {
 				console.log("正在进行，请稍候");
 			},
 			success : function(data) {
-				sId = "m" + sId;
+				sId = "Manageer" + sId;
 				$("#content").load(sId, {listInfo:JSON.stringify(data)}, function(){
 					console.log("success!");
 				}); //加载相对应的内容
@@ -69,46 +62,87 @@ $(function() {
 		});
 	});
 	function loadInner(sId) {
+
 		var sId = window.location.hash;
+
 		var pathn, i;
+
 		switch(sId) {
-			case "#xsxxgl":
-				pathn = "mxsxxgl";
+
+			case "#StudentMana":
+
+				pathn = "MStudent";
+
 				i = 0;
+
 				break;
-			case "#jsxxgl":
-				pathn = "mjsxxgl";
+
+			case "#TeacherMana":
+
+				pathn = "MTeacher";
+
                 i = 1;
+
                 break;
-            case "#bjxxgl":
-                pathn = "mbjxxgl";
+
+            case "#ClassMana":
+
+                pathn = "M-Class";
+
                 i = 2;
+
                 break;
-            case "#kcapgl":
-                pathn = "mkcapgl";
+
+            case "#Course_planMana":
+
+                pathn = "M-Course_plan";
+
                 i = 3;
+
                 break;
-            case "#kcxxgl":
-                pathn = "mkcxxgl";
+
+            case "#CourseMana":
+
+                pathn = "M-Course";
+
                 i = 4;
+
                 break;
-            case "#yxxxgl":
-                pathn = "myxxxgl";
+
+            case "#DepartmentMana":
+
+                pathn = "M-Department";
+
                 i = 5;
+
                 break;
-            case "#zyxxgl":
-                pathn = "mzyxxgl";
+
+            case "#DisciplineMana":
+
+                pathn = "M-Discipline";
+
                 i = 6;
+
                 break;
-            case "#xkxxgl":
-                pathn = "mxkxxgl";
+
+            case "#Select_courseMana":
+
+                pathn = "M-Select_course";
+
                 i = 7;
+
                 break;
+
             default:
-                pathn = "mxsxxgl";
+
+                pathn = "M-Student";
+
                 i = 0;
+
                 break;
+
         }
+
 	}
 	var sId = window.location.hash;
 	loadInner(sId);
