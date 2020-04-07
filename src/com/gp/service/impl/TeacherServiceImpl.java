@@ -47,4 +47,26 @@ public class TeacherServiceImpl implements TeacherService {
 	public List<Teacher> getAll() {
 		return teacherMapper.getAll();
 	}
+	public int delete(Teacher teacher) {
+		return teacherMapper.delete(teacher);
+	}
+	public int deleteMany(List<Teacher> listTeachers) {
+		int flag = 0;
+		for(Teacher teacher : listTeachers) {
+			flag = teacherMapper.delete(teacher);
+			if(flag == 0) return flag; 
+		}
+		return flag;
+	}
+	public int update(Teacher teacher) {
+		return teacherMapper.update(teacher);
+	}
+	public int updateMany(List<Teacher> listTeachers) {
+		int flag = 0;
+		for(Teacher teacher : listTeachers) {
+			flag = teacherMapper.update(teacher);
+			if(flag == 0) return flag;
+		}
+		return flag;
+	}
 }

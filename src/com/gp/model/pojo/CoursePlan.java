@@ -5,6 +5,7 @@ import java.util.List;
 import com.gp.model.vo.SchoolTerm;
 
 public class CoursePlan {
+	private long id;
 	private Course cid;
 	private Teacher tid;
 	private int startYear;
@@ -14,12 +15,19 @@ public class CoursePlan {
 	List<SelectCourse> selectCourses;
 	
 	public CoursePlan() {}
-	public CoursePlan(Course cid, Teacher tid, int startYear, SchoolTerm startTerm, String timeAPlace) {
+	public CoursePlan(long id, Course cid, Teacher tid, int startYear, SchoolTerm startTerm, String timeAPlace) {
+		this.id = id;
 		this.cid = cid;
 		this.tid = tid;
 		this.startYear = startYear;
 		this.startTerm = startTerm;
 		this.timeAPlace = timeAPlace;
+	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
 	}
 	public Course getCid() {
 		return cid;

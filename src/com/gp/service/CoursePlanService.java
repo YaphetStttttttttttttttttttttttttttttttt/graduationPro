@@ -9,5 +9,7 @@ public interface CoursePlanService {
 	
 	int addMany(List<CoursePlan> coursePlans);
 	
-	int getByAll(CoursePlan coursePlan);
+	int getCountByAll(CoursePlan coursePlan);
+	
+	int getCountById(long id);
 }

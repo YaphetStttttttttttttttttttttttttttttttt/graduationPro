@@ -18,14 +18,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.alibaba.fastjson.JSONArray;
 import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Department;
 import com.gp.model.pojo.Teacher;
@@ -33,7 +29,6 @@ import com.gp.model.vo.Sex;
 import com.gp.model.vo.TeacherVo;
 import com.gp.service.DepartmentService;
 import com.gp.service.TeacherService;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 @Controller
 public class TeacherController {
@@ -67,6 +62,52 @@ public class TeacherController {
 			}
 		}
 		System.out.println(s);
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(s);
+	}
+	@RequestMapping("deleteTeacher")
+	public void deleteTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+		String s = "";
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(s);
+	}
+	@ResponseBody
+	@RequestMapping("jsxxgl")
+	public Object Manager_TeacherMana(HttpSession session) {
+		Admin user = (Admin) session.getAttribute("user");
+		List<Teacher> listTeachers = new ArrayList<Teacher>();
+		System.out.println(user != null);
+		if(user != null) {
+			listTeachers = teacherService.getAll();
+	//		obj.addObject("listTeachers",listTeachers);
+		}
+		return listTeachers;
+	}
+	@RequestMapping("updateTeacher")
+	public void updateTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+		String s = "", msg = "";
+		Teacher teacher = getTeacherFormData(httpServletRequest);
+		TeacherVo teacherVo = formTeacherDataPro(teacher.getId(), teacher.getName(), teacher.getSex().getSex(), 
+				teacher.getDeid().getName(), teacher.getTitle(), teacher.getTel(), teacher.getE_mail());
+		if(!teacherVo.isFlag()) {
+			s = "{\"success\":\"" + teacherVo.isFlag() +"\",\"msg\":\"" + teacherVo.getMsg() + "\"}";
+		}else {
+			try {
+				int flag = teacherService.add(teacherVo.getTeacher());
+				if(flag == 0) {
+					msg = "插入数据库失败!";
+					s = "{\"success\":\"" + "false" +"\",\"msg\":\"" + msg + "\"}";
+				}else {
+					msg = "添加成功!";
+					s = "{\"success\":\"" + teacherVo.isFlag() +"\",\"msg\":\"" + msg + "\"}";
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
 		httpServletResponse.setCharacterEncoding("utf8");
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
@@ -118,18 +159,7 @@ public class TeacherController {
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
 	}
-	@ResponseBody
-	@RequestMapping("jsxxgl")
-	public Object Manager_TeacherMana(HttpSession session) {
-		Admin user = (Admin) session.getAttribute("user");
-		List<Teacher> listTeachers = new ArrayList<Teacher>();
-		System.out.println(user != null);
-		if(user != null) {
-			listTeachers = teacherService.getAll();
-	//		obj.addObject("listTeachers",listTeachers);
-		}
-		return listTeachers;
-	}
+	//获取表单数据
 	private Teacher getTeacherFormData(HttpServletRequest httpServletRequest) throws UnsupportedEncodingException {
 		httpServletRequest.setCharacterEncoding("UTF-8");
 		Teacher teacher = new Teacher();
@@ -160,12 +190,7 @@ public class TeacherController {
 		if(sex.equals("女")) num = 2;
 		return num;
 	}
-	private String sexString2Int(int num) {
-		String sex = "";
-		if(num == 1) sex = "男";
-		if(num == 2) sex = "女";
-		return sex;
-	}
+	//获取excel表格的数据
 	private TeacherVo excelTeacherDataPro(Row row, boolean rowFlag) {
 		TeacherVo teacherVo = new TeacherVo();
 		String msg = "";
@@ -239,6 +264,8 @@ public class TeacherController {
 		}
 		return teacherVo;
 	}
+	
+	// 处理表单数据，以及excel获取后的数据 
 	private TeacherVo formTeacherDataPro(long id, String name,String sex, String deName, String title, long tel, String e_mail) {
 		TeacherVo teacherVo = new TeacherVo();
 		String msg = "";

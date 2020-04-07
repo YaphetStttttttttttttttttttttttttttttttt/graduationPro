@@ -6,9 +6,12 @@
     
     <mapper namespace="com.gp.mapper.CoursePlanMapper">	
         <insert id="add" parameterType="CoursePlan">
-        	insert into course_plan(cid,tid,time_place,start_year,start_term) values(#{cid.id}, #{tid.id}, #{timeAPlace}, #{startYear}, #{startTerm.termNum})
+        	insert into course_plan(id,cid,tid,time_place,start_year,start_term) values(#{id}, #{cid.id}, #{tid.id}, #{timeAPlace}, #{startYear}, #{startTerm.termNum})
         </insert>
-        <select id="getByAll" resultType="int">
+        <select id="getCountByAll" resultType="int">
         	select count(*) from course_plan where cid = #{cid.id} and tid = #{tid.id} and time_place = #{timeAPlace} and start_term = #{startTerm.termNum} and start_year = #{startYear}
+        </select>
+        <select id="getCountById" resultType="int">
+        	select count(*) from course_plan where id = #{id}
         </select>
     </mapper>

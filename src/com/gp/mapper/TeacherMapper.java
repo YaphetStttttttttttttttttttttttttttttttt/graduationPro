@@ -12,4 +12,8 @@ public interface TeacherMapper {
 	public int getCountById(@Param("id") long id);
 	
 	public List<Teacher> getAll();
+	
+	public int delete(Teacher teacher);
+	
+	public int update(Teacher teacher);
 }

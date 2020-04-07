@@ -25,7 +25,10 @@ public class CoursePlanServiceImpl implements CoursePlanService {
 		}
 		return flag;
 	}
-	public int getByAll(CoursePlan coursePlan) {
-		return coursePlanMapper.getByAll(coursePlan);
+	public int getCountByAll(CoursePlan coursePlan) {
+		return coursePlanMapper.getCountByAll(coursePlan);
+	}
+	public int getCountById(long id) {
+		return coursePlanMapper.getCountById(id);
 	}
 }

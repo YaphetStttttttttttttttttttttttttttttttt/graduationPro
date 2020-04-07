@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+    <mapper namespace="com.gp.mapper.SelectCourseMapper">
+        <select id="get" resultType="SelectCourse">
+        	select * from select_course
+        </select>
+        <insert id="add" parameterType="SelectCourse" >
+        	insert into select_course(sid, cpid) values(#{sid.id}, #{cpid.id})
+        </insert>
+        <delete id="delete" parameterType="SelectCourse">
+        	delete from select_course where sid = #{sid.id} and cpid = #{cpid.id}
+        </delete>
+    </mapper>

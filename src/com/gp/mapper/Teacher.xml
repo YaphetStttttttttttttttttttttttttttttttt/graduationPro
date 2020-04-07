@@ -54,6 +54,22 @@
         	insert into teacher(<include refid="key"/>) values(<include refid="values"/>)
         </insert>
         <select id="getAll" resultMap="TeacherBean">
-        	select t.*, de.*, de.name 'dename' from teacher t left join department de on t.deid = de.id
+        	select t.*, de.*, de.name 'dename' from teacher t 
+        	left join department de on t.deid = de.id
         </select>
+        <delete id="delete" parameterType="Teacher">
+        	delete from teacher where id = #{id}
+        </delete>
+        <update id="update" parameterType="Teacher">
+        	update teacher
+        	<set>
+				<if test=" name!=null and name!='' "> name=#{name},</if>
+				<if test=" sex!=null and sex!='' "> sex=#{sex.num},</if>
+				<if test=" deid!=null and deid!='' "> deid=#{deid.id},</if>
+				<if test=" title!=null and title!='' "> title=#{title},</if>
+				<if test=" tel!=null and tel!='' "> tel=#{tel},</if>
+				<if test=" e_mail!=null and e_mail!='' "> e_mail=#{e_mail},</if>
+			</set>
+			where id = #{id}
+        </update>
     </mapper>

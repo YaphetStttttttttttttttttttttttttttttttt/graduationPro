@@ -2,15 +2,15 @@ package com.gp.model.pojo;
 
 public class SelectCourse {
 	private Student sid;
-	private CoursePlan coursePlan;
+	private CoursePlan cpid;
 	private float fGrade;
 	private float sGrade;
 	private float tGrade;
 	
 	public SelectCourse() {}
-	public SelectCourse(Student sid, CoursePlan coursePlan, float fGrade, float sGrade, float tGrade) {
+	public SelectCourse(Student sid, CoursePlan cpid, float fGrade, float sGrade, float tGrade) {
 		this.sid = sid;
-		this.coursePlan = coursePlan;
+		this.cpid = cpid;
 		this.fGrade = fGrade;
 		this.sGrade = sGrade;
 		this.tGrade = tGrade;
@@ -21,11 +21,11 @@ public class SelectCourse {
 	public void setSid(Student sid) {
 		this.sid = sid;
 	}
-	public CoursePlan getCoursePlan() {
-		return coursePlan;
+	public CoursePlan getCpid() {
+		return cpid;
 	}
-	public void setCoursePlan(CoursePlan coursePlan) {
-		this.coursePlan = coursePlan;
+	public void setCpid(CoursePlan cpid) {
+		this.cpid = cpid;
 	}
 	public float getfGrade() {
 		return fGrade;

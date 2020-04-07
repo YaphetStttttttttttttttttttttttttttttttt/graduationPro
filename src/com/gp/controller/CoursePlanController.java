@@ -27,7 +27,6 @@ import com.gp.model.vo.SchoolTerm;
 import com.gp.service.CoursePlanService;
 import com.gp.service.CourseService;
 import com.gp.service.TeacherService;
-import com.microsoft.schemas.office.visio.x2012.main.RowType;
 
 @Controller
 public class CoursePlanController {
@@ -56,7 +55,8 @@ public class CoursePlanController {
 				// 4.读取每一行的单元格
 				if(row.getRowNum() == 0) continue;
 				boolean[] isBlankRow = {false,false,false,false,false};
-				for(int count = 0; count < 5; count++) {
+				//判断排课excel(共6列)这一行是否为空。
+				for(int count = 0; count < 6; count++) {
 					cell = row.getCell(count);
 					if(cell == null || cell.getCellType() == CellType.BLANK) isBlankRow[count] = true;		
 				}
@@ -98,17 +98,30 @@ public class CoursePlanController {
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
 	}
-	
+	/**
+	 * @param row
+	 * @param rowFlag
+	 * @description 读取excel一行数据并处理
+	 * @return
+	 */
 	private CoursePlanVo excelCoursePlanDataPro(Row row, boolean rowFlag) {
 		CoursePlanVo coursePlanVo = new CoursePlanVo();
 		String msg = "";
 		String courseName = "", timeAPlace = "", startTerm = "";
 		int startYear = 0;
-		long teacherId = 0;
+		long teacherId = 0, coursePlanId = 0;
 		Cell cell = null;
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < 6; i++) {
 			cell = row.getCell(i);
 			if(i == 0) {
+				//读取第0列：排课编号
+				if(cell != null && cell.getCellType() == CellType.NUMERIC) {
+					coursePlanId = (long)cell.getNumericCellValue();
+				}else {
+					rowFlag = false;
+					msg = "排课编号不能为空，查看excel表格是否将文本类型数字转换成数字";
+				}
+			}else if(i == 1) {
 				//读取excel第一列：课程名称
 				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
 					courseName = cell.getStringCellValue();
@@ -116,7 +129,7 @@ public class CoursePlanController {
 					rowFlag = false;
 					msg = "课程名称不能为空";
 				}
-			}else if (i == 1) {
+			}else if (i == 2) {
 				//读取excel第二列：授课教师
 				if(cell != null && cell.getCellType() == CellType.NUMERIC ) {
 					teacherId = (long)cell.getNumericCellValue();
@@ -124,7 +137,7 @@ public class CoursePlanController {
 					rowFlag = false;
 					msg = "授课编号姓名不能为空";
 				}
-			}else if (i == 2) {
+			}else if (i == 3) {
 				//读取excel第三列：上课年份
 				if(cell != null && cell.getCellType() == CellType.NUMERIC) {
 					startYear = (int)cell.getNumericCellValue();
@@ -132,7 +145,7 @@ public class CoursePlanController {
 					rowFlag = false;
 					msg = "上课年份不能为空且仅能输入数字(年份)";
 				}
-			}else if (i == 3) {
+			}else if (i == 4) {
 				//读取excel第四列：上课学期
 				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
 					startTerm = cell.getStringCellValue();
@@ -158,7 +171,7 @@ public class CoursePlanController {
 			coursePlanVo.setFlag(rowFlag);
 			coursePlanVo.setMsg(msg);
 		}else {
-			coursePlanVo = formCoursePlanDataPro(courseName, teacherId, startYear, startTerm, timeAPlace);
+			coursePlanVo = formCoursePlanDataPro(coursePlanId, courseName, teacherId, startYear, startTerm, timeAPlace);
 			if(!coursePlanVo.isFlag()) {
 				msg = "第" + row.getRowNum() + "行数据：";
 				coursePlanVo.setMsg(msg + coursePlanVo.getMsg());
@@ -166,11 +179,30 @@ public class CoursePlanController {
 		}
 		return coursePlanVo;
 	}
-	private CoursePlanVo formCoursePlanDataPro(String courseName, long teacherId, int startYear, String termName, String timeAPlace) {
+
+	/* a */
+	/**
+	 * @author 49305
+	 * @param coursePlanId
+	 * @param courseName
+	 * @param teacherId
+	 * @param startYear
+	 * @param termName
+	 * @param timeAPlace
+	 * @return
+	 * @description 处理CoursePlan格式的数据，包括jsp传来的表单数据，excel数据
+	 */
+	private CoursePlanVo formCoursePlanDataPro(long coursePlanId, String courseName, long teacherId, int startYear, String termName, String timeAPlace) {
 		CoursePlanVo coursePlanVo = new CoursePlanVo();
 		String msg = "";
 		boolean flag = true;
 		CoursePlan coursePlan = new CoursePlan();
+		if(coursePlanService.getCountById(coursePlanId) == 1) {
+			flag = false;
+			msg += "排课编号重复";
+		}else {
+			coursePlan.setId(coursePlanId);
+		}
 		Long courseId = courseService.getIdByName(courseName);
 		if(courseId == null) {
 			flag = false;
@@ -205,7 +237,7 @@ public class CoursePlanController {
 		}
 		if(flag ) {
 			coursePlan.setTimeAPlace(timeAPlace);
-			if(coursePlanService.getByAll(coursePlan) == 1) {
+			if(coursePlanService.getCountByAll(coursePlan) == 1) {
 				flag = false;
 				msg += "存在相同的课程安排";
 			}else {
