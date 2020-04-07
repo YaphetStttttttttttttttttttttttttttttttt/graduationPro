@@ -347,7 +347,7 @@ function validateForm() {
 		<td>
 			<center>
 			<button type="button" name="Update" class="btn btn-info" onclick='updateTeacher("${teacher.id}", "${teacher.name}", "${teacher.sex.num==1?'男':'女'}", 
-			"${teacher.deid.name}", "${teacher.title==null?'null':teacher.title}", "${teacher.tel==0?'null':teacher.tel}", "${teacher.e_mail==null?'null':teacher.e_mail}")'><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>修改</button>
+			"${teacher.deid.name}", "${teacher.title==null?'':teacher.title}", "${teacher.tel==0?'':teacher.tel}", "${teacher.e_mail==null?'':teacher.e_mail}")'><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>修改</button>
         	<button type="button" name="Delete" class="btn btn-danger" style="display:none;"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除</button>
         	</center>
         </td> 

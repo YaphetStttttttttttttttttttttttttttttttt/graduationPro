@@ -21,7 +21,7 @@
 	</div>
 	<ul class="list-group">
 	<li class="list-group-item list-group-item-info" data-id="StudentMana" style="height:80px;"data-toggle="tooltip" data-placement="right" title="学生信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>学生信息管理</li>
-	<li class="list-group-item list-group-item-warning" data-id="TeacherMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="教师信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>教师信息管理</li>
+	<li class="list-group-item list-group-item-warning" data-id="_teacher"style="height:80px;"data-toggle="tooltip" data-placement="right" title="教师信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>教师信息管理</li>
 	<li class="list-group-item list-group-item-success" data-id="ClassMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="班级信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>班级信息管理</li>
 	<li class="list-group-item list-group-item-warning" data-id="Course_planMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="课程安排管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程安排管理</li>
 	<li class="list-group-item list-group-item-success" data-id="CourseMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="课程信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>课程信息管理</li>
@@ -49,7 +49,7 @@ $(function() {
 				console.log("正在进行，请稍候");
 			},
 			success : function(data) {
-				sId = "Manageer" + sId;
+				sId = "manageer" + sId;
 				$("#content").load(sId, {listInfo:JSON.stringify(data)}, function(){
 					console.log("success!");
 				}); //加载相对应的内容
@@ -62,87 +62,46 @@ $(function() {
 		});
 	});
 	function loadInner(sId) {
-
 		var sId = window.location.hash;
-
 		var pathn, i;
-
 		switch(sId) {
-
 			case "#StudentMana":
-
-				pathn = "MStudent";
-
+				pathn = "manageer_student";
 				i = 0;
-
 				break;
-
-			case "#TeacherMana":
-
-				pathn = "MTeacher";
-
+			case "#_teacher":
+				pathn = "manageer_teacher";
                 i = 1;
-
                 break;
-
             case "#ClassMana":
-
                 pathn = "M-Class";
-
                 i = 2;
-
                 break;
-
             case "#Course_planMana":
-
                 pathn = "M-Course_plan";
-
                 i = 3;
-
                 break;
-
             case "#CourseMana":
-
                 pathn = "M-Course";
-
                 i = 4;
-
                 break;
-
             case "#DepartmentMana":
-
                 pathn = "M-Department";
-
                 i = 5;
-
                 break;
-
             case "#DisciplineMana":
-
                 pathn = "M-Discipline";
-
                 i = 6;
-
                 break;
-
             case "#Select_courseMana":
-
                 pathn = "M-Select_course";
-
                 i = 7;
-
                 break;
-
             default:
-
                 pathn = "M-Student";
-
                 i = 0;
-
                 break;
-
         }
-
 	}
 	var sId = window.location.hash;
 	loadInner(sId);

@@ -41,8 +41,7 @@ public class TeacherController {
 	@RequestMapping("addTeacher")
 	public void addTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 		Teacher teacher = getTeacherFormData(httpServletRequest);
-		TeacherVo teacherVo = formTeacherDataPro(teacher.getId(), teacher.getName(), teacher.getSex().getSex(), 
-				teacher.getDeid().getName(), teacher.getTitle(), teacher.getTel(), teacher.getE_mail());
+		TeacherVo teacherVo = formTeacherDataPro(teacher, "insert");
 		String s = "", msg = "";
 		if(!teacherVo.isFlag()) {
 			s = "{\"success\":\"" + teacherVo.isFlag() +"\",\"msg\":\"" + teacherVo.getMsg() + "\"}";
@@ -74,7 +73,7 @@ public class TeacherController {
 		httpServletResponse.getWriter().print(s);
 	}
 	@ResponseBody
-	@RequestMapping("jsxxgl")
+	@RequestMapping("_teacher")
 	public Object Manager_TeacherMana(HttpSession session) {
 		Admin user = (Admin) session.getAttribute("user");
 		List<Teacher> listTeachers = new ArrayList<Teacher>();
@@ -89,18 +88,17 @@ public class TeacherController {
 	public void updateTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 		String s = "", msg = "";
 		Teacher teacher = getTeacherFormData(httpServletRequest);
-		TeacherVo teacherVo = formTeacherDataPro(teacher.getId(), teacher.getName(), teacher.getSex().getSex(), 
-				teacher.getDeid().getName(), teacher.getTitle(), teacher.getTel(), teacher.getE_mail());
+		TeacherVo teacherVo = formTeacherDataPro(teacher, "update");
 		if(!teacherVo.isFlag()) {
 			s = "{\"success\":\"" + teacherVo.isFlag() +"\",\"msg\":\"" + teacherVo.getMsg() + "\"}";
 		}else {
 			try {
-				int flag = teacherService.add(teacherVo.getTeacher());
+				int flag = teacherService.update(teacherVo.getTeacher());
 				if(flag == 0) {
-					msg = "插入数据库失败!";
+					msg = "修改失败!";
 					s = "{\"success\":\"" + "false" +"\",\"msg\":\"" + msg + "\"}";
 				}else {
-					msg = "添加成功!";
+					msg = "修改成功!";
 					s = "{\"success\":\"" + teacherVo.isFlag() +"\",\"msg\":\"" + msg + "\"}";
 				}
 			} catch (Exception e) {
@@ -175,7 +173,7 @@ public class TeacherController {
 		teacher.setDeid(deid);
 		teacher.setTitle( httpServletRequest.getParameter("title") );
 		String tel = httpServletRequest.getParameter("tel");
-		if(tel ==null || tel.equals("")) {
+		if(tel == null || tel.equals("")) {
 			
 		}else {
 			teacher.setTel( Long.valueOf(tel) );
@@ -256,7 +254,12 @@ public class TeacherController {
 			teacherVo.setFlag(rowFlag);
 			teacherVo.setMsg(msg);
 		}else {
-			teacherVo = formTeacherDataPro(id, name, sex, deName, title, tel, e_mail);
+			Sex s = new Sex();
+			s.setSex(sex);
+			Department de = new Department();
+			de.setName(deName);
+			Teacher t = new Teacher(id, name, s, de, title, tel, e_mail);
+			teacherVo = formTeacherDataPro(t, "insert");
 			if(!teacherVo.isFlag()) {
 				msg = "第" + row.getRowNum() + "行数据：";
 				teacherVo.setMsg(msg + teacherVo.getMsg());
@@ -266,15 +269,21 @@ public class TeacherController {
 	}
 	
 	// 处理表单数据，以及excel获取后的数据 
-	private TeacherVo formTeacherDataPro(long id, String name,String sex, String deName, String title, long tel, String e_mail) {
+	private TeacherVo formTeacherDataPro(Teacher t, String style) {
 		TeacherVo teacherVo = new TeacherVo();
+		long id = t.getId(), tel = t.getTel();
+		String name = t.getName(), sex = t.getSex().getSex(), deName = t.getDeid().getName(), title = t.getTitle(), e_mail = t.getE_mail();
 		String msg = "";
 		boolean flag = true;
 		Teacher teacher = new Teacher();
-		if(teacherService.getCountById(id) == 1) {
-			flag = false;
-			msg += "教师编号重复";
-		}else {
+		if(style.equals("insert")) {
+			if(teacherService.getCountById(id) == 1) {
+				flag = false;
+				msg += "教师编号重复";
+			}else {
+				teacher.setId(id);
+			}
+		}else if(style.equals("update")) {
 			teacher.setId(id);
 		}
 		if(isTrueSex(sex) == 0) {
