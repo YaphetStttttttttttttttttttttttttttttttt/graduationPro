@@ -7,31 +7,27 @@
     <mapper namespace="com.gp.mapper.TeacherMapper">
     	<sql id="key">
     		id,name,sex,deid
-    		<trim prefix=",">
     			<if test="title != null and title !=''">
-    				title
+    				,title
     			</if>
     			<if test="tel != null and tel !=''">
-    				tel
+    				,tel
     			</if>
     			<if test="e_mail != null and e_mail !=''">
-    				e_mail
+    				,e_mail
     			</if>
-    		</trim>
     	</sql>
     	<sql id="values">
     		#{id},#{name},#{sex.num},#{deid.id}
-    		<trim prefix=",">
     			<if test="title != null and title !=''">
-    				#{title}
+    				,#{title}
     			</if>
     			<if test="tel != null and tel !=''">
-    				#{tel}
+    				,#{tel}
     			</if>
     			<if test="e_mail != null and e_mail !=''">
-    				#{e_mail}
+    				,#{e_mail}
     			</if>
-    		</trim>
     	</sql>
     	<resultMap id="TeacherBean" type="Teacher">
     		<id column="id" property="id" />
@@ -72,4 +68,9 @@
 			</set>
 			where id = #{id}
         </update>
+        <select id="getBySelect" resultMap="TeacherBean">
+        	select t.*, de.*, de.name 'dename' from teacher t
+        	left join department de on t.deid = de.id
+        	where t.id like concat('%',#{id},'%') and t.name like concat('%',#{name},'%') and t.deid like concat('%',#{deid},'%')
+        </select>
     </mapper>

@@ -4,19 +4,99 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%
-String listTeachers = request.getParameter("listInfo");
-List<Teacher> list = JSONArray.parseArray(listTeachers,Teacher.class);
+/* String listTeachers = request.getParameter("listInfo");
+List<Teacher> list = JSONArray.parseArray(listTeachers,Teacher.class); */
+
 %>
 <!DOCTYPE html>
 <script src="js/jquery.min.js"></script>
 <link href="css/bootstrap.min.css" rel="stylesheet">
-<script src="js/bootstrap.min.js"></script>
-
-<script>
-$(document).ready(function(){
-	
+<script src="js/bootstrap.min.js"></script>  
+<script type="text/javascript">
+$(document).ready(function () {
+	console.log("ajaxRequest");
+	$.ajax("${pageContext.request.contextPath}/_teacher",// 发送请求的URL字符串。
+			{
+		type : "get", //  请求方式 POST或GET
+		async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
+		success : function(data) {
+			tablePro(data);
+		},
+		error : function(data){
+			
+		}
+	});
 });
+function tablePro(data){
+	for(var index in data){
+		var title,tel,email,sex;
+		if(data[index]["title"]==null){
+			title = '';
+		}else{
+			title = data[index]["title"];
+		}
+		if(data[index]["tel"] == 0){
+			tel = '';
+		}else{
+			tel = data[index]["tel"];
+		}
+		if(data[index]["e_mail"]==null){
+			email = '';
+		}else{
+			email = data[index]["e_mail"];
+		}
+		if(data[index]["sex"]["num"]==1){
+			sex = "男";
+		}else{
+			sex = "女";
+		}
+		html =  
+		"<tr>" +
+		"<td name=\"select\" style=\"display:none;\"><input name=\"ids\" type=\"checkbox\" value='{\"id\":"+ data[index]["id"] +"}'></td>" + 
+		"<td>"+ data[index]["id"] +"</td>" +
+		"<td>"+ data[index]["name"] +"</td>" +
+		"<td>"+ sex +"</td>" + 
+		"<td>"+ data[index]["deid"]["name"] +"</td>" + 
+		"<td>"+ title +"</td>" +
+		"<td>"+ tel +"</td>" +
+		"<td>"+ email +"</td>" + 
+		"<td>" +
+			"<center>" +
+			"<button type=\"button\" name=\"Update\" class=\"btn btn-info\" onclick='updateTeacher(\"" + data[index]["id"] + "\", \"" + data[index]["name"] + "\", \"" + sex + "\"," + 
+			"\"" + data[index]["deid"]["name"] + "\", \"" + title + "\", \"" + tel + "\", \"" + email + "\")'>" + 
+			"<span class=\"glyphicon glyphicon-wrench\" aria-hidden=\"true\"></span>修改" +
+			"</button>" + 
+			"<button type=\"button\" name=\"Delete\" class=\"btn btn-danger\" style=\"display:none;\" onclick=\"deleteTeacher(" + data[index]["id"] + ")\">" +
+			"<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\" ></span>删除" + 
+			"</button>" + 
+			"</center>" + 
+		"</td>" + 
+		"</tr>";
+		console.log(data[index]["id"]);
+		console.log(html);
+		$("#tableList").append(html);
+	}
+}
+function selectTeacher(){
+	var id = document.getElementById("select_input_id").value;
+	var name = document.getElementById("select_input_name").value;
+	var department = document.getElementById("select_input_department").value;
+	
+	$.ajax("${pageContext.request.contextPath}/getTeachers",// 发送请求的URL字符串。
+			{
+		type : "post", //  请求方式 POST或GET
+		data:{"id":id,"name":name,"dename":department},
+		contentType: "application/x-www-form-urlencoded",
+		success : function(data) {
+			tablePro(data);
+		},
+		error : function(data){
+			
+		}
+	});
+}
 $(function(){
 	var table = $("#TeacherInfoTable");
 	$("#DeleteTeacherBtn").click(function(){
@@ -114,6 +194,7 @@ function inputTeacher(){
 				$("#TeacherFormData_UpdateBtn").hide();
 				$("#TeacherFormData_ConfirmBtn").hide();
 				$("#TeacherExcelInput").hide();
+				location.reload();
 			}
 		},
 		error : function(data){
@@ -132,7 +213,6 @@ function putFormData(){
 			var title = document.getElementById("title").value;
 			var tel = document.getElementById("tel").value;
 			var e_mail = document.getElementById("e_mail").value;
-			alert(tid + tname + sex + department + title + tel + e_mail);
 			$.ajax("${pageContext.request.contextPath}/addTeacher",// 发送请求的URL字符串。
 					{
 				type : "post", //  请求方式 POST或GET
@@ -162,6 +242,7 @@ function putFormData(){
 						$("#TeacherFormData_UpdateBtn").hide();
 						$("#TeacherFormData_ConfirmBtn").hide();
 						$("#TeacherExcelInput").hide();
+						location.reload();
 					}
 				},
 				error : function(data){
@@ -212,6 +293,7 @@ function updateFormData(){
 						$("#TeacherFormData_UpdateBtn").hide();
 						$("#TeacherFormData_ConfirmBtn").hide();
 						$("#TeacherExcelInput").hide();
+						location.reload();
 					}
 				},
 				error : function(data){
@@ -234,6 +316,7 @@ function deleteTeacher(id){
 					alert(resq.msg);
 				}else{
 					alert("删除成功");
+					location.reload();
 				}
 			},
 			error : function(data){
@@ -317,7 +400,6 @@ function validateForm() {
     return true
 }
 </script>
-
 <div  class="panel panel-primary" style="height:700px;width:100%;">
 <div class="panel-heading" style="height:auto;">
 当前位置：管理员>教师信息管理
@@ -329,7 +411,7 @@ function validateForm() {
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">姓名</button>
       </span>
-      <input type="text" class="form-control" >
+      <input type="text" class="form-control" id="select_input_name">
     </div>
 </div>
 <div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
@@ -337,7 +419,7 @@ function validateForm() {
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">教师编号</button>
       </span>
-      <input type="text" class="form-control" >
+      <input type="text" class="form-control" id="select_input_id">
     </div>
 </div>
 <div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
@@ -345,11 +427,11 @@ function validateForm() {
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">所属院系</button>
       </span>
-      <input type="text" class="form-control" >
+      <input type="text" class="form-control" id="select_input_department">
     </div>
 </div>
 <div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
-  <button type="button" class="btn btn-warning" id="selectTeacherBtn">
+  <button type="button" class="btn btn-warning" id="selectTeacherBtn" onclick="selectTeacher()">
   <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
   </button>
 </div>
@@ -376,9 +458,9 @@ function validateForm() {
 	<th>电子邮箱</th>
 	<th><center>操作</center></th> 
 </thead>
-<tbody>
-	
-	<c:forEach items='<%=list %>' var="teacher" varStatus="status"> 
+<tbody id="tableList">
+	<%-- '<%=list %>' --%>
+	<c:forEach items="${listTest}" var="teacher" varStatus="status"> 
 		<tr>
 		<td name="select" style="display:none;"><input name="ids" type="checkbox" value='{"id":${teacher.id}}'></td>
 		<td>${teacher.id }</td>
@@ -404,6 +486,7 @@ function validateForm() {
 	
 </tbody>
 </table>
+
 <div id="TeacherFormData"  style="display:none;background-color:LightCyan;margin-top:4%;margin-left:15%;position:absolute;width:50%;">
 	
 		<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:2%;">

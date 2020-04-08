@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.gp.model.pojo.Admin;
@@ -33,6 +34,7 @@ import com.gp.service.ClassesService;
 import com.gp.service.CoursePlanService;
 import com.gp.service.DepartmentService;
 import com.gp.service.TeacherService;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 @Controller
 public class TeacherController {
@@ -148,6 +150,7 @@ public class TeacherController {
 	}
 	@ResponseBody
 	@RequestMapping("_teacher")
+//	public Object Manager_TeacherMana(HttpSession session, HttpServletRequest request) {
 	public Object Manager_TeacherMana(HttpSession session) {
 		Admin user = (Admin) session.getAttribute("user");
 		List<Teacher> listTeachers = new ArrayList<Teacher>();
@@ -155,6 +158,20 @@ public class TeacherController {
 		if(user != null) {
 			listTeachers = teacherService.getAll();
 	//		obj.addObject("listTeachers",listTeachers);
+		}
+	//	request.getSession().setAttribute("listTest", listTeachers);
+		return listTeachers;
+	}
+	@RequestMapping("getTeachers")
+	public Object getTeachers(HttpSession session, HttpServletRequest request) {
+		Admin user = (Admin) session.getAttribute("user");
+		List<Teacher> listTeachers = new ArrayList<Teacher>();
+		System.out.println(user != null);
+		if(user != null) {
+			long id = Long.valueOf(request.getParameter("id"));
+			String name = request.getParameter("name");
+			int deid = 6;
+			listTeachers = teacherService.getBySelect(id, name, deid);
 		}
 		return listTeachers;
 	}

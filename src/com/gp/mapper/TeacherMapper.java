@@ -16,4 +16,6 @@ public interface TeacherMapper {
 	public int delete(Teacher teacher);
 	
 	public int update(Teacher teacher);
+	
+	public List<Teacher> getBySelect(@Param("id") long id, @Param("name") String name, @Param("deid") int deid);
 }

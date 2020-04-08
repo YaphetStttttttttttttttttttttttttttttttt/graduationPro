@@ -9,7 +9,7 @@
 
 <div  class="panel panel-primary">
 <div class="panel-heading" style="height:140px;">
-	<h1 >成绩查询系统</h1>当前位置：管理员 
+	<h1 >成绩查询系统</h1>当前位置：管理员
 	<button type="button" class="btn btn-default btn-lg" style="float:right;">
 		<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销
 	</button>
@@ -30,8 +30,10 @@
 	<li class="list-group-item list-group-item-warning" data-id="Select_courseMana"style="height:80px;"data-toggle="tooltip" data-placement="right" title="选课信息管理"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>选课信息管理</li>
 	</ul>
 </div>
-<div id="content" style="float:left;margin-left:1%;width:83%"></div>
- </div>
+<div id="content" style="float:left;margin-left:1%;width:83%">
+	<iframe frameborder="0" scrolling="no" style="width:100%;height:800px" src="" id="aa"></iframe>
+</div>
+</div>
 </div>
 <script>
 $(function () { 
@@ -40,26 +42,8 @@ $(function () {
 $(function() {
 	$(".list-group").on("click", "li", function() {
 		var sId = $(this).data("id"); //获取data-id的值
-		$.ajax("${pageContext.request.contextPath}/" + sId,// 发送请求的URL字符串。
-				{
-			type : "post", //  请求方式 POST或GET
-			dataType:"json",
-			async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
-			beforeSend:function(){
-				console.log("正在进行，请稍候");
-			},
-			success : function(data) {
-				sId = "manageer" + sId;
-				$("#content").load(sId, {listInfo:JSON.stringify(data)}, function(){
-					console.log("success!");
-				}); //加载相对应的内容
-			//	window.location.hash = sId; //设置锚点
-			//	loadInner(sId);
-			},
-			error : function(data){
-				
-			}
-		});
+		sId = "manageer" + sId;
+		$("iframe").attr("src",sId);
 	});
 	function loadInner(sId) {
 		var sId = window.location.hash;

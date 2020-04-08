@@ -20,4 +20,6 @@ public interface TeacherService {
 	int update(Teacher teacher);
 	
 	int updateMany(List<Teacher> listTeachers);
+	
+	List<Teacher> getBySelect(long id, String name, int deid);
 }
