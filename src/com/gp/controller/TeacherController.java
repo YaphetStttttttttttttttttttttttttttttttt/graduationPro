@@ -22,11 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.alibaba.fastjson.JSONArray;
 import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Department;
 import com.gp.model.pojo.Teacher;
 import com.gp.model.vo.Sex;
 import com.gp.model.vo.TeacherVo;
+import com.gp.service.ClassesService;
+import com.gp.service.CoursePlanService;
 import com.gp.service.DepartmentService;
 import com.gp.service.TeacherService;
 
@@ -36,7 +40,10 @@ public class TeacherController {
 	TeacherService teacherService;
 	@Autowired
 	DepartmentService departmentService;
-	
+	@Autowired
+	ClassesService classesService;
+	@Autowired
+	CoursePlanService coursePlanService;
 	
 	@RequestMapping("addTeacher")
 	public void addTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
@@ -60,14 +67,81 @@ public class TeacherController {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(s);
 		httpServletResponse.setCharacterEncoding("utf8");
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
 	}
 	@RequestMapping("deleteTeacher")
+	public void deleteTeacher(@RequestParam long id, HttpServletResponse httpServletResponse) throws IOException {
+		String s ="", msg = "";
+		Teacher teacher = new Teacher();
+		teacher.setId(id);
+		boolean deleteFlag = teacherCanDeleted(teacher);
+		if(!deleteFlag) {
+			msg = "教师无法删除。可能在排课或是班级中存在";
+			s = "{\"success\":\"" + deleteFlag +"\",\"msg\":\"" + msg + "\"}";
+		}else {
+			try {
+				int flag = teacherService.delete(teacher);
+				if(flag == 0) {
+					msg = "删除失败!";
+					s = "{\"success\":\"" + "false" +"\",\"msg\":\"" + msg + "\"}";
+				}else {
+					msg = "删除成功!";
+					s = "{\"success\":\"" + deleteFlag +"\",\"msg\":\"" + msg + "\"}";
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(s);
+	}
+	@RequestMapping("deleteTeachers")
 	public void deleteTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
-		String s = "";
+		String s = "", msg = "", jsonString = "[";
+		//以数组形式从前端获取选取的checkbox的value
+		//jsonString 将获取的value写成json字符串形式
+		String[] array = httpServletRequest.getParameterValues("array[]");
+		for(int i = 0; i < array.length; i++) {
+			if(i > 0) {
+				jsonString = jsonString + "," + array[i];
+			}else {
+				jsonString = jsonString + array[i];
+			}
+		}
+		jsonString += "]";
+		//将json字符串转换成list对象
+		List<Teacher> listTeachers = JSONArray.parseArray(jsonString, Teacher.class);
+		boolean deleteFlag = false;
+		for(Teacher t : listTeachers) {
+			//在这里判断list<>中每一个对象是否可以进行删除
+			deleteFlag = teacherCanDeleted(t);
+			//返回false就跳出循环
+			if(!deleteFlag) {
+				msg = "id为" + t.getId() + "的教师无法删除。可能在排课或是班级中存在";
+				break;
+			}
+		}
+		if(!deleteFlag) {
+			s = "{\"success\":\"" + deleteFlag +"\",\"msg\":\"" + msg + "\"}";
+		}else {
+			try {
+				int flag = teacherService.deleteMany(listTeachers);
+				if(flag == 0) {
+					msg = "删除失败!";
+					s = "{\"success\":\"" + "false" +"\",\"msg\":\"" + msg + "\"}";
+				}else {
+					msg = "删除成功!";
+					s = "{\"success\":\"" + deleteFlag +"\",\"msg\":\"" + msg + "\"}";
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
 		httpServletResponse.setCharacterEncoding("utf8");
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
@@ -77,7 +151,7 @@ public class TeacherController {
 	public Object Manager_TeacherMana(HttpSession session) {
 		Admin user = (Admin) session.getAttribute("user");
 		List<Teacher> listTeachers = new ArrayList<Teacher>();
-		System.out.println(user != null);
+		//System.out.println(user != null);
 		if(user != null) {
 			listTeachers = teacherService.getAll();
 	//		obj.addObject("listTeachers",listTeachers);
@@ -181,6 +255,23 @@ public class TeacherController {
 		
 		teacher.setE_mail( httpServletRequest.getParameter("e_mail") );
 		return teacher;	
+	}
+	/**
+	 * @param teacher
+	 * @return boolean
+	 * 
+	 */
+	private boolean teacherCanDeleted(Teacher teacher) {
+		//判断teacher是否能被删除。1.判断是否为班主任2.是否在排课中存在
+		if(classesService.getCountByTid(teacher.getId()) > 0) {
+			return false;
+		}else {
+			if(coursePlanService.getCountByTid(teacher.getId()) > 0) {
+				return false;
+			}else {
+				return true;
+			}
+		}
 	}
 	private int isTrueSex(String sex) {
 		int num = 0;

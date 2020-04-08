@@ -64,4 +64,7 @@
         <insert id="addAdmin">
         	insert into admin(username) values(#{username})
         </insert>
+        <delete id="deleteTeacher">
+        	delete from t_user where username = #{username}
+        </delete>
     </mapper>

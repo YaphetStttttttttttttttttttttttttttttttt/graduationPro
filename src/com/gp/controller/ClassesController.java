@@ -160,7 +160,7 @@ public class ClassesController {
 		String msg = "";
 		boolean flag = true;
 		Classes classes = new Classes();
-		if(classesService.getByIdAName(id, name) == 1) {
+		if(classesService.getCountByIdAName(id, name) == 1) {
 			flag = false;
 			msg += "已经存在相同的ID或班级名;";
 		}else {

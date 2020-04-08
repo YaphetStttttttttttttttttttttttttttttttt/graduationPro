@@ -14,4 +14,7 @@
         <select id="getCountById" resultType="int">
         	select count(*) from course_plan where id = #{id}
         </select>
+        <select id="getCountByTid" resultType="int">
+        	select count(*) from course_plan where tid = #{tid}
+        </select>
     </mapper>

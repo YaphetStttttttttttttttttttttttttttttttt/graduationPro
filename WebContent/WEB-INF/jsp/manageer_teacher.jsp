@@ -221,31 +221,75 @@ function updateFormData(){
 		}
 	}
 }
-function deleteFormData() {
-	var flag = deleteForm();
-	if(flag){
+function deleteTeacher(id){
 	if (confirm("确定删除？")) {
-		
+		$.ajax("${pageContext.request.contextPath}/deleteTeacher",// 发送请求的URL字符串。
+				{
+			type : "post", //  请求方式 POST或GET
+			data:{"id":id},
+			contentType: "application/x-www-form-urlencoded",
+			success : function(data) {
+				var resq = eval("(" + data + ")");
+				if(resq.success == "false"){
+					alert(resq.msg);
+				}else{
+					alert("删除成功");
+				}
+			},
+			error : function(data){
+				
+			}
+		});
+	}
+}
+function deleteFormData() {
+	var ids = document.getElementsByName("ids");               
+	var flag = false;
+	var seleted = new Array();
+	for(var i=0; i < ids.length; i++){
+    	if(ids[i].checked){
+    		seleted[i] = ids[i].value;
+    		flag = true;
+    	}
+	}
+	if(!flag){
+		alert("请最少选择一项！");
 	}
 	else {
+		if (confirm("确定删除？")) {
+			$.ajax("${pageContext.request.contextPath}/deleteTeachers",// 发送请求的URL字符串。
+					{
+				type : "post", //  请求方式 POST或GET
+				data:{"array":seleted},
+				contentType: "application/x-www-form-urlencoded",
+				success : function(data) {
+					var resq = eval("(" + data + ")");
+					if(resq.success == "false"){
+						alert(resq.msg);
+					}else{
+						alert("删除成功");
+					}
+				},
+				error : function(data){
+					
+				}
+			});
+		}
 	}
 }
-}
-function deleteForm(){
-var ids = document.getElementsByName("select");               
-var flag = false ;               
-for(var i=0; i<ids.length; i++){
-    if(ids[i].checked){
-        flag = true ;
-        break ;
-    }
-}
-if(!flag){
-    alert("请最少选择一项！");
-    return false ;
-}
-return true;
-}
+/* function deleteForm(){
+	var ids = document.getElementsByName("ids");               
+	var flag = false ;
+	var seleted = new Array();
+	for(var i=0; i < ids.length; i++){
+    	if(ids[i].checked){
+    		seleted[i] = ids[i].value;
+    	}
+	}
+	if(!flag){
+    	alert("请最少选择一项！");
+	}
+} */
 function validateForm() {
 	var tid = document.getElementById("tid").value;
 	var tname = document.getElementById("tname").value;
@@ -336,7 +380,7 @@ function validateForm() {
 	
 	<c:forEach items='<%=list %>' var="teacher" varStatus="status"> 
 		<tr>
-		<td name="select" style="display:none;"><input name="ids" type="checkbox"></td>
+		<td name="select" style="display:none;"><input name="ids" type="checkbox" value='{"id":${teacher.id}}'></td>
 		<td>${teacher.id }</td>
 		<td>${teacher.name }</td>
 		<td>${teacher.sex.num==1?'男':'女' }</td>
@@ -347,8 +391,12 @@ function validateForm() {
 		<td>
 			<center>
 			<button type="button" name="Update" class="btn btn-info" onclick='updateTeacher("${teacher.id}", "${teacher.name}", "${teacher.sex.num==1?'男':'女'}", 
-			"${teacher.deid.name}", "${teacher.title==null?'':teacher.title}", "${teacher.tel==0?'':teacher.tel}", "${teacher.e_mail==null?'':teacher.e_mail}")'><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>修改</button>
-        	<button type="button" name="Delete" class="btn btn-danger" style="display:none;"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除</button>
+			"${teacher.deid.name}", "${teacher.title==null?'':teacher.title}", "${teacher.tel==0?'':teacher.tel}", "${teacher.e_mail==null?'':teacher.e_mail}")'>
+				<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>修改
+			</button>
+        	<button type="button" name="Delete" class="btn btn-danger" style="display:none;" onclick="deleteTeacher(${teacher.id})">
+        		<span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除
+        	</button>
         	</center>
         </td> 
 		</tr>

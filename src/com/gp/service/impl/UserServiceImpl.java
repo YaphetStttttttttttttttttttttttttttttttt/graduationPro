@@ -32,4 +32,7 @@ public class UserServiceImpl implements UserService {
 	public int addAdmin(String username) {
 		return userMapper.addAdmin(username);
 	}
+	public int deleteTeacher(long username) {
+		return userMapper.deleteTeacher(username);
+	}
 }

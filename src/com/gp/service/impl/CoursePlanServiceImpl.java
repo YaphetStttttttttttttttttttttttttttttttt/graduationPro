@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.gp.mapper.CoursePlanMapper;
 import com.gp.model.pojo.CoursePlan;
+import com.gp.model.pojo.Teacher;
 import com.gp.service.CoursePlanService;
 
 @Service
@@ -30,5 +31,8 @@ public class CoursePlanServiceImpl implements CoursePlanService {
 	}
 	public int getCountById(long id) {
 		return coursePlanMapper.getCountById(id);
+	}
+	public int getCountByTid(long tid) {
+		return coursePlanMapper.getCountByTid(tid);
 	}
 }

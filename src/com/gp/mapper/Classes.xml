@@ -29,10 +29,13 @@
         <insert id="add" parameterType="Classes">
         	insert into classes(<include refid="key"/>) values(<include refid="values"/>)
         </insert>
-        <select id="getByIdAName" resultType="int">
+        <select id="getCountByIdAName" resultType="int">
         	select count(*) from classes where id = #{id} or name = #{name}
         </select>
         <select id="getIdByName" resultType="integer">
         	select id from classes where name = #{name}
+        </select>
+        <select id="getCountByTid" resultType="int">
+        	select count(*) from classes where tid = #{tid}
         </select>
     </mapper>

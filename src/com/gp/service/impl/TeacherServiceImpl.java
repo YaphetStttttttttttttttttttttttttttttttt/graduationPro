@@ -27,7 +27,6 @@ public class TeacherServiceImpl implements TeacherService {
 			return flag;
 		}else {
 			flag = userService.addTeacher(teacher.getId());
-			if(flag == 0) return flag;
 		}
 		return flag;
 	}
@@ -48,13 +47,23 @@ public class TeacherServiceImpl implements TeacherService {
 		return teacherMapper.getAll();
 	}
 	public int delete(Teacher teacher) {
-		return teacherMapper.delete(teacher);
+		int flag = userService.deleteTeacher(teacher.getId());
+		if(flag == 0) {
+			return flag;
+		}else {
+			return teacherMapper.delete(teacher);
+		}
 	}
 	public int deleteMany(List<Teacher> listTeachers) {
 		int flag = 0;
 		for(Teacher teacher : listTeachers) {
-			flag = teacherMapper.delete(teacher);
-			if(flag == 0) return flag; 
+			flag = userService.deleteTeacher(teacher.getId());
+			if(flag == 0) {
+				return flag;
+			}else {
+				flag = teacherMapper.delete(teacher);
+				if(flag == 0) return flag;
+			}
 		}
 		return flag;
 	}

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.gp.mapper.ClassesMapper;
 import com.gp.model.pojo.Classes;
+import com.gp.model.pojo.Teacher;
 import com.gp.service.ClassesService;
 
 @Service
@@ -25,10 +26,13 @@ public class ClassesServiceImpl implements ClassesService {
 		}
 		return flag;
 	}
-	public int getByIdAName(int id, String name) {
-		return classesMapper.getByIdAName(id, name);
+	public int getCountByIdAName(int id, String name) {
+		return classesMapper.getCountByIdAName(id, name);
 	}
 	public Integer getIdByName(String name) {
 		return classesMapper.getIdByName(name);
+	}
+	public int getCountByTid(long tid) {
+		return classesMapper.getCountByTid(tid);
 	}
 }
