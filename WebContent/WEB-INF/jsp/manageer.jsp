@@ -9,7 +9,7 @@
 
 <div  class="panel panel-primary">
 <div class="panel-heading" style="height:140px;">
-	<h1 >成绩查询系统</h1>当前位置：管理员
+	<h1 >成绩查询系统啊</h1>当前位置：管理员
 	<button type="button" class="btn btn-default btn-lg" style="float:right;">
 		<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销
 	</button>
