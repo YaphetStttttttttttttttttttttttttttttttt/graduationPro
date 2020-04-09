@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gp.model.pojo.Admin;
@@ -35,7 +33,6 @@ import com.gp.service.ClassesService;
 import com.gp.service.CoursePlanService;
 import com.gp.service.DepartmentService;
 import com.gp.service.TeacherService;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 @Controller
 public class TeacherController {
@@ -175,7 +172,7 @@ public class TeacherController {
 	public Object getTeachers(HttpSession session, HttpServletRequest request) {
 		long id = 0;
 		int deid = 6;
-		System.out.println(id);
+	//	System.out.println(id);
 		String name = "", deName = "";
 		Admin user = (Admin) session.getAttribute("user");
 		List<Teacher> listTeachers = new ArrayList<Teacher>();
@@ -274,8 +271,7 @@ public class TeacherController {
 		Teacher teacher = new Teacher();
 		Sex sex = new Sex();
 		Department deid = new Department();
-		System.out.println(httpServletRequest.getParameter("tid"));
-		System.out.println(httpServletRequest.getParameter("tname"));
+		
 		teacher.setId( Long.valueOf( httpServletRequest.getParameter("tid") ) );
 		teacher.setName( httpServletRequest.getParameter("tname") );
 		sex.setSex( httpServletRequest.getParameter("sex") );

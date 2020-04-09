@@ -23,6 +23,7 @@ $(document).ready(function () {
 		success : function(data) {
 			var jsonObj = eval('(' + data + ')');
 			tablePro(jsonObj["listTeachers"]);
+			tabPro(jsonObj["listDepartments"]);
 		},
 		error : function(data){
 			
@@ -31,7 +32,9 @@ $(document).ready(function () {
 });
 function tabPro(data){
 	for(var index in data){
-		
+		html = "<li><a href=\"#\">" + data[index]["name"] + "</a></li>";
+		$("#project").append(html);
+		$("#project1").append(html);
 	}
 }
 function tablePro(data){
@@ -82,16 +85,10 @@ function tablePro(data){
 		$("#tableList").append(html);
 	}
 }
-function dealData(data){
-	if(data == null || data ==""){
-		return "";
-	}
-	return data;
-}
 function selectTeacher(){
-	var id = dealData(document.getElementById("select_input_id").value);
-	var name = dealData(document.getElementById("select_input_name").value);
-	var department = dealData(document.getElementById("select_input_department").value);
+	var id = document.getElementById("select_input_id").value;
+	var name = document.getElementById("select_input_name").value;
+	var department = document.getElementById("select_input_department").value;
 	
 	$.ajax("${pageContext.request.contextPath}/getTeachers",// 发送请求的URL字符串。
 			{
@@ -133,6 +130,7 @@ $(function(){
 		$("#TeacherInfoTable").show();
 	});
 	$("#AddTeacherBtn").click(function(){
+		document.getElementById('tid').removeAttribute('disabled')
 		$("#TeacherFormData").hide();
 		$("#TeacherFormData_UpdateBtn").hide();
 		$("#TeacherExcelInput").show();
@@ -141,6 +139,7 @@ $(function(){
 	});
 });
 function updateTeacher(id, name, sex, department, title, tel, email) {
+	document.getElementById('tid').setAttribute('disabled', 'disabled')
 	document.getElementById("tid").value = id;
 	document.getElementById("tname").value = name;
 	document.getElementById("sex").value = sex;
@@ -170,13 +169,6 @@ $(function(){
 		$("#TeacherFormData_ConfirmBtn").hide();
 		$("#TeacherExcelInput").hide();
 	});
-/* 	 $("button[name='Update']").click(function(){
-		div.hide();
-		$("#TeacherFormData_ConfirmBtn").hide();
-		$("#TeacherExcelInput").hide();
-		$("#TeacherFormData_UpdateBtn").show();
-		div.show();
-	}); */
 });
 function inputTeacher(){
 	var formData = new FormData();
@@ -411,20 +403,13 @@ function validateForm() {
 }
 $(function(){
 	$("#project").on("click", "li", function(){
-		
 		 $("#department").val($(this).text());
-		 
-		 
-		});
-	});//下拉菜单选中的值赋值给input输入框！
-	$(function(){
-		$("#project1").on("click", "li", function(){
-			
-			$("#select_input_department").val($(this).text());
-			 
-			 
-			});
-		});//下拉菜单选中的值赋值给input输入框！
+	});
+	$("#project1").on("click", "li", function(){
+		$("#select_input_department").val($(this).text());
+	});
+	
+});//下拉菜单选中的值赋值给input输入框！
 </script>
 <div  class="panel panel-primary" style="height:700px;width:100%;">
 <div class="panel-heading" style="height:auto;">
@@ -453,11 +438,7 @@ $(function(){
       <span class="input-group-btn">
         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">所属院系<span class="caret"></span></button>
                       <ul id="project1" class="dropdown-menu" >
-	    		      <li><a href="#">${teacher.deid.name }</a></li>
-                      <li><a href="#">北洋广场</a></li>
-                     <li><a href="#">其他</a></li>
-	                       
-	        </ul>      
+                      </ul>      
       </span>
       <input type="text" class="form-control" id="select_input_department" disabled="true">
     </div>
@@ -525,10 +506,8 @@ $(function(){
     		<div class="input-group-btn">
     		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">所属院系<span class="caret"></span></button>
 	    		    <ul id="project" class="dropdown-menu" >
-	    		      <li><a href="#">${teacher.deid.name }</a></li>
-                    <li><a href="#">北洋广场</a></li>
-                    <li><a href="#">其他</a></li>
-	                  </ul>
+	    		    
+                    </ul>
 	       </div>
     		<input id="department" type="text" class="form-control" disabled="true">
     	</div><!-- /input-group -->
