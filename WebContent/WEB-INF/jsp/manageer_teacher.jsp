@@ -462,7 +462,7 @@ $(function(){
       <input type="text" class="form-control" id="select_input_department" disabled="true">
     </div>
 </div>
-<div class="btn-group" style=" width:6%; height:10%;  float:left; margin-left:1%;">
+<div class="btn-group" style=" width:7%; height:10%;  float:left; margin-left:1%;">
   <button type="button" class="btn btn-warning" id="selectTeacherBtn" onclick="selectTeacher()">
   <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
   </button>
