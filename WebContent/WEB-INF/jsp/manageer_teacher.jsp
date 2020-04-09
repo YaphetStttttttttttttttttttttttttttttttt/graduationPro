@@ -55,6 +55,7 @@ function getTotle(){
 		success : function(data) {
 			allCount = data.totle;
             pageNum();//页面被加载默认的页数
+            $("#totleRow").val(allCount);
 		},
 		error : function(data){
 			
@@ -628,13 +629,14 @@ $(function(){
 </tbody>
 <tfoot>
     <tr>
-        <td colspan="5" align="center">	每页10条|
+        <td colspan="5" align="center">	
+        	共<input style="width: 20px;" id="totleRow" disabled="disabled"/>条|每页10条|
             <span id="firstPage" style="color:red;font-weight:bold" onclick="firstPage()">首页</span>|
             <span id="prePage" style="color:red;font-weight:bold" onclick="prePage()">上一页</span>|
             <span id="nextPage" style="color:red;font-weight:bold" onclick="nextPage()">下一页</span>|
             <span id="lastPage" style="color:red;font-weight:bold" onclick="lastPage()">最后一页</span>|
             <span style="color:red;font-weight:bold">
-            	当前第<input style="width: 20px;" id="nowPage" type="text" value="1"/>页
+            	当前第<input style="width: 20px;" id="nowPage" type="text" value="1" disabled="disabled"/>页
             </span>|
            	 	共<input style="width: 20px;" id="totlePage" disabled="disabled"/>页|
             <span style="color:red;font-weight:bold">
