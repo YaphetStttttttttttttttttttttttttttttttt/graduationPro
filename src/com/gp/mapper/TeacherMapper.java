@@ -17,5 +17,7 @@ public interface TeacherMapper {
 	
 	public int update(Teacher teacher);
 	
-	public List<Teacher> getBySelect(@Param("id") long id, @Param("name") String name, @Param("deid") int deid);
+	public List<Teacher> getBySelect(@Param("id") long id, @Param("name") String name, @Param("deid") int deid, @Param("start") int start,@Param("size") int end);
+
+	public int totleCount(@Param("id") long id, @Param("name") String name, @Param("deid") int deid);
 }

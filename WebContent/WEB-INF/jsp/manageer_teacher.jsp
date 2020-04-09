@@ -15,6 +15,12 @@ List<Teacher> list = JSONArray.parseArray(listTeachers,Teacher.class); */
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <script src="js/bootstrap.min.js"></script>  
 <script type="text/javascript">
+var allCount;//记录总数
+var page;//总页数
+var pageNumber = 1;//默认起始记录
+var pageSize = 10;//每页记录数
+var selectFlag = false;
+
 $(document).ready(function () {
 	console.log("ajaxRequest");
 	$.ajax("${pageContext.request.contextPath}/_teacher",// 发送请求的URL字符串。
@@ -29,7 +35,142 @@ $(document).ready(function () {
 			
 		}
 	});
+	getTotle();
 });
+function getTotle(){
+	var id = "", name = "", department = "";
+	if(selectFlag){
+		id = document.getElementById("select_input_id").value;
+		name = document.getElementById("select_input_name").value;
+		department = document.getElementById("select_input_department").value;
+	}
+	$.ajax("${pageContext.request.contextPath}/totlePageTeacher",// 发送请求的URL字符串。
+			{
+		type : "post", //  请求方式 POST或GET
+		data:{
+			"id":id,
+			"name":name,
+			"dename":department
+		},
+		success : function(data) {
+			allCount = data.totle;
+            pageNum();//页面被加载默认的页数
+		},
+		error : function(data){
+			
+		}
+	});
+}
+/**
+ * 总页数
+ * */
+function pageNum() {
+    if (allCount % 10 == 0) {
+        page = parseInt(allCount / 10);
+        $("#totlePage").val(page);
+    } else {
+        page = parseInt(allCount / 10) + 1;
+        $("#totlePage").val(page);
+    }
+}
+/**
+ * 首页
+ * */
+function firstPage() {
+    pageNumber = 1;
+    pageSize = 10;
+    $("#jumpPage").val("1");
+    if ($("#nowPage").val() == 1) {
+        alert("已经是首页了")
+    }
+    $("#nowPage").val("1");
+    show();
+}
+/**
+ * 上一页
+ * */
+function prePage() {
+    if (pageSize > 10) {
+        $("#nowPage").val(pageSize / 10 - 1);
+        $("#jumpPage").val(pageSize / 10 - 1);
+        pageSize = pageNumber - 1;
+        pageNumber = pageNumber - 10;
+        show();
+    } else {
+        alert("已经是首页了")
+    }
+}
+/**
+ * 下一页
+ * */
+function nextPage() {
+    if (allCount > pageSize) {
+        $("#nowPage").val(pageSize / 10 + 1);
+        $("#jumpPage").val(pageSize / 10 + 1);
+        pageNumber = pageNumber + 10;
+        pageSize = pageNumber + 10 - 1;
+        show();
+    } else {
+        alert("已经是最后一页了")
+    }
+}
+/**
+ * 跳转至第几页
+ * */
+function jump() {
+    var page = parseInt($("#jumpPage").val());
+    if (page <= parseInt($("#totlePage").val())) {
+        pageSize = page * 10;
+        pageNumber = (page - 1) * 10 + 1;
+        $("#nowPage").val($("#jumpPage").val());
+        show();
+    } else {
+        alert("该页不存在")
+        $("#jumpPage").val($("#nowPage").val());
+
+    }
+}
+/**
+ * 最后一页
+ * */
+function lastPage() {
+    pageNumber = parseInt($("#totlePage").val() - 1) * 10 + 1;
+    pageSize = allCount;
+    $("#jumpPage").val($("#totlePage").val());
+    if ($("#nowPage").val() == $("#totlePage").val()) {
+        alert("已经是最后一页了")
+    }
+    $("#nowPage").val($("#totlePage").val());
+    show();
+}
+function show() {
+	var id = "", name = "", department = "";
+	if(selectFlag){
+		id = document.getElementById("select_input_id").value;
+		name = document.getElementById("select_input_name").value;
+		department = document.getElementById("select_input_department").value;
+	}
+	$.ajax("${pageContext.request.contextPath}/getTeachers",// 发送请求的URL字符串。
+			{
+		type : "post", //  请求方式 POST或GET
+		data:{
+			"id":id,
+			"name":name,
+			"dename":department,
+			"pageNumber":$("#nowPage").val(),
+			"Size":10
+		},
+		success : function(data) {
+			console.log("sueecss");
+			$("#tableList").empty();
+			tablePro(data);
+		},
+		error : function(data){
+			
+		}
+	});
+	getTotle();
+}
 function tabPro(data){
 	for(var index in data){
 		html = "<li><a href=\"#\">" + data[index]["name"] + "</a></li>";
@@ -85,7 +226,13 @@ function tablePro(data){
 		$("#tableList").append(html);
 	}
 }
+function inputChange(){
+	selectFlag = false;
+}
 function selectTeacher(){
+	selectFlag = true;
+	show();
+	/*
 	var id = document.getElementById("select_input_id").value;
 	var name = document.getElementById("select_input_name").value;
 	var department = document.getElementById("select_input_department").value;
@@ -102,7 +249,7 @@ function selectTeacher(){
 		error : function(data){
 			
 		}
-	});
+	});*/
 }
 $(function(){
 	var table = $("#TeacherInfoTable");
@@ -196,7 +343,7 @@ function inputTeacher(){
 				$("#TeacherFormData_UpdateBtn").hide();
 				$("#TeacherFormData_ConfirmBtn").hide();
 				$("#TeacherExcelInput").hide();
-				location.reload();
+				show();
 			}
 		},
 		error : function(data){
@@ -237,14 +384,14 @@ function putFormData(){
 				success : function(data) {
 					var resq = eval("(" + data + ")");
 					if(resq.success == "false"){
-						alert(resq.msg);
+					//	alert(resq.msg);
 					}else{
 						alert("添加成功");
 						$("#TeacherFormData").hide();   
 						$("#TeacherFormData_UpdateBtn").hide();
 						$("#TeacherFormData_ConfirmBtn").hide();
 						$("#TeacherExcelInput").hide();
-						location.reload();
+						show();
 					}
 				},
 				error : function(data){
@@ -295,7 +442,7 @@ function updateFormData(){
 						$("#TeacherFormData_UpdateBtn").hide();
 						$("#TeacherFormData_ConfirmBtn").hide();
 						$("#TeacherExcelInput").hide();
-						location.reload();
+						show();
 					}
 				},
 				error : function(data){
@@ -318,7 +465,7 @@ function deleteTeacher(id){
 					alert(resq.msg);
 				}else{
 					alert("删除成功");
-					location.reload();
+					show();
 				}
 			},
 			error : function(data){
@@ -353,6 +500,7 @@ function deleteFormData() {
 						alert(resq.msg);
 					}else{
 						alert("删除成功");
+						show();
 					}
 				},
 				error : function(data){
@@ -406,6 +554,7 @@ $(function(){
 		 $("#department").val($(this).text());
 	});
 	$("#project1").on("click", "li", function(){
+		selectFlag = false;
 		$("#select_input_department").val($(this).text());
 	});
 	
@@ -422,7 +571,7 @@ $(function(){
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">姓名</button>
       </span>
-      <input type="text" class="form-control" id="select_input_name">
+      <input type="text" class="form-control" id="select_input_name" onchange="inputChange()">
     </div>
 </div>
 <div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
@@ -430,17 +579,20 @@ $(function(){
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">教师编号</button>
       </span>
-      <input type="text" class="form-control" id="select_input_id">
+      <input type="text" class="form-control" id="select_input_id" onchange="inputChange()">
     </div>
 </div>
 <div class="btn-group" style=" width:26%; height:10%;  float:left; margin-left:1%;">
   <div class="input-group">
-      <span class="input-group-btn">
-        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">所属院系<span class="caret"></span></button>
-                      <ul id="project1" class="dropdown-menu" >
-                      </ul>      
-      </span>
-      <input type="text" class="form-control" id="select_input_department" disabled="true">
+  	<span class="input-group-btn">
+  	<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">所属院系<span class="caret">
+  	</span>
+  	</button>
+  		<ul id="project1" class="dropdown-menu" >
+  		
+  		</ul>
+  	</span>
+  	<input type="text" class="form-control" id="select_input_department" disabled="true" onchange="inputChange()">
     </div>
 </div>
 <div class="btn-group" style=" width:7%; height:10%;  float:left; margin-left:1%;">
@@ -474,6 +626,23 @@ $(function(){
 <tbody id="tableList">
 	
 </tbody>
+<tfoot>
+    <tr>
+        <td colspan="5" align="center">	每页10条|
+            <span id="firstPage" style="color:red;font-weight:bold" onclick="firstPage()">首页</span>|
+            <span id="prePage" style="color:red;font-weight:bold" onclick="prePage()">上一页</span>|
+            <span id="nextPage" style="color:red;font-weight:bold" onclick="nextPage()">下一页</span>|
+            <span id="lastPage" style="color:red;font-weight:bold" onclick="lastPage()">最后一页</span>|
+            <span style="color:red;font-weight:bold">
+            	当前第<input style="width: 20px;" id="nowPage" type="text" value="1"/>页
+            </span>|
+           	 	共<input style="width: 20px;" id="totlePage" disabled="disabled"/>页|
+            <span style="color:red;font-weight:bold">
+            	跳转至第<input style="width: 20px;" id="jumpPage" type="text" value="1"/>页</span>
+            <button onclick="jump()">确定</button>
+        </td>
+    </tr>
+    </tfoot>
 </table>
 
 <div id="TeacherFormData"  style="display:none;background-color:LightCyan;margin-top:4%;margin-left:15%;position:absolute;width:50%;">

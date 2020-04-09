@@ -33,6 +33,7 @@ import com.gp.service.ClassesService;
 import com.gp.service.CoursePlanService;
 import com.gp.service.DepartmentService;
 import com.gp.service.TeacherService;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 @Controller
 public class TeacherController {
@@ -171,12 +172,13 @@ public class TeacherController {
 	@RequestMapping("getTeachers")
 	public Object getTeachers(HttpSession session, HttpServletRequest request) {
 		long id = 0;
-		int deid = 6;
-	//	System.out.println(id);
+		int deid = 0;
 		String name = "", deName = "";
 		Admin user = (Admin) session.getAttribute("user");
 		List<Teacher> listTeachers = new ArrayList<Teacher>();
 	//	System.out.println(user != null);
+		int start = Integer.valueOf(request.getParameter("pageNumber"));
+		int size = Integer.valueOf(request.getParameter("Size"));
 		if(user != null) {
 			if(request.getParameter("id") != null && request.getParameter("id") != "" && !request.getParameter("id").equals("")) {
 				id = Long.valueOf(request.getParameter("id"));
@@ -188,9 +190,33 @@ public class TeacherController {
 				deName = request.getParameter("dename");
 				deid = (int)departmentService.getIdByName(deName);
 			}
-			listTeachers = teacherService.getBySelect(id, name, deid);
+			listTeachers = teacherService.getBySelect(id, name, deid, (start - 1) * 10, size);
 		}
 		return listTeachers;
+	}
+	@ResponseBody
+	@RequestMapping("totlePageTeacher")
+	public Object getTeacherTotlePage(HttpSession session, HttpServletRequest request) {
+		long id = 0;
+		int deid = 0;
+		String name = "", deName = "";
+		Admin user = (Admin) session.getAttribute("user");
+		if(user != null) {
+			if(request.getParameter("id") != null && request.getParameter("id") != "" && !request.getParameter("id").equals("")) {
+				id = Long.valueOf(request.getParameter("id"));
+			}
+			if(request.getParameter("name") != null && request.getParameter("name") != "" && !request.getParameter("name").equals("")) {
+				name = request.getParameter("name");
+			}
+			if(request.getParameter("dename") != null && request.getParameter("dename") != "" && !request.getParameter("dename").equals("")) {
+				deName = request.getParameter("dename");
+				deid = (int)departmentService.getIdByName(deName);
+			}
+		}
+		int totle = teacherService.totleCount(id, name, deid);
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("totle", totle);
+		return jsonObj;
 	}
 	@RequestMapping("updateTeacher")
 	public void updateTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {

@@ -21,5 +21,7 @@ public interface TeacherService {
 	
 	int updateMany(List<Teacher> listTeachers);
 	
-	List<Teacher> getBySelect(long id, String name, int deid);
+	List<Teacher> getBySelect(long id, String name, int deid, int start, int size);
+	
+	int totleCount(long id, String name, int deid);
 }

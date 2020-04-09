@@ -78,7 +78,10 @@ public class TeacherServiceImpl implements TeacherService {
 		}
 		return flag;
 	}
-	public List<Teacher> getBySelect(long id, String name, int deid){
-		return teacherMapper.getBySelect(id, name, deid);
+	public List<Teacher> getBySelect(long id, String name, int deid, int start, int size){
+		return teacherMapper.getBySelect(id, name, deid, start, size);
+	}
+	public int totleCount(long id, String name, int deid) {
+		return teacherMapper.totleCount(id, name, deid);
 	}
 }
