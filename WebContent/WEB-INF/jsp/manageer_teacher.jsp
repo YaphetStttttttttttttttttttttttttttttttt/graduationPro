@@ -409,6 +409,22 @@ function validateForm() {
     }
     return true
 }
+$(function(){
+	$("#project").on("click", "li", function(){
+		
+		 $("#department").val($(this).text());
+		 
+		 
+		});
+	});//下拉菜单选中的值赋值给input输入框！
+	$(function(){
+		$("#project1").on("click", "li", function(){
+			
+			$("#select_input_department").val($(this).text());
+			 
+			 
+			});
+		});//下拉菜单选中的值赋值给input输入框！
 </script>
 <div  class="panel panel-primary" style="height:700px;width:100%;">
 <div class="panel-heading" style="height:auto;">
@@ -432,15 +448,21 @@ function validateForm() {
       <input type="text" class="form-control" id="select_input_id">
     </div>
 </div>
-<div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
+<div class="btn-group" style=" width:26%; height:10%;  float:left; margin-left:1%;">
   <div class="input-group">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button">所属院系</button>
+        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">所属院系<span class="caret"></span></button>
+                      <ul id="project1" class="dropdown-menu" >
+	    		      <li><a href="#">${teacher.deid.name }</a></li>
+                      <li><a href="#">北洋广场</a></li>
+                     <li><a href="#">其他</a></li>
+	                       
+	        </ul>      
       </span>
-      <input type="text" class="form-control" id="select_input_department">
+      <input type="text" class="form-control" id="select_input_department" disabled="true">
     </div>
 </div>
-<div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
+<div class="btn-group" style=" width:7%; height:10%;  float:left; margin-left:1%;">
   <button type="button" class="btn btn-warning" id="selectTeacherBtn" onclick="selectTeacher()">
   <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
   </button>
@@ -499,11 +521,16 @@ function validateForm() {
     	</div><!-- /input-group -->
     
    
-    	<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%">
-    		<span class="input-group-btn">
-    		<button class="btn btn-default" type="button">所属院系</button>
-    		</span>
-    		<input id="department" type="text" class="form-control">
+    		<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%">	
+    		<div class="input-group-btn">
+    		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">所属院系<span class="caret"></span></button>
+	    		    <ul id="project" class="dropdown-menu" >
+	    		      <li><a href="#">${teacher.deid.name }</a></li>
+                    <li><a href="#">北洋广场</a></li>
+                    <li><a href="#">其他</a></li>
+	                  </ul>
+	       </div>
+    		<input id="department" type="text" class="form-control" disabled="true">
     	</div><!-- /input-group -->
    
     	<div class="input-group"style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%">
