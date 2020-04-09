@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Department;
 import com.gp.model.pojo.Teacher;
@@ -151,26 +152,45 @@ public class TeacherController {
 	@ResponseBody
 	@RequestMapping("_teacher")
 //	public Object Manager_TeacherMana(HttpSession session, HttpServletRequest request) {
-	public Object Manager_TeacherMana(HttpSession session) {
+	public void Manager_TeacherMana(HttpSession session, HttpServletResponse httpServletResponse) throws IOException {
 		Admin user = (Admin) session.getAttribute("user");
 		List<Teacher> listTeachers = new ArrayList<Teacher>();
+		List<Department> listDepartments = new ArrayList<Department>();
+		JSONObject jsonObj = new JSONObject();
 		//System.out.println(user != null);
 		if(user != null) {
 			listTeachers = teacherService.getAll();
-	//		obj.addObject("listTeachers",listTeachers);
+			listDepartments = departmentService.get();
 		}
-	//	request.getSession().setAttribute("listTest", listTeachers);
-		return listTeachers;
+		jsonObj.put("listTeachers", listTeachers);
+		jsonObj.put("listDepartments", listDepartments);
+		String jsonString = JSONObject.toJSONString(jsonObj);
+		
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(jsonString);
 	}
+	@ResponseBody
 	@RequestMapping("getTeachers")
 	public Object getTeachers(HttpSession session, HttpServletRequest request) {
+		long id = 0;
+		int deid = 6;
+		System.out.println(id);
+		String name = "", deName = "";
 		Admin user = (Admin) session.getAttribute("user");
 		List<Teacher> listTeachers = new ArrayList<Teacher>();
-		System.out.println(user != null);
+	//	System.out.println(user != null);
 		if(user != null) {
-			long id = Long.valueOf(request.getParameter("id"));
-			String name = request.getParameter("name");
-			int deid = 6;
+			if(request.getParameter("id") != null && request.getParameter("id") != "" && !request.getParameter("id").equals("")) {
+				id = Long.valueOf(request.getParameter("id"));
+			}
+			if(request.getParameter("name") != null && request.getParameter("name") != "" && !request.getParameter("name").equals("")) {
+				name = request.getParameter("name");
+			}
+			if(request.getParameter("dename") != null && request.getParameter("dename") != "" && !request.getParameter("dename").equals("")) {
+				deName = request.getParameter("dename");
+				deid = (int)departmentService.getIdByName(deName);
+			}
 			listTeachers = teacherService.getBySelect(id, name, deid);
 		}
 		return listTeachers;

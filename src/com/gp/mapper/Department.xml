@@ -35,4 +35,7 @@
         <select id="getCountByIdAName" resultType="int">
         	select count(*) from department where name = #{name} or id = #{id}
         </select>
+        <select id="get" resultType="Department">
+        	select * from department
+        </select>
     </mapper>

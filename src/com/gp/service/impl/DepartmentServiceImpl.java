@@ -31,4 +31,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	public int getCountByIdAName(int id, String name) {
 		return departmentMapper.getCountByIdAName(id, name);
 	}
+	public List<Department> get(){
+		return departmentMapper.get();
+	}
 }

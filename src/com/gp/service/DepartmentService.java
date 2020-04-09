@@ -12,4 +12,6 @@ public interface DepartmentService {
 	Integer getIdByName(String name);
 	
 	int getCountByIdAName(int id, String name);
+	
+	List<Department> get();
 }

@@ -14,4 +14,6 @@ public interface DepartmentMapper {
 	Integer getIdByName(@Param("name") String name);
 	
 	int getCountByIdAName(@Param("id") int id, @Param("name") String name);
+	
+	List<Department> get();
 }

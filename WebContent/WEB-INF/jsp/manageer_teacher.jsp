@@ -19,16 +19,21 @@ $(document).ready(function () {
 	console.log("ajaxRequest");
 	$.ajax("${pageContext.request.contextPath}/_teacher",// 发送请求的URL字符串。
 			{
-		type : "get", //  请求方式 POST或GET
-		async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
+		type : "post", //  请求方式 POST或GET
 		success : function(data) {
-			tablePro(data);
+			var jsonObj = eval('(' + data + ')');
+			tablePro(jsonObj["listTeachers"]);
 		},
 		error : function(data){
 			
 		}
 	});
 });
+function tabPro(data){
+	for(var index in data){
+		
+	}
+}
 function tablePro(data){
 	for(var index in data){
 		var title,tel,email,sex;
@@ -74,22 +79,27 @@ function tablePro(data){
 			"</center>" + 
 		"</td>" + 
 		"</tr>";
-		console.log(data[index]["id"]);
-		console.log(html);
 		$("#tableList").append(html);
 	}
 }
+function dealData(data){
+	if(data == null || data ==""){
+		return "";
+	}
+	return data;
+}
 function selectTeacher(){
-	var id = document.getElementById("select_input_id").value;
-	var name = document.getElementById("select_input_name").value;
-	var department = document.getElementById("select_input_department").value;
+	var id = dealData(document.getElementById("select_input_id").value);
+	var name = dealData(document.getElementById("select_input_name").value);
+	var department = dealData(document.getElementById("select_input_department").value);
 	
 	$.ajax("${pageContext.request.contextPath}/getTeachers",// 发送请求的URL字符串。
 			{
 		type : "post", //  请求方式 POST或GET
 		data:{"id":id,"name":name,"dename":department},
-		contentType: "application/x-www-form-urlencoded",
 		success : function(data) {
+			console.log("sueecss");
+			$("#tableList").empty();
 			tablePro(data);
 		},
 		error : function(data){
@@ -459,30 +469,6 @@ function validateForm() {
 	<th><center>操作</center></th> 
 </thead>
 <tbody id="tableList">
-	<%-- '<%=list %>' --%>
-	<c:forEach items="${listTest}" var="teacher" varStatus="status"> 
-		<tr>
-		<td name="select" style="display:none;"><input name="ids" type="checkbox" value='{"id":${teacher.id}}'></td>
-		<td>${teacher.id }</td>
-		<td>${teacher.name }</td>
-		<td>${teacher.sex.num==1?'男':'女' }</td>
-		<td>${teacher.deid.name }</td>
-		<td>${teacher.title==null?'还未填写':teacher.title }</td>
-		<td>${teacher.tel==0?'还未填写':teacher.tel }</td>
-		<td>${teacher.e_mail==null?'还未填写':teacher.e_mail }</td>
-		<td>
-			<center>
-			<button type="button" name="Update" class="btn btn-info" onclick='updateTeacher("${teacher.id}", "${teacher.name}", "${teacher.sex.num==1?'男':'女'}", 
-			"${teacher.deid.name}", "${teacher.title==null?'':teacher.title}", "${teacher.tel==0?'':teacher.tel}", "${teacher.e_mail==null?'':teacher.e_mail}")'>
-				<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>修改
-			</button>
-        	<button type="button" name="Delete" class="btn btn-danger" style="display:none;" onclick="deleteTeacher(${teacher.id})">
-        		<span class="glyphicon glyphicon-remove" aria-hidden="true" ></span>删除
-        	</button>
-        	</center>
-        </td> 
-		</tr>
-	 </c:forEach> 
 	
 </tbody>
 </table>

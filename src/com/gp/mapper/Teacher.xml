@@ -71,6 +71,17 @@
         <select id="getBySelect" resultMap="TeacherBean">
         	select t.*, de.*, de.name 'dename' from teacher t
         	left join department de on t.deid = de.id
-        	where t.id like concat('%',#{id},'%') and t.name like concat('%',#{name},'%') and t.deid like concat('%',#{deid},'%')
+        	where 
+        	<trim prefixOverrides="and">
+        		<if test="id != null and id != '' and id != 0">
+        			and t.id like concat('%',#{id},'%')
+        		</if>
+        		<if test="name != null and name != '' and name != 0">
+        			and t.name like concat('%',#{name},'%')
+        		</if>
+        		<if test="deid != null and deid != '' and deid != 0">
+        			and t.deid like concat('%',#{deid},'%')
+        		</if>
+        	</trim>
         </select>
     </mapper>
