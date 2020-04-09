@@ -428,7 +428,7 @@ $(function(){
 </script>
 <div  class="panel panel-primary" style="height:700px;width:100%;">
 <div class="panel-heading" style="height:auto;">
-当前位置：管理员>教师信息管理
+当前位置：管理员>教师信息管理a 
 </div>
 
 <div class="panel-body" style="height:1000px;" >
