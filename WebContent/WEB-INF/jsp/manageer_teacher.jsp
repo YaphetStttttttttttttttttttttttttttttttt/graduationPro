@@ -704,7 +704,7 @@ $(function(){
    
     	<div class="input-group" style=" width:47%;float:left; margin-right:51%;margin-left:2%;margin-top:5%">
     		<span class="input-group-btn">
-    		<button class="btn btn-default" type="button">电子邮箱</button>
+    		<button class="btn btn-default" type="button">电子邮箱a</button>
     		</span>
     		<input id="e_mail" type="text" class="form-control" >
     	</div><!-- /input-group -->
