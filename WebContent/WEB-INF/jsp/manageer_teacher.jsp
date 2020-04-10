@@ -125,8 +125,6 @@ function jump() {
         pageSize = page * 10;
         pageNumber = (page - 1) * 10 + 1;
         $("#nowPage").val($("#jumpPage").val());
-        
-        
 		show();
     } else {
         alert("该页不存在")
