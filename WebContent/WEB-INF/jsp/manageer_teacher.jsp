@@ -714,7 +714,7 @@ $(function(){
     <button type="button" id="TeacherFormData_CancelBtn" style="width:15%;   float:left; margin-left:5%;margin-top:8%" class="btn btn-warning">取消</button>
    
     <div class="form-group" id="TeacherExcelInput" class="col-sm-10" style="display:none;float:left;margin-left:10%;margin-top:4%;">
-	   通过excel表单添加：
+	   通过excel表单添：
 	<input id="TeacherExcelFile" name="excelFile" type="file" class="form-control" style="width:45%; display: inline;" />
 	<input id="insertTeacherExcelButton" type="button" class="btn btn-primary" onclick="inputTeacher()" style="width: 15%;height: 35px;" value="上传" />
 	</div>
