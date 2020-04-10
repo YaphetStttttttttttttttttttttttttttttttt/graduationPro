@@ -5,11 +5,6 @@
     pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<%
-/* String listTeachers = request.getParameter("listInfo");
-List<Teacher> list = JSONArray.parseArray(listTeachers,Teacher.class); */
-
-%>
 <!DOCTYPE html>
 <script src="js/jquery.min.js"></script>
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -134,7 +129,7 @@ function jump() {
 }
 /**
  * 最后一页
- * */
+ **/
 function lastPage() {
     pageNumber = parseInt($("#totlePage").val() - 1) * 10 + 1;
     pageSize = allCount;
@@ -233,25 +228,11 @@ function inputChange(){
 }
 function selectTeacher(){
 	selectFlag = true;
+	pageNumber = 1;
+    pageSize = 10;
+    $("#jumpPage").val("1");
+    $("#nowPage").val("1");
 	show();
-	/*
-	var id = document.getElementById("select_input_id").value;
-	var name = document.getElementById("select_input_name").value;
-	var department = document.getElementById("select_input_department").value;
-	
-	$.ajax("${pageContext.request.contextPath}/getTeachers",// 发送请求的URL字符串。
-			{
-		type : "post", //  请求方式 POST或GET
-		data:{"id":id,"name":name,"dename":department},
-		success : function(data) {
-			console.log("sueecss");
-			$("#tableList").empty();
-			tablePro(data);
-		},
-		error : function(data){
-			
-		}
-	});*/
 }
 $(function(){
 	var table = $("#TeacherInfoTable");
@@ -508,19 +489,6 @@ function deleteFormData() {
 		}
 	}
 }
-/* function deleteForm(){
-	var ids = document.getElementsByName("ids");               
-	var flag = false ;
-	var seleted = new Array();
-	for(var i=0; i < ids.length; i++){
-    	if(ids[i].checked){
-    		seleted[i] = ids[i].value;
-    	}
-	}
-	if(!flag){
-    	alert("请最少选择一项！");
-	}
-} */
 function validateForm() {
 	var tid = document.getElementById("tid").value;
 	var tname = document.getElementById("tname").value;
@@ -578,7 +546,7 @@ $(function(){
 <div class="btn-group" style=" width:15%; height:10%;  float:left; margin-left:1%;">
   <div class="input-group">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button">教师编号</button>
+      	<button class="btn btn-default" type="button">教师编号</button>
       </span>
       <input type="text" class="form-control" id="select_input_id" onchange="inputChange()">
     </div>
@@ -590,7 +558,7 @@ $(function(){
   	</span>
   	</button>
   		<ul id="project1" class="dropdown-menu" >
-  		
+  			<li><a href="#">所有学院</a></li>
   		</ul>
   	</span>
   	<input type="text" class="form-control" id="select_input_department" disabled="true" onchange="inputChange()">
@@ -612,7 +580,7 @@ $(function(){
   </button>
 </div>
 
-<table id="TeacherInfoTable" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:100%;margin-top:4%;">
+<table id="TeacherInfoTable" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:95%;margin-top:4%;">
 <thead>
 	<th id="selectall"style="display:none;"><input type="checkbox" onclick="selectAll(this)" >全选</th>
 	<th>教师编号</th>

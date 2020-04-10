@@ -24,9 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.gp.bean.ExcelValueBean;
+import com.gp.bean.GlobalName;
 import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Department;
 import com.gp.model.pojo.Teacher;
+import com.gp.model.vo.GetExcelValue;
 import com.gp.model.vo.Sex;
 import com.gp.model.vo.TeacherVo;
 import com.gp.service.ClassesService;
@@ -188,7 +191,11 @@ public class TeacherController {
 			}
 			if(request.getParameter("dename") != null && request.getParameter("dename") != "" && !request.getParameter("dename").equals("")) {
 				deName = request.getParameter("dename");
-				deid = (int)departmentService.getIdByName(deName);
+				if(deName.trim().equals("所有学院")) {
+					deid = 0;
+				} else{
+					deid = (int)departmentService.getIdByName(deName);
+				}
 			}
 			listTeachers = teacherService.getBySelect(id, name, deid, (start - 1) * 10, size);
 		}
@@ -210,7 +217,11 @@ public class TeacherController {
 			}
 			if(request.getParameter("dename") != null && request.getParameter("dename") != "" && !request.getParameter("dename").equals("")) {
 				deName = request.getParameter("dename");
-				deid = (int)departmentService.getIdByName(deName);
+				if(deName.trim().equals("所有学院")) {
+					deid = 0;
+				} else{
+					deid = (int)departmentService.getIdByName(deName);
+				}
 			}
 		}
 		int totle = teacherService.totleCount(id, name, deid);
@@ -345,54 +356,68 @@ public class TeacherController {
 		String name = "", deName = "", sex = "", title = "", e_mail = "";
 		long id = 0, tel = 0;
 		Cell cell = null;
+		GetExcelValue gev = new GetExcelValue();
 		for(int i = 0; i < 7; i++) {
 			cell = row.getCell(i);
 			if(i == 0) {
-				//读取excel第一列：教师ID
-				if(cell != null && cell.getCellType() == CellType.NUMERIC) {
-					id = (long)cell.getNumericCellValue();
-				}else {
+				//读取id 类型long 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_LONG, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "教师编号不能为空";
+					msg = "教师编号无法读取！";
+				}else {
+					id = gev.getLongValue();
 				}
-			}else if (i == 1) {
-				//读取excel第二列：姓名
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
-					name = cell.getStringCellValue();
-				}else {
+			}else if(i == 1) {
+				//读取excel第二列：姓名 类型String 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "教师姓名不能为空";
+					msg = "教师姓名无法读取！";
+				}else {
+					name = gev.getStringValue();
 				}
 			}else if (i == 2) {
-				//读取excel第三列：性别
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
-					sex = cell.getStringCellValue();
-				}else {
+				//读取excel第三列：性别 类型String 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "输入教师性别[男/女]";
+					msg = "教师性别无法读取！";
+				}else {
+					sex = gev.getStringValue();
 				}
 			}else if (i == 3) {
-				//读取excel第四列：所属院系
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
-					deName = cell.getStringCellValue();
-				}else {
+				//读取excel第四列：所属院系 类型 String 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "输入正确的教师所属院系";
+					msg = "教师所属院系无法读取！";
+				}else {
+					deName = gev.getStringValue();
 				}
 			}else if (i == 4) {
-				//读取excel第五列：职称
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
-					title = cell.getStringCellValue();
+				//读取excel第五列：职称 类型String 可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.unNecessary);
+				if( !gev.isResult() ) {
+					
+				}else {
+					title = gev.getStringValue();
 				}
 			}else if (i == 5) {
-				//读取excel第六列：联系电话
-				if(cell != null && cell.getCellType() == CellType.NUMERIC ) {
-					tel = (long)cell.getNumericCellValue();
+				//读取excel第六列：联系电话 类型long 可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_LONG, GlobalName.unNecessary);
+				if( !gev.isResult() ) {
+					
+				}else {
+					tel = gev.getLongValue();
 				}
 			}else {
-				//第七列：邮箱
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
-					e_mail = cell.getStringCellValue();
+				//第七列：邮箱 类型String 可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.unNecessary);
+				if( !gev.isResult() ) {
+					
+				}else {
+					e_mail = gev.getStringValue();
 				}
 			}
 			if(!rowFlag) {

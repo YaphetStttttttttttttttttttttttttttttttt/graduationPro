@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.CellType;
+
 import com.alibaba.fastjson.JSONArray;
 import com.gp.model.pojo.Teacher;
 
@@ -35,4 +37,56 @@ public class test {
 				"		</tr>";
 		
 	}
+	/*
+	if(i == 0) {
+		//读取excel第一列：教师ID
+		if(cell != null && cell.getCellType() == CellType.NUMERIC) {
+			id = (long)cell.getNumericCellValue();
+		}else if(cell != null && cell.getCellType() == CellType.FORMULA){
+			id = (long)cell.getNumericCellValue();
+		}else {
+			System.out.println(cell.getCellType());
+			rowFlag = false;
+			msg = "教师编号不能为空";
+		}
+	}else if (i == 1) {
+		//读取excel第二列：姓名
+		if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
+			name = cell.getStringCellValue();
+		}else {
+			rowFlag = false;
+			msg = "教师姓名不能为空";
+		}
+	}else if (i == 2) {
+		//读取excel第三列：性别
+		if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
+			sex = cell.getStringCellValue();
+		}else {
+			rowFlag = false;
+			msg = "输入教师性别[男/女]";
+		}
+	}else if (i == 3) {
+		//读取excel第四列：所属院系
+		if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
+			deName = cell.getStringCellValue();
+		}else {
+			rowFlag = false;
+			msg = "输入正确的教师所属院系";
+		}
+	}else if (i == 4) {
+		//读取excel第五列：职称
+		if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
+			title = cell.getStringCellValue();
+		}
+	}else if (i == 5) {
+		//读取excel第六列：联系电话
+		if(cell != null && cell.getCellType() == CellType.NUMERIC ) {
+			tel = (long)cell.getNumericCellValue();
+		}
+	}else {
+		//第七列：邮箱
+		if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
+			e_mail = cell.getStringCellValue();
+		}
+	}*/
 }
