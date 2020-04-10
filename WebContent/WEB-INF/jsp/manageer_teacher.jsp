@@ -171,7 +171,6 @@ function show() {
 			"Size":10
 		},
 		success : function(data) {
-			console.log("sueecss");
 			$("#tableList").empty();
 			tablePro(data);
 		},
