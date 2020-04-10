@@ -32,6 +32,7 @@ public class ExcelValueBean {
 			int intValue = 0; 
 			long longValue = 0; 
 			double doubleValue = 0;
+			float floatValue = 0;
 			if(cell != null && cell.getCellType() == CellType.NUMERIC) {
 				switch (resultType) {
 				case GlobalName.resultType_INT: 
@@ -40,6 +41,8 @@ public class ExcelValueBean {
 					longValue = (long)cell.getNumericCellValue(); gev.setLongValue(longValue); break;
 				case GlobalName.resultType_DOUBLE: 
 					doubleValue = (double)cell.getNumericCellValue(); gev.setDoubleValue(doubleValue); break;
+				case GlobalName.resultType_FLOAT: 
+					floatValue = (float)cell.getNumericCellValue(); gev.setFloatValue(floatValue); break;
 				default:break;
 				}
 				result = true;
@@ -51,6 +54,8 @@ public class ExcelValueBean {
 					longValue = (long)cell.getNumericCellValue(); gev.setLongValue(longValue); break;
 				case GlobalName.resultType_DOUBLE: 
 					doubleValue = (double)cell.getNumericCellValue(); gev.setDoubleValue(doubleValue); break;
+				case GlobalName.resultType_FLOAT: 
+					floatValue = (float)cell.getNumericCellValue(); gev.setFloatValue(floatValue); break;
 				default:break;
 				}
 				result = true;

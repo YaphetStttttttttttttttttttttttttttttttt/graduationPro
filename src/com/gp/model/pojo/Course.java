@@ -20,7 +20,7 @@ public class Course {
 	
 	public Course() {}
 	public Course(long id, String name, CourseType type, float credit, int cycle, int startSyear, SchoolTerm startTerm,
-			Department deid, Discipline diid, List<CoursePlan> coursePlans) {
+			Department deid, Discipline diid) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
@@ -30,7 +30,6 @@ public class Course {
 		this.startTerm = startTerm;
 		this.deid = deid;
 		this.diid = diid;
-		this.coursePlans = coursePlans;
 	}
 	public long getId() {
 		return id;

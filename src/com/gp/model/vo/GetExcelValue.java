@@ -6,6 +6,7 @@ public class GetExcelValue {
 	private boolean booleanValue;
 	private String stringValue;
 	private double doubleValue;
+	private float floatValue;
 	
 	private boolean result;
 	
@@ -57,6 +58,14 @@ public class GetExcelValue {
 
 	public void setResult(boolean result) {
 		this.result = result;
+	}
+
+	public float getFloatValue() {
+		return floatValue;
+	}
+
+	public void setFloatValue(float floatValue) {
+		this.floatValue = floatValue;
 	}
 	
 }

@@ -15,6 +15,8 @@ var page;//总页数
 var pageNumber = 1;//默认起始记录
 var pageSize = 10;//每页记录数
 var selectFlag = false;
+var deleteFlag = false;
+var array = new Array();
 
 $(document).ready(function () {
 	console.log("ajaxRequest");
@@ -31,7 +33,17 @@ $(document).ready(function () {
 		}
 	});
 	getTotle();
+	initArray();
 });
+//初始化存储教师ID的数组
+function initArray(){
+	for(var i = 1; i<=page; i++){
+		array[i] = new Array(10);
+		for(var j = 0; j<10; j++){
+			array[i][j] = 0;
+		}
+	}
+}
 function getTotle(){
 	var id = "", name = "", department = "";
 	if(selectFlag){
@@ -42,6 +54,7 @@ function getTotle(){
 	$.ajax("${pageContext.request.contextPath}/totlePageTeacher",// 发送请求的URL字符串。
 			{
 		type : "post", //  请求方式 POST或GET
+		async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
 		data:{
 			"id":id,
 			"name":name,
@@ -176,6 +189,7 @@ function tabPro(data){
 	}
 }
 function tablePro(data){
+	var selected_num = 0;
 	for(var index in data){
 		var title,tel,email,sex;
 		if(data[index]["title"]==null){
@@ -198,9 +212,27 @@ function tablePro(data){
 		}else{
 			sex = "女";
 		}
+		var nowPage = $("#nowPage").val()
+		var td_style = "style=\"display:none;\"";//默认是隐藏
+		var input_checked = "";//默认是未选中
+		var updata_style = "";//默认是显示
+		var delete_style = "style=\"display:none;\"";//默认隐藏
+		//当处于多选删除状态
+		if(deleteFlag){
+			td_style = "";//td显示
+			updata_style = "style=\"display:none;\"";//修改按钮隐藏
+			delete_style = "";//删除按钮显示
+			for(var i = 0; i < array[nowPage].length; i++){
+				//如果当前行被选中
+				if(array[nowPage][i] == ("{\"id\":" + data[index]["id"] +"}")){
+					input_checked = "checked=\"checked\"";//input被选中
+					selected_num++;
+				}
+			}
+		}
 		html =  
 		"<tr>" +
-		"<td name=\"select\" style=\"display:none;\"><input name=\"ids\" type=\"checkbox\" value='{\"id\":"+ data[index]["id"] +"}'></td>" + 
+		"<td name=\"select\" " + td_style + "><input name=\"ids\" type=\"checkbox\" value='{\"id\":"+ data[index]["id"] +"}' " + input_checked + "></td>" + 
 		"<td>"+ data[index]["id"] +"</td>" +
 		"<td>"+ data[index]["name"] +"</td>" +
 		"<td>"+ sex +"</td>" + 
@@ -210,17 +242,23 @@ function tablePro(data){
 		"<td>"+ email +"</td>" + 
 		"<td>" +
 			"<center>" +
-			"<button type=\"button\" name=\"Update\" class=\"btn btn-info\" onclick='updateTeacher(\"" + data[index]["id"] + "\", \"" + data[index]["name"] + "\", \"" + sex + "\"," + 
+			"<button type=\"button\" name=\"Update\" class=\"btn btn-info\" " + updata_style + " onclick='updateTeacher(\"" + data[index]["id"] + "\", \"" + data[index]["name"] + "\", \"" + sex + "\"," + 
 			"\"" + data[index]["deid"]["name"] + "\", \"" + title + "\", \"" + tel + "\", \"" + email + "\")'>" + 
 			"<span class=\"glyphicon glyphicon-wrench\" aria-hidden=\"true\"></span>修改" +
 			"</button>" + 
-			"<button type=\"button\" name=\"Delete\" class=\"btn btn-danger\" style=\"display:none;\" onclick=\"deleteTeacher(" + data[index]["id"] + ")\">" +
+			"<button type=\"button\" name=\"Delete\" class=\"btn btn-danger\" " + delete_style + " onclick=\"deleteTeacher(" + data[index]["id"] + ")\">" +
 			"<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\" ></span>删除" + 
 			"</button>" + 
 			"</center>" + 
 		"</td>" + 
 		"</tr>";
 		$("#tableList").append(html);
+	}
+	if(selected_num == 10) {
+		$("#select_all_input").prop("checked",true);
+	}
+	else {
+		$("#select_all_input").prop("checked",false);
 	}
 }
 function inputChange(){
@@ -232,11 +270,14 @@ function selectTeacher(){
     pageSize = 10;
     $("#jumpPage").val("1");
     $("#nowPage").val("1");
+    array.splice(1,page);
 	show();
+	initArray();
 }
 $(function(){
 	var table = $("#TeacherInfoTable");
 	$("#DeleteTeacherBtn").click(function(){
+		deleteFlag = true;
 		$("#TeacherInfoTable").hide();
 		$("#TeacherFormData").hide();
 		$("button[name='Update']").hide();
@@ -247,6 +288,14 @@ $(function(){
 		$("#TeacherInfoTable").show();
 	});
 	$("#MultiDeleteCancelBtn").click(function(){
+		deleteFlag = false;
+		for(var i = 1; i <= page; i++){
+			for(var j = 0; j < array[i].length; j++){
+				array[i][j] = 0;
+			}
+		}
+		$("#select_all_input").prop("checked",false);
+		selectAll($("#select_all_input"));
 		$("#TeacherInfoTable").hide();
 		$("button[name='Update']").show();
 		$("#selectall").hide();
@@ -256,7 +305,8 @@ $(function(){
 		$("#TeacherInfoTable").show();
 	});
 	$("#AddTeacherBtn").click(function(){
-		document.getElementById('tid').removeAttribute('disabled')
+		document.getElementById('tid').removeAttribute('disabled');
+		setFormData("", "", "", "", "", "", "");
 		$("#TeacherFormData").hide();
 		$("#TeacherFormData_UpdateBtn").hide();
 		$("#TeacherExcelInput").show();
@@ -264,8 +314,7 @@ $(function(){
 		$("#TeacherFormData").show(); 
 	});
 });
-function updateTeacher(id, name, sex, department, title, tel, email) {
-	document.getElementById('tid').setAttribute('disabled', 'disabled')
+function setFormData(id, name, sex, department, title, tel, email){
 	document.getElementById("tid").value = id;
 	document.getElementById("tname").value = name;
 	document.getElementById("sex").value = sex;
@@ -273,6 +322,10 @@ function updateTeacher(id, name, sex, department, title, tel, email) {
 	document.getElementById("title").value = title;
 	document.getElementById("tel").value = tel;
 	document.getElementById("e_mail").value = email;
+}
+function updateTeacher(id, name, sex, department, title, tel, email) {
+	document.getElementById('tid').setAttribute('disabled', 'disabled')
+	setFormData(id, name, sex, department, title, tel, email);
 	var div = $("#TeacherFormData");
 	$("#TeacherFormData").hide();
 	$("#TeacherFormData_ConfirmBtn").hide();
@@ -295,6 +348,20 @@ $(function(){
 		$("#TeacherFormData_ConfirmBtn").hide();
 		$("#TeacherExcelInput").hide();
 	});
+	setInterval(function(){
+		var arr = document.getElementsByName("ids");
+		var nowPage = $("#nowPage").val();
+        for(var i = 0; i<arr.length; i++){
+            var checkbox = arr[i];
+            if(checkbox.checked){
+            	array[nowPage][i] = checkbox.value;
+            //	console.log("11第" + nowPage + "页第" + i + "行value:" + array[nowPage][i]);
+            }else{
+            	array[nowPage][i] = 0;
+            //	console.log("22第" + nowPage + "页第" + i + "行value:" + array[nowPage][i]);
+            }
+        }
+    },500);
 });
 function inputTeacher(){
 	var formData = new FormData();
@@ -322,7 +389,7 @@ function inputTeacher(){
 				$("#TeacherFormData_UpdateBtn").hide();
 				$("#TeacherFormData_ConfirmBtn").hide();
 				$("#TeacherExcelInput").hide();
-				show();
+				location.reload();
 			}
 		},
 		error : function(data){
@@ -370,7 +437,7 @@ function putFormData(){
 						$("#TeacherFormData_UpdateBtn").hide();
 						$("#TeacherFormData_ConfirmBtn").hide();
 						$("#TeacherExcelInput").hide();
-						show();
+						location.reload();
 					}
 				},
 				error : function(data){
@@ -453,15 +520,18 @@ function deleteTeacher(id){
 		});
 	}
 }
+
 function deleteFormData() {
 	var ids = document.getElementsByName("ids");               
 	var flag = false;
-	var seleted = new Array();
-	for(var i=0; i < ids.length; i++){
-    	if(ids[i].checked){
-    		seleted[i] = ids[i].value;
-    		flag = true;
-    	}
+	var selected = new Array();
+	for(var i=1,num=0; i <= page; i++){
+		for(var j=0; j < array[i].length; j++){
+			if(array[i][j] != 0) {
+				flag = true;
+				selected[num++] = array[i][j];
+			} 
+		}
 	}
 	if(!flag){
 		alert("请最少选择一项！");
@@ -471,7 +541,7 @@ function deleteFormData() {
 			$.ajax("${pageContext.request.contextPath}/deleteTeachers",// 发送请求的URL字符串。
 					{
 				type : "post", //  请求方式 POST或GET
-				data:{"array":seleted},
+				data:{"array":selected},
 				contentType: "application/x-www-form-urlencoded",
 				success : function(data) {
 					var resq = eval("(" + data + ")");
@@ -582,7 +652,7 @@ $(function(){
 
 <table id="TeacherInfoTable" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:95%;margin-top:4%;">
 <thead>
-	<th id="selectall"style="display:none;"><input type="checkbox" onclick="selectAll(this)" >全选</th>
+	<th id="selectall"style="display:none;"><input type="checkbox" onclick="selectAll(this)" id="select_all_input">全选</th>
 	<th>教师编号</th>
 	<th>姓名</th>
 	<th>性别</th>

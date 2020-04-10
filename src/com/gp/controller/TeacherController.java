@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -36,7 +35,6 @@ import com.gp.service.ClassesService;
 import com.gp.service.CoursePlanService;
 import com.gp.service.DepartmentService;
 import com.gp.service.TeacherService;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 @Controller
 public class TeacherController {
@@ -52,7 +50,7 @@ public class TeacherController {
 	@RequestMapping("addTeacher")
 	public void addTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 		Teacher teacher = getTeacherFormData(httpServletRequest);
-		TeacherVo teacherVo = formTeacherDataPro(teacher, "insert");
+		TeacherVo teacherVo = formTeacherDataPro(teacher, GlobalName.method_INSERT);
 		String s = "", msg = "";
 		if(!teacherVo.isFlag()) {
 			s = "{\"success\":\"" + teacherVo.isFlag() +"\",\"msg\":\"" + teacherVo.getMsg() + "\"}";
@@ -233,7 +231,7 @@ public class TeacherController {
 	public void updateTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 		String s = "", msg = "";
 		Teacher teacher = getTeacherFormData(httpServletRequest);
-		TeacherVo teacherVo = formTeacherDataPro(teacher, "update");
+		TeacherVo teacherVo = formTeacherDataPro(teacher, GlobalName.method_UPDATE);
 		if(!teacherVo.isFlag()) {
 			s = "{\"success\":\"" + teacherVo.isFlag() +"\",\"msg\":\"" + teacherVo.getMsg() + "\"}";
 		}else {
@@ -434,7 +432,7 @@ public class TeacherController {
 			Department de = new Department();
 			de.setName(deName);
 			Teacher t = new Teacher(id, name, s, de, title, tel, e_mail);
-			teacherVo = formTeacherDataPro(t, "insert");
+			teacherVo = formTeacherDataPro(t, GlobalName.method_INSERT);
 			if(!teacherVo.isFlag()) {
 				msg = "第" + row.getRowNum() + "行数据：";
 				teacherVo.setMsg(msg + teacherVo.getMsg());
@@ -444,21 +442,21 @@ public class TeacherController {
 	}
 	
 	// 处理表单数据，以及excel获取后的数据 
-	private TeacherVo formTeacherDataPro(Teacher t, String style) {
+	private TeacherVo formTeacherDataPro(Teacher t, int method_way) {
 		TeacherVo teacherVo = new TeacherVo();
 		long id = t.getId(), tel = t.getTel();
 		String name = t.getName(), sex = t.getSex().getSex(), deName = t.getDeid().getName(), title = t.getTitle(), e_mail = t.getE_mail();
 		String msg = "";
 		boolean flag = true;
 		Teacher teacher = new Teacher();
-		if(style.equals("insert")) {
+		if(method_way == GlobalName.method_INSERT) {
 			if(teacherService.getCountById(id) == 1) {
 				flag = false;
 				msg += "教师编号重复";
 			}else {
 				teacher.setId(id);
 			}
-		}else if(style.equals("update")) {
+		}else if(method_way == GlobalName.method_UPDATE) {
 			teacher.setId(id);
 		}
 		if(isTrueSex(sex) == 0) {

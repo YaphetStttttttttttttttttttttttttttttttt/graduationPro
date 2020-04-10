@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -20,11 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gp.bean.ExcelValueBean;
+import com.gp.bean.GlobalName;
 import com.gp.model.pojo.Course;
 import com.gp.model.pojo.Department;
 import com.gp.model.pojo.Discipline;
 import com.gp.model.vo.CourseType;
 import com.gp.model.vo.CourseVo;
+import com.gp.model.vo.GetExcelValue;
 import com.gp.model.vo.SchoolTerm;
 import com.gp.service.CourseService;
 import com.gp.service.DepartmentService;
@@ -139,8 +141,12 @@ public class CourseController {
 		if(term.equals("下学期")) termNum = 2;
 		return termNum;
 	}
-	private CourseVo formCourseDataPro(long id, String name, String typeName, 
-			float credit, int cycle, int startSyear, String termName, String deName, String diName) {
+	private CourseVo formCourseDataPro(Course c) {
+		long id = c.getId();
+		float credit = c.getCredit();
+		int cycle = c.getCycle(), startSyear = c.getStartSyear();
+		String name = c.getName(), typeName = c.getType().getTypeName(), 
+				termName = c.getStartTerm().getTermName(), deName = c.getDeid().getName(), diName = c.getDiid().getName();
 		CourseVo courseVo = new CourseVo();
 		String msg = "";
 		boolean flag = true;
@@ -190,7 +196,7 @@ public class CourseController {
 			deid.setId(deId.intValue());
 			course.setDeid(deid);
 		}
-		if(!diName.equals("")) {
+		if(diName != null && !"".equals(diName)) {
 			Integer diId = disciplineService.getIdByName(diName);
 			if(diId == null) {
 				flag = false;
@@ -218,85 +224,89 @@ public class CourseController {
 		float credit = 0;
 		int cycle = 0,startSyear = 0;
 		Cell cell = null;
+		GetExcelValue gev = new GetExcelValue();
 		for(int i =0; i < 9; i++) {
 			cell = row.getCell(i);
 			if(i == 0) {
-				//读取的第一列数据为课程ID
-				if(cell != null && cell.getCellType() == CellType.NUMERIC) {
-					id = (long)cell.getNumericCellValue();		
-				}else {
-					//数据库里面这一条数据不能为空。此时为空，返回错误
+				//读取的第一列数据为课程ID 类型long 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_LONG, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "课程编号(id)不能为空";
+					msg = "课程编号无法读取！";
+				}else {
+					id = gev.getLongValue();
 				}
 			}else if(i == 1) {
-				//课程名称
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
-					name = cell.getStringCellValue();
-				}else {
-					//数据库里面这一条数据不能为空。此时为空，返回错误
+				//课程名称name 类型String 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "课程名称不能为空";
+					msg = "课程名称无法读取！";
+				}else {
+					name = gev.getStringValue();
 				}
 			}else if(i == 2) {
-				//课程类型
+				//课程类型typeName 类型String 不可为空
 				//1:必修  2:选修 3:限选 4:任选 5:公选
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
-					typeName = cell.getStringCellValue();
-				}else {
-					//数据库里面这一条数据不能为空。此时为空，返回错误
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "课程类型不能为空";
+					msg = "课程类型无法读取！";
+				}else {
+					typeName = gev.getStringValue();
 				}
 			}else if(i == 3) {
-				//学分
-				if(cell != null && cell.getCellType() == CellType.NUMERIC) {
-					credit = (float)cell.getNumericCellValue();
-				}else {
-					//数据库里面这一条数据不能为空。此时为空，返回错误
+				//学分credit float 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_FLOAT, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "课程学分不能为空";
+					msg = "学分无法读取！";
+				}else {
+					credit = gev.getFloatValue();
 				}
 			}else if(i == 4) {
-				//学时
-				if(cell != null && cell.getCellType() == CellType.NUMERIC) {
-					cycle = (int)cell.getNumericCellValue();
-				}else {
-					//数据库里面这一条数据不能为空。此时为空，返回错误
+				//学时cycle int 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_INT, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "课程学时不能为空";
+					msg = "学时无法读取！";
+				}else {
+					cycle = gev.getIntValue();
 				}
 			}else if(i == 5) {
-				//开课学年1,2,3,4
-				if(cell != null && cell.getCellType() == CellType.NUMERIC) {
-					startSyear = (int)cell.getNumericCellValue();
-				}else {
-					//数据库里面这一条数据不能为空。此时为空，返回错误
+				//开课学年1,2,3,4StartYear int 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_INT, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "课程开课学年不能为空";
+					msg = "开课学年无法读取！";
+				}else {
+					startSyear = gev.getIntValue();
 				}
 			}else if(i == 6) {
-				//开课学期上，下
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
-					termName = cell.getStringCellValue();
-				}else {
-					//数据库里面这一条数据不能为空。此时为空，返回错误
+				//开课学期上，下termName String 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "课程开课学期不能为空";
+					msg = "开课学期无法读取！";
+				}else {
+					termName = gev.getStringValue();
 				}
 			}else if(i == 7) {
-				//课程所属院系
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("")) {
-					deName = cell.getStringCellValue();
-				}else {
-					//数据库里面这一条数据不能为空。此时为空，返回错误
+				//课程所属院系 String 不可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.Necessary);
+				if( !gev.isResult() ) {
 					rowFlag = false;
-					msg = "课程所属院系不能为空";
+					msg = "课程所属院系无法读取！";
+				}else {
+					deName = gev.getStringValue();
 				}
 			}else {
-				//课程所属专业
-				if(cell != null && cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().equals("") ) {
-					diName = cell.getStringCellValue();
+				//课程所属专业 String 可为空
+				gev = ExcelValueBean.valueDeal(cell, GlobalName.resultType_STRING, GlobalName.unNecessary);
+				if( !gev.isResult() ) {
+					
+				}else {
+					diName = gev.getStringValue();
 				}
 			}
 			if(!rowFlag) {
@@ -308,7 +318,16 @@ public class CourseController {
 			courseVo.setFlag(rowFlag);
 			courseVo.setMsg(msg);
 		}else {
-			courseVo = formCourseDataPro(id, name, typeName, credit, cycle, startSyear, termName, deName, diName);
+			CourseType courseType = new CourseType();
+			SchoolTerm term = new SchoolTerm();
+			Department de = new Department();
+			Discipline di = new Discipline();
+			courseType.setTypeName(typeName);
+			term.setTermName(termName);
+			de.setName(deName);
+			di.setName(diName);
+			Course c = new Course(id, name, courseType, credit, cycle, startSyear, term, de, di);
+			courseVo = formCourseDataPro(c);
 			if(!courseVo.isFlag()) {
 				msg = "第" + row.getRowNum() + "行数据：";
 				courseVo.setMsg(msg + courseVo.getMsg());
