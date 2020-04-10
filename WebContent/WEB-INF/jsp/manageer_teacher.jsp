@@ -85,7 +85,7 @@ function firstPage() {
         alert("已经是首页了")
     }
     $("#nowPage").val("1");
-    show();
+	show();
 }
 /**
  * 上一页
@@ -96,7 +96,7 @@ function prePage() {
         $("#jumpPage").val(pageSize / 10 - 1);
         pageSize = pageNumber - 1;
         pageNumber = pageNumber - 10;
-        show();
+		show();
     } else {
         alert("已经是首页了")
     }
@@ -110,7 +110,8 @@ function nextPage() {
         $("#jumpPage").val(pageSize / 10 + 1);
         pageNumber = pageNumber + 10;
         pageSize = pageNumber + 10 - 1;
-        show();
+       
+		show();
     } else {
         alert("已经是最后一页了")
     }
@@ -124,7 +125,7 @@ function jump() {
         pageSize = page * 10;
         pageNumber = (page - 1) * 10 + 1;
         $("#nowPage").val($("#jumpPage").val());
-        show();
+		show();
     } else {
         alert("该页不存在")
         $("#jumpPage").val($("#nowPage").val());
@@ -256,25 +257,21 @@ $(function(){
 	var table = $("#TeacherInfoTable");
 	$("#DeleteTeacherBtn").click(function(){
 		$("#TeacherInfoTable").hide();
-		
 		$("#TeacherFormData").hide();
 		$("button[name='Update']").hide();
 		$("#selectall").show();
 		$("td[name='select']").show();
 		$("button[name='Delete']").show();
 		$("#MultiDelete").show();
-		
 		$("#TeacherInfoTable").show();
 	});
 	$("#MultiDeleteCancelBtn").click(function(){
 		$("#TeacherInfoTable").hide();
-		
 		$("button[name='Update']").show();
 		$("#selectall").hide();
 		$("td[name='select']").hide();
 		$("button[name='Delete']").hide();
 		$("#MultiDelete").hide();
-		
 		$("#TeacherInfoTable").show();
 	});
 	$("#AddTeacherBtn").click(function(){
@@ -558,7 +555,10 @@ $(function(){
 		selectFlag = false;
 		$("#select_input_department").val($(this).text());
 	});
-	
+	$("#project2").on("click", "li", function(){
+		selectFlag = false;
+		$("#sex").val($(this).text());
+	});
 });//下拉菜单选中的值赋值给input输入框！
 </script>
 <div  class="panel panel-primary" style="height:700px;width:100%;">
@@ -612,7 +612,7 @@ $(function(){
   </button>
 </div>
 
-<table id="TeacherInfoTable" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:79%;margin-top:4%;">
+<table id="TeacherInfoTable" class="table table-striped table-bordered table-hover  table-condensed"style="position:absolute;width:100%;margin-top:4%;">
 <thead>
 	<th id="selectall"style="display:none;"><input type="checkbox" onclick="selectAll(this)" >全选</th>
 	<th>教师编号</th>
@@ -627,29 +627,29 @@ $(function(){
 <tbody id="tableList">
 	
 </tbody>
-<tfoot>
+<tfoot >
     <tr>
         <td colspan="5" align="center">	
         	共<input style="width: 20px;" id="totleRow" disabled="disabled"/>条|每页10条|
-            <span id="firstPage" style="color:red;font-weight:bold" onclick="firstPage()">首页</span>|
-            <span id="prePage" style="color:red;font-weight:bold" onclick="prePage()">上一页</span>|
-            <span id="nextPage" style="color:red;font-weight:bold" onclick="nextPage()">下一页</span>|
-            <span id="lastPage" style="color:red;font-weight:bold" onclick="lastPage()">最后一页</span>|
-            <span style="color:red;font-weight:bold">
+            <span id="firstPage" style="color:red;font-weight:bold" onclick="firstPage()"><a href="#">首页</a></span>|
+            <span id="prePage" style="color:red;font-weight:bold" onclick="prePage()"><a href="#">上一页</a></span>|
+            <span id="nextPage" style="color:red;font-weight:bold" onclick="nextPage()"><a href="#">下一页</a></span>|
+            <span id="lastPage" style="color:red;font-weight:bold" onclick="lastPage()"><a href="#">最后一页</a></span>|
+            <span style="font-weight:bold">
             	当前第<input style="width: 20px;" id="nowPage" type="text" value="1" disabled="disabled"/>页
             </span>|
            	 	共<input style="width: 20px;" id="totlePage" disabled="disabled"/>页|
-            <span style="color:red;font-weight:bold">
+            <span style="color:bluefont-weight:bold">
             	跳转至第<input style="width: 20px;" id="jumpPage" type="text" value="1"/>页</span>
-            <button onclick="jump()">确定</button>
+            <button onclick="jump()" class="btn btn-success">确定</button>
         </td>
     </tr>
     </tfoot>
 </table>
 
-<div id="TeacherFormData"  style="display:none;background-color:LightCyan;margin-top:4%;margin-left:15%;position:absolute;width:50%;">
+<div id="TeacherFormData"  style="display:none;border-radius:30px;background-color:GhostWhite;margin-top:4%;margin-left:15%;position:absolute;width:60%;height:60%;">
 	
-		<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:2%;">
+		<div class="input-group" style=" width:47%;   float:left; margin-left:2%;margin-top:10%;">
 			<span class="input-group-btn">
 			<button class="btn btn-default" type="button">教师编号</button>
 			</span>
@@ -657,7 +657,7 @@ $(function(){
 		</div><!-- /input-group -->
 
 	
-		<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:2%;">
+		<div class="input-group" style=" width:47%;   float:left; margin-left:2%;margin-top:10%;">
 			<span class="input-group-btn">
 			<button class="btn btn-default" type="button">姓名</button>
 			</span>
@@ -665,15 +665,20 @@ $(function(){
     	</div><!-- /input-group -->
 
     
-    	<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%">
-    		<span class="input-group-btn">
-    		<button class="btn btn-default" type="button">性别</button>
-    		</span>
-    		<input id="sex" type="text" class="form-control" >
+    	<div class="input-group" style=" width:47%;   float:left; margin-left:2%;margin-top:5%">
+    		<div class="input-group-btn">
+    		<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">性别<span class="caret"></span></button>
+    		<ul id="project2" class="dropdown-menu" >
+	    		    <li><a href="#">男</a></li>
+	    		    <li><a href="#">女</a></li>
+                    </ul>
+    		
+    		</div>
+    		<input id="sex" type="text" class="form-control" disabled="true">
     	</div><!-- /input-group -->
     
    
-    		<div class="input-group" style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%">	
+    		<div class="input-group" style=" width:47%;   float:left; margin-left:2%;margin-top:5%">	
     		<div class="input-group-btn">
     		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">所属院系<span class="caret"></span></button>
 	    		    <ul id="project" class="dropdown-menu" >
@@ -683,38 +688,38 @@ $(function(){
     		<input id="department" type="text" class="form-control" disabled="true">
     	</div><!-- /input-group -->
    
-    	<div class="input-group"style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%">
+    	<div class="input-group"style=" width:47%;   float:left; margin-left:2%;margin-top:5%">
     		<span class="input-group-btn">
     		<button class="btn btn-default" type="button">职称</button>
     		</span>
     		<input id="title" type="text" class="form-control" >
     	</div><!-- /input-group -->
    
-    	<div class="input-group"style=" width:49%; height:10%;  float:left; margin-left:1%;margin-top:3%" >
+    	<div class="input-group"style=" width:47%;   float:left; margin-left:2%;margin-top:5%" >
     		<span class="input-group-btn">
     		<button class="btn btn-default" type="button">联系电话</button>
     		</span>
     		<input id="tel" type="text" class="form-control" >
     	</div><!-- /input-group -->
    
-    	<div class="input-group" style=" width:49%; height:10%;float:left; margin-right:50%;margin-left:1%;margin-top:3%">
+    	<div class="input-group" style=" width:47%;float:left; margin-right:51%;margin-left:2%;margin-top:5%">
     		<span class="input-group-btn">
-    		<button class="btn btn-default" type="button">电子邮箱</button>
+    		<button class="btn btn-default" type="button">电子邮箱a</button>
     		</span>
     		<input id="e_mail" type="text" class="form-control" >
     	</div><!-- /input-group -->
   
-    <button type="button" id="TeacherFormData_ConfirmBtn" style="display:none;width:20%;   float:left; margin-left:20%;margin-top:3%" class="btn btn-success" onclick="putFormData()">添加</button>
-    <button type="button" id="TeacherFormData_UpdateBtn" style="display:none;width:20%;  float:left; margin-left:20%;margin-top:3%" class="btn btn-success"   onclick="updateFormData()">修改</button>
-    <button type="button" id="TeacherFormData_CancelBtn" style="width:20%;   float:left; margin-left:20%;margin-top:3%" class="btn btn-warning">取消</button>
+    <button type="button" id="TeacherFormData_ConfirmBtn" style="display:none;width:15%;   float:left; margin-left:35%;margin-top:8%" class="btn btn-success" onclick="putFormData()">添加</button>
+    <button type="button" id="TeacherFormData_UpdateBtn" style="display:none;width:15%;  float:left; margin-left:35%;margin-top:8%" class="btn btn-success"   onclick="updateFormData()">修改</button>
+    <button type="button" id="TeacherFormData_CancelBtn" style="width:15%;   float:left; margin-left:5%;margin-top:8%" class="btn btn-warning">取消</button>
    
-    <div class="form-group" id="TeacherExcelInput" class="col-sm-10" style="display:none;float:left;margin-left:5%;margin-top:3%;">
+    <div class="form-group" id="TeacherExcelInput" class="col-sm-10" style="display:none;float:left;margin-left:10%;margin-top:4%;">
 	   通过excel表单添加：
 	<input id="TeacherExcelFile" name="excelFile" type="file" class="form-control" style="width:45%; display: inline;" />
 	<input id="insertTeacherExcelButton" type="button" class="btn btn-primary" onclick="inputTeacher()" style="width: 15%;height: 35px;" value="上传" />
 	</div>
 </div>
-<div id="MultiDelete"style="display:none;margin-top:580px;margin-left:40%;width:100%;">
+<div id="MultiDelete"style="display:none;margin-top:580px;margin-left:40%;">
 	<button type="button" id="MultiDeleteBtn"  class="btn btn-danger"  onclick="deleteFormData()">批量删除</button>
 	<button type="button" id="MultiDeleteCancelBtn" class="btn btn-warning"  >取消</button>
 </div>
