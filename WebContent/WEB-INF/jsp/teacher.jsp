@@ -19,13 +19,14 @@
   </div>
         <ul class="list-group">
   <li class="list-group-item list-group-item-success" data-id="yhzx">用户中心</li>
-  <li class="list-group-item list-group-item-info" data-id="kccx">课程查询</li>
+  <li class="list-group-item list-group-item-danger" data-id="kccx">课程查询</li>
+  <li class="list-group-item list-group-item-info" data-id="grxxgl">个人信息管理</li>
   <li class="list-group-item list-group-item-warning" data-id="kcxxxx">课程详细信息</li>
 </ul>
             
 
         </div>
-        <div id="content" style="float:left;margin-left:1px;"></div>
+        <div id="content" style="float:left;margin-left:1%;width:83%"></div>
   </div>
 </div>
 <script>
@@ -48,21 +49,28 @@
             switch(sId) {
             case "#yhzx":
 
-                pathn = "teachercenter";
+                pathn = "teacher_center";
 
                 i = 0;
 
                 break;
             case "#kccx":
 
-                pathn = "teacherkccx";
+                pathn = "teacher_course";
+
+                i = 1;
+
+                break;
+            case "#grxxgl":
+
+                pathn = "teacher_info";
 
                 i = 1;
 
                 break;
             case "#kcxxxx":
 
-                pathn = "teacherkcxxxx";
+                pathn = "teacher_course_detail";
 
                 i = 2;
 
@@ -70,7 +78,7 @@
          
             default:
 
-                pathn = "teachercenter";
+                pathn = "teacher_center";
 
                 i = 0;
 
