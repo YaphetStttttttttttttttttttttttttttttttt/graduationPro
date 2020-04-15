@@ -75,7 +75,7 @@
         		<if test="id != null and id != '' and id != 0">
         			and t.id like concat('%',#{id},'%')
         		</if>
-        		<if test="name != null and name != '' and name != 0">
+        		<if test="name != null and name != ''">
         			and t.name like concat('%',#{name},'%')
         		</if>
         		<if test="deid != null and deid != '' and deid != 0">
@@ -90,7 +90,7 @@
         		<if test="id != null and id != '' and id != 0">
         			and id like concat('%',#{id},'%')
         		</if>
-        		<if test="name != null and name != '' and name != 0">
+        		<if test="name != null and name != ''">
         			and name like concat('%',#{name},'%')
         		</if>
         		<if test="deid != null and deid != '' and deid != 0">
