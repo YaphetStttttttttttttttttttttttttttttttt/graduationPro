@@ -5,7 +5,7 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <script src="js/bootstrap.min.js"></script>
  
-<div  class="panel panel-primary" style="height:500px;width:1100px;">
+<div  class="panel panel-primary" style="height:550px;width:100%;">
   <div class="panel-heading" style="height:auto;">
    当前位置：学生>学生选课
   </div>
