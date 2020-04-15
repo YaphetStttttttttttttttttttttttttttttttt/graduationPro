@@ -12,8 +12,8 @@
   <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销
 </button>
   </div>
-  <div class="panel-body" style="height:550px;" >
-<div class="panel panel-primary" style="width:15%; height:500px;float:left;margin-left:1px;">
+  <div class="panel-body" style="height:100%;" >
+<div class="panel panel-primary" style="width:15%; height:550px;float:left;margin-left:1px;">
 <div class="panel-heading" style="height:auto;">
    功能菜单
   </div>
@@ -24,7 +24,7 @@
   <li class="list-group-item list-group-item-danger" data-id="xsxk">学生选课</li>
 </ul>     
         </div>
-        <div id="content" style="float:left;margin-left:1px;"></div>
+        <div id="content" style="float:left;margin-left:1%;width:83%"></div>
   </div>
 </div>
 <script>
@@ -39,23 +39,23 @@
             var pathn, i;
             switch(sId) {
             case "#yhzx":
-                pathn = "studentcenter";
+                pathn = "student_center";
                 i = 0;
                 break;
             case "#cjcx":
-                pathn = "studentscore";
+                pathn = "student_score";
                 i = 1;
                 break;
             case "#grxxgl":
-                pathn = "studentinfo";
+                pathn = "student_info";
                 i = 2;
                 break;
             case "#xsxk":
-                pathn = "studentchoose";
+                pathn = "student_select_course";
                 i = 3;
                 break;   
             default:
-                pathn = "studentcenter";
+                pathn = "student_center";
                 i = 0;
                 break;
             }
