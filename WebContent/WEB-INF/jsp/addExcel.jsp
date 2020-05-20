@@ -192,8 +192,8 @@ function inputDepartment(){
 	<input id="courseExcelFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
 	<input id="insertCourseExcelButton" type="button" onclick="inputFile()" style="width: 60px;height: 35px;" value="上传" />
 </div>
-<font color="red" id="errorInfo"></font>
-<a href="addDepartment">123</a>
+<!-- <font color="red" id="errorInfo"></font>
+<a href="addDepartment">123</a> -->
 <div class="form-group" id="coursePlan" class="col-sm-10" style="float: left; margin-right: 50px;">
 	<input id="coursePlanExcelFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
 	<input id="insertCoursePlanExcelButton" type="button" onclick="inputCoursePlans()" style="width: 60px;height: 35px;" value="上传" />

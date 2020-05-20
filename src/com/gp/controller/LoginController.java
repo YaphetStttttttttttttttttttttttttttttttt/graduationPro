@@ -75,13 +75,10 @@ public class LoginController {
 	public String student() {
 		return "index";
 	}
-	@RequestMapping("2")
-	public String teacher() {
-		return "teacher";
-	}
-	@RequestMapping("3")
-	public String admin() {
-		return "m-coursetj";
+	@RequestMapping("stuExit")
+	public String exit(HttpSession session) {
+		session.setAttribute("user", null);
+		return "index";
 	}
 	private String sexInt2String(int num) {
 		String sex = "";

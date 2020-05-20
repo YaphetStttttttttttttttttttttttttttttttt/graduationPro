@@ -18,6 +18,9 @@
                 <result column="tel" property="tel" />
                 <result column="address" property="address" />
                 <result column="e_mail" property="e_mail" />
+                <association property="cid" javaType="Classes">
+                	<result column="classname" property="name"/>
+                </association>
                 <association property="sex" javaType="com.gp.model.vo.Sex">
                 	<result column="sex" property="num"/>
                 </association>
@@ -43,8 +46,9 @@
             </association >	
     	</resultMap>
         <select id="slogin" resultMap="StudentUserBean">
-            select user.*,s.* from s_user user
+            select user.*,s.*,cls.*,cls.name 'classname' from s_user user
             	left join student s on s.id = user.username
+            	left join classes cls on cls.id = s.cid
             	where user.username = #{username} and password = #{password}
         </select>
         <select id="tlogin" resultMap="TeacherUserBean">

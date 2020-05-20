@@ -3,7 +3,6 @@ package com.gp.service;
 import java.util.List;
 
 import com.gp.model.pojo.CoursePlan;
-import com.gp.model.pojo.Teacher;
 
 public interface CoursePlanService {
 	int add(CoursePlan coursePlan);
@@ -15,4 +14,8 @@ public interface CoursePlanService {
 	int getCountById(long id);
 	
 	int getCountByTid(long tid);
+	
+	List<CoursePlan> stuSelect(long id);
+	
+	int stuSelectCount(long id);
 }

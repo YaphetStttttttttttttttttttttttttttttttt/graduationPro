@@ -52,7 +52,17 @@
             delete from student where id= #{id}  
         </delete>
         <update id="update" parameterType="Student" >
-            update student set name=#{name} where id=#{id}   
+            update student
+        	<set>
+				<if test=" name!=null and name!='' "> name=#{name},</if>
+				<if test=" sex!=null and sex!='' "> sex=#{sex.num},</if>
+				<if test=" age!=null and age!='' "> age=#{age},</if>
+				<if test=" cid!=null and cid!='' "> cid=#{cid.id},</if>
+				<if test=" tel!=null and tel!='' "> tel=#{tel},</if>
+				<if test=" e_mail!=null and e_mail!='' "> e_mail=#{e_mail},</if>
+				<if test=" address!=null and address!='' "> address=#{address},</if>
+			</set>
+			where id = #{id}   
         </update>
         <select id="list" resultType="Student">
             select * from student     

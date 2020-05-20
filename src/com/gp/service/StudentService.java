@@ -12,4 +12,6 @@ public interface StudentService {
 	int addMany(List<Student> listStudents);
 	
 	int getById(long id);
+	
+	int update(Student student);
 }

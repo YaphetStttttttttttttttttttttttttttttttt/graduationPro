@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+    <mapper namespace="com.gp.mapper.TimeAndPlaceMapper">
+    	<sql id="key">
+    		tid,weeks,week,time,place,school_year,school_term
+    	</sql>
+    	<sql id="values">
+    		#{tid},#{weeks},#{week},#{time},#{place.id},#{schoolYear},#{schoolTerm.termNum}
+    	</sql>
+    	
+        <insert id="add" parameterType="TimeAndPlace">
+        	insert into time_place(<include refid="key"/>) values(<include refid="values"/>)
+        </insert>
+        <select id="getId" resultType="integer" parameterType="TimeAndPlace">
+        	select id from time_place where tid=#{tid} and weeks=#{weeks} and week=#{week} and 
+        	time=#{time} and place=#{place.id} and school_year=#{schoolYear} and school_term=#{schoolTerm.termNum}
+        </select>
+        <select id="getFlag" resultType="int" parameterType="TimeAndPlace">
+        	select count(*) from time_place where 
+			(weeks 	&amp; #{weeks}) and tid=#{tid} and week=#{week} and 
+			(time 	&amp; #{time}) and place=#{place.id} and school_term = #{schoolTerm.termNum} and school_year=#{schoolYear}
+        </select>
+    </mapper>

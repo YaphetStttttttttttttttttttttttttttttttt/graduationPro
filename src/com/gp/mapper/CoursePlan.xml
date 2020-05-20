@@ -4,17 +4,77 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
     
-    <mapper namespace="com.gp.mapper.CoursePlanMapper">	
+    <mapper namespace="com.gp.mapper.CoursePlanMapper">
+    	<resultMap id="stuSelectBean" type="CoursePlan">
+    		<id column="id" property="id" />
+    		<association property="cid" javaType="Course">
+    			<id column="cidid" property="id" />
+    			<result column="cidname" property="name"/>
+    			<result column="credit" property="credit"/>
+    			<result column="cycle" property="cycle"/>
+    			<association property="type" javaType="com.gp.model.vo.CourseType">
+    				<result column="type" property="typeNum"/>
+    			</association>
+    		</association>
+    		<association property="tid" javaType="Teacher">
+    			<result column="tidname" property="name"/>
+    		</association>
+    		<association property="time_place1" javaType="TimeAndPlace">
+    			<result column="weeks1" property="weeks"/>
+    			<result column="week1" property="week"/>
+    			<result column="time1" property="time"/>
+    			<association property="place" javaType="Classroom">
+    				<result column="name1" property="name"/>
+    			</association>
+    		</association>
+    		<association property="time_place2" javaType="TimeAndPlace">
+    			<result column="weeks2" property="weeks"/>
+    			<result column="week2" property="week"/>
+    			<result column="time2" property="time"/>
+    			<association property="place" javaType="Classroom">
+    				<result column="name2" property="name"/>
+    			</association>
+    		</association>
+    		<association property="time_place3" javaType="TimeAndPlace">
+    			<result column="weeks3" property="weeks"/>
+    			<result column="week3" property="week"/>
+    			<result column="time3" property="time"/>
+    			<association property="place" javaType="Classroom">
+    				<result column="name3" property="name"/>
+    			</association>
+    		</association>
+    	</resultMap>
         <insert id="add" parameterType="CoursePlan">
-        	insert into course_plan(id,cid,tid,time_place,start_year,start_term) values(#{id}, #{cid.id}, #{tid.id}, #{timeAPlace}, #{startYear}, #{startTerm.termNum})
+        	insert into course_plan(id,cid,tid,time_place1,time_place2,time_place3) values(#{id}, #{cid.id}, #{tid.id}, #{time_place1.id}, #{time_place2.id}, #{time_place3.id})
         </insert>
         <select id="getCountByAll" resultType="int">
-        	select count(*) from course_plan where cid = #{cid.id} and tid = #{tid.id} and time_place = #{timeAPlace} and start_term = #{startTerm.termNum} and start_year = #{startYear}
+        	select count(*) from course_plan where cid = #{cid.id} and tid = #{tid.id} and time_place1 = #{time_place1.id} and time_place2 = #{time_place2.id} and time_place3 = #{time_place3.id}
         </select>
         <select id="getCountById" resultType="int">
         	select count(*) from course_plan where id = #{id}
         </select>
         <select id="getCountByTid" resultType="int">
         	select count(*) from course_plan where tid = #{tid}
+        </select>
+        <select id="stuSelect" resultMap="stuSelectBean">
+        	select cp.*,sc.*,c.*,t.*,tp1.*,tp2.*,tp3.*,p1.*,p2.*,p3.*,c.id 'cidid',c.name 'cidname',t.name 'tidname',
+        	tp1.weeks 'weeks1',tp1.week 'week1',tp1.time 'time1',tp1.place 'place1',p1.name 'name1',
+        	tp2.weeks 'weeks2',tp2.week 'week2',tp2.time 'time2',tp2.place 'place2',p2.name 'name2',
+        	tp3.weeks 'weeks3',tp3.week 'week3',tp3.time 'time3',tp3.place 'place3',p3.name 'name3'
+        	from course_plan cp
+			left join select_course sc on sc.cpid = cp.id
+			left join course c on c.id = cp.cid
+			left join teacher t on t.id = cp.tid
+			left join time_place tp1 on tp1.id = cp.time_place1
+			left join time_place tp2 on tp2.id = cp.time_place2
+			left join time_place tp3 on tp3.id = cp.time_place3
+			left join classroom p1 on p1.id = tp1.place
+			left join classroom p2 on p2.id = tp2.place
+			left join classroom p3 on p3.id = tp3.place
+			where cid not in (select cid from course_plan where id in (select cpid from select_course where sid = #{id})) 
+			limit 0,10
+        </select>
+        <select id="stuSelectCount" resultType="int">
+        	select count(*) from course_plan where cid not in (select cid from course_plan where id in (select cpid from select_course where sid = #{id}))
         </select>
     </mapper>

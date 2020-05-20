@@ -39,4 +39,7 @@ public class StudentServiceImpl implements StudentService {
     public int getById(long id) {
     	return studentMapper.getById(id);
     }
+    public int update(Student student) {
+    	return studentMapper.update(student);
+    }
 }

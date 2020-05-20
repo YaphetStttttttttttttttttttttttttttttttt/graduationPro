@@ -2,6 +2,7 @@ package com.gp.bean;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 
 import com.gp.model.vo.GetExcelValue;
 
@@ -67,5 +68,21 @@ public class ExcelValueBean {
 		}
 		gev.setResult(result);
 		return gev;
+	}
+	//判断是否为空行。是返回true；
+	public static boolean isBlankRow(Row row, int countNum) {
+		boolean flag = false;
+		Cell cell = null;
+		boolean[] isBlankRow = {false,false,false,false,false,false,false,false,false,false};
+		for(int count = 0; count < countNum; count++) {
+			cell = row.getCell(count);
+			if(cell == null || cell.getCellType() == CellType.BLANK) isBlankRow[count] = true;		
+		}
+		int sum = 0;
+		for(int count = 0; count < countNum; count++) {
+			if(isBlankRow[count]) sum++;
+		}
+		if(sum == countNum) flag = true;
+		return flag;
 	}
 }

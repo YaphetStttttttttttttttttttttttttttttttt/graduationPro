@@ -349,17 +349,23 @@ $(function(){
 	});
 	setInterval(function(){
 		var arr = document.getElementsByName("ids");
+		var selected_num = 0;
 		var nowPage = $("#nowPage").val();
         for(var i = 0; i<arr.length; i++){
             var checkbox = arr[i];
             if(checkbox.checked){
             	array[nowPage][i] = checkbox.value;
-            //	console.log("11第" + nowPage + "页第" + i + "行value:" + array[nowPage][i]);
+            	selected_num++;
             }else{
             	array[nowPage][i] = 0;
-            //	console.log("22第" + nowPage + "页第" + i + "行value:" + array[nowPage][i]);
             }
         }
+        if(selected_num == 10) {
+    		$("#select_all_input").prop("checked",true);
+    	}
+    	else {
+    		$("#select_all_input").prop("checked",false);
+    	}
     },500);
 });
 function inputTeacher(){
@@ -681,7 +687,7 @@ $(function(){
             <button onclick="jump()" class="btn btn-success">确定</button>
         </td>
     </tr>
-    </tfoot>
+</tfoot>
 </table>
 
 <div id="TeacherFormData"  style="display:none;border-radius:30px;background-color:GhostWhite;margin-top:4%;margin-left:15%;position:absolute;width:60%;height:60%;">

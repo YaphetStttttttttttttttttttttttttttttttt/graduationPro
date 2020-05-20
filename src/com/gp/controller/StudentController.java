@@ -2,11 +2,13 @@ package com.gp.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -18,12 +20,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONObject;
+import com.gp.bean.GlobalName;
+import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Classes;
+import com.gp.model.pojo.Department;
 import com.gp.model.pojo.Student;
+import com.gp.model.pojo.StudentUser;
+import com.gp.model.pojo.Teacher;
+import com.gp.model.pojo.TeacherUser;
 import com.gp.model.vo.Sex;
 import com.gp.model.vo.StudentVo;
+import com.gp.model.vo.TeacherVo;
 import com.gp.service.ClassesService;
 import com.gp.service.StudentService;
 
@@ -38,8 +49,7 @@ public class StudentController {
 	public void addStudent(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
 		Student student = getStudentFormData(httpServletRequest);
 		//学号，姓名，性别，班级名，年龄，联系电话，家庭地址，电子邮箱
-		StudentVo studentVo = formStudentDataPro(student.getId(), student.getName(), student.getSex().getSex(), student.getCid().getName(), 
-				student.getAge(), student.getTel(), student.getAddress(), student.getE_mail() );
+		StudentVo studentVo = formStudentDataPro(student, GlobalName.method_INSERT);
 		String s = "", msg = "";
 		if(!studentVo.isFlag()) {
 			s = "{\"success\":\"" + studentVo.isFlag() +"\",\"msg\":\"" + studentVo.getMsg() + "\"}";
@@ -62,6 +72,47 @@ public class StudentController {
 		httpServletResponse.setCharacterEncoding("utf8");
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
+	}
+	@RequestMapping("updateStudent")
+	public void updateTeacher(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
+		String s = "", msg = "";
+		Student student = getStudentFormData(httpServletRequest);
+		StudentVo studentVo = formStudentDataPro(student, GlobalName.method_UPDATE);
+		if(!studentVo.isFlag()) {
+			s = "{\"success\":\"" + studentVo.isFlag() +"\",\"msg\":\"" + studentVo.getMsg() + "\"}";
+		}else {
+			try {
+				int flag = studentService.update(studentVo.getStudent());
+				if(flag == 0) {
+					msg = "修改失败!";
+					s = "{\"success\":\"" + "false" +"\",\"msg\":\"" + msg + "\"}";
+				}else {
+					msg = "修改成功!";
+					s = "{\"success\":\"" + studentVo.isFlag() +"\",\"msg\":\"" + msg + "\"}";
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(s);
+	}
+	@ResponseBody
+	@RequestMapping("_studentInfo")
+//	public Object Manager_TeacherMana(HttpSession session, HttpServletRequest request) {
+	public void Manager_TeacherMana(HttpSession session, HttpServletResponse httpServletResponse) throws IOException {
+		StudentUser user = (StudentUser) session.getAttribute("user");
+		JSONObject jsonObj = new JSONObject();
+		if(user != null) {
+			jsonObj.put("stuInfo", user.getUsername());
+		}
+		String jsonString = JSONObject.toJSONString(jsonObj);
+		
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(jsonString);
 	}
 	@RequestMapping("addStudentExcel")
 	public void addStudentExcel(@RequestParam("file") MultipartFile file,HttpServletResponse httpServletResponse) throws IOException {
@@ -110,13 +161,15 @@ public class StudentController {
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
 	}
-	private Student getStudentFormData(HttpServletRequest httpServletRequest) {
+	private Student getStudentFormData(HttpServletRequest httpServletRequest) throws UnsupportedEncodingException {
+		httpServletRequest.setCharacterEncoding("UTF-8");
 		Student student = new Student();
 		Sex sex = new Sex();
-		Classes classes = new Classes();
-		student.setId( Long.valueOf( httpServletRequest.getParameter("id") ) );
-		student.setName( httpServletRequest.getParameter("name") );
-		classes.setName(httpServletRequest.getParameter("className"));
+		Classes cid = new Classes();
+		student.setId( Long.valueOf( httpServletRequest.getParameter("sid") ) );
+		student.setName( httpServletRequest.getParameter("sname") );
+		cid.setName(httpServletRequest.getParameter("classes"));
+		student.setCid(cid);
 		sex.setSex( httpServletRequest.getParameter("sex") );
 		student.setSex(sex);
 		student.setAge( Integer.valueOf( httpServletRequest.getParameter("age") ) );
@@ -201,7 +254,12 @@ public class StudentController {
 			studentVo.setFlag(rowFlag);
 			studentVo.setMsg(msg);
 		}else {
-			studentVo = formStudentDataPro(id, name, sex, cName, age, tel, address, e_mail);
+			Classes cid = new Classes();
+			cid.setName(cName);
+			Sex sexNum = new Sex();
+			sexNum.setSex(sex);
+			Student student = new Student(id, name, cid, sexNum, age, tel, address, e_mail);
+			studentVo = formStudentDataPro(student, GlobalName.method_INSERT);
 			if(!studentVo.isFlag()) {
 				msg = "第" + row.getRowNum() + "行数据：";
 				studentVo.setMsg(msg + studentVo.getMsg());
@@ -210,15 +268,22 @@ public class StudentController {
 		return studentVo;
 	}
 	//学号，姓名，性别，班级名，年龄，联系电话，家庭地址，电子邮箱
-	private StudentVo formStudentDataPro(long id, String name,String sex, String cName, int age, long tel, String address, String e_mail) {
+	private StudentVo formStudentDataPro(Student s, int method_way) {
+		long id = s.getId(), tel = s.getTel();
+		String name = s.getName(), sex = s.getSex().getSex(), e_mail = s.getE_mail(), address = s.getAddress(), cName = s.getCid().getName();
+		int age = s.getAge();
 		StudentVo studentVo = new StudentVo();
 		String msg = "";
 		boolean flag = true;
 		Student student = new Student();
-		if(studentService.getById(id) == 1) {
-			flag = false;
-			msg += "学号重复";
-		}else {
+		if(method_way == GlobalName.method_INSERT) {
+			if(studentService.getById(id) == 1) {
+				flag = false;
+				msg += "学号重复";
+			}else {
+				student.setId(id);
+			}
+		}else if(method_way == GlobalName.method_UPDATE) {
 			student.setId(id);
 		}
 		if(isTrueSex(sex) == 0) {

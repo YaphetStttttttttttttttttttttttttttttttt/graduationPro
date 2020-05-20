@@ -5,10 +5,36 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
+$(document).ready(function () {
+	console.log("ajaxRequest");
+	$.ajax("${pageContext.request.contextPath}/_studentInfo",// 发送请求的URL字符串。
+			{
+		type : "post", //  请求方式 POST或GET
+		success : function(data) {
+			var jsonObj = eval('(' + data + ')');
+			stuInfo(jsonObj["stuInfo"]);
+		},
+		error : function(data){
+			
+		}
+	});
+});
+function stuInfo(data){
+	document.getElementById("sid").value = data["id"];
+	document.getElementById("sname").value = data["name"];
+	if(data["sex"]["num"] == 1){
+		document.getElementById("sex").value = "男";
+	}else{
+		document.getElementById("sex").value = "女";
+	}
+	document.getElementById("classes").value = data["cid"]["name"];
+	document.getElementById("age").value = data["age"];
+	document.getElementById("tel").value = data["tel"];
+	document.getElementById("address").value = data["address"];
+	document.getElementById("e_mail").value = data["e_mail"];
+}
 $(function(){
-
 	$("#project2").on("click", "li", function(){
-		
 		$("#sex").val($(this).text());
 	});
 });//下拉菜单选中的值赋值给input输入框！
@@ -57,8 +83,8 @@ function updateFormData(){
 					{
 				type : "post", //  请求方式 POST或GET
 				data:{
-					'sid':tid,
-					'sname':tname,
+					'sid':sid,
+					'sname':sname,
 					'sex':sex,
 					'classes':classes,
 					'age':age,
@@ -79,8 +105,7 @@ function updateFormData(){
 						alert(resq.msg);
 					}else{
 						alert("修改成功");
-					
-						
+						location.reload();
 					}
 				},
 				error : function(data){
@@ -96,7 +121,7 @@ function updateFormData(){
 <div  class="panel panel-primary" style="height:550px;width:100%;">
   <div class="panel-heading" style="height:auto;">
    当前位置：学生>个人信息管理
-  </div>
+ </div>
    <div class="panel-body"  style=" height:550px;">
    <div id="StudentFormData"  style="border-radius:30px;background-color:GhostWhite;margin-left:10%;margin-top:2%;position:absolute;width:60%;">
 	
@@ -120,9 +145,9 @@ function updateFormData(){
     		<div class="input-group-btn">
     		<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">性别<span class="caret"></span></button>
     		<ul id="project2" class="dropdown-menu" >
-	    		    <li><a href="#">男</a></li>
-	    		    <li><a href="#">女</a></li>
-                    </ul>
+    			<li><a href="#">男</a></li>
+    			<li><a href="#">女</a></li>
+    		</ul>
     		
     		</div>
     		<input id="sex" type="text" class="form-control" disabled="true">

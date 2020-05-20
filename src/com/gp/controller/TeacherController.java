@@ -28,6 +28,7 @@ import com.gp.bean.GlobalName;
 import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Department;
 import com.gp.model.pojo.Teacher;
+import com.gp.model.pojo.TeacherUser;
 import com.gp.model.vo.GetExcelValue;
 import com.gp.model.vo.Sex;
 import com.gp.model.vo.TeacherVo;
@@ -265,6 +266,7 @@ public class TeacherController {
 			Sheet sheetAt = wb.getSheetAt(0);
 			for(Row row : sheetAt) {
 				if(row.getRowNum() == 0) continue;
+				if( ExcelValueBean.isBlankRow(row, 7) ) continue;
 				if(!rowFlag) break;
 				TeacherVo teacherVo = new TeacherVo();
 				teacherVo = excelTeacherDataPro(row, rowFlag);
