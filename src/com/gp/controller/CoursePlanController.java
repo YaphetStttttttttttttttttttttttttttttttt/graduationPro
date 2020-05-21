@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -231,13 +232,15 @@ public class CoursePlanController {
 	@ResponseBody
 	@RequestMapping("studentSC")
 //	public Object Manager_TeacherMana(HttpSession session, HttpServletRequest request) {
-	public void studentSC(HttpSession session, HttpServletResponse httpServletResponse) throws IOException {
+	public void studentSC(HttpSession session, HttpServletResponse httpServletResponse,HttpServletRequest request) throws IOException {
 		StudentUser user = (StudentUser) session.getAttribute("user");
+		int start = Integer.valueOf(request.getParameter("pageNumber"));
+		//int size = Integer.valueOf(request.getParameter("Size"));
 		List<CoursePlan> listCoursePlans = new ArrayList<CoursePlan>();
 		JSONObject jsonObj = new JSONObject();
 		//System.out.println(user != null);
 		if(user != null) {
-			listCoursePlans = coursePlanService.stuSelect(user.getUsername().getId());
+			listCoursePlans = coursePlanService.stuSelect(user.getUsername().getId(), (start - 1) * 10);
 		}
 		int i = 0;
 		List<String> listTimes = new ArrayList<String>();
@@ -245,9 +248,6 @@ public class CoursePlanController {
 			String times = TimeIntToString(cp.getTime_place1(), 1) + TimeIntToString(cp.getTime_place2(), 2) + TimeIntToString(cp.getTime_place3(), 3);
 			listTimes.add(times);
 			i++;
-		}
-		for(String st : listTimes) {
-			System.out.println(st);
 		}
 		jsonObj.put("listTimes", listTimes);
 		jsonObj.put("listCoursePlans", listCoursePlans);

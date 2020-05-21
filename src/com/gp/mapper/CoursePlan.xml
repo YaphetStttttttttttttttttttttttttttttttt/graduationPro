@@ -72,7 +72,7 @@
 			left join classroom p2 on p2.id = tp2.place
 			left join classroom p3 on p3.id = tp3.place
 			where cid not in (select cid from course_plan where id in (select cpid from select_course where sid = #{id})) 
-			limit 0,10
+			limit #{start},10
         </select>
         <select id="stuSelectCount" resultType="int">
         	select count(*) from course_plan where cid not in (select cid from course_plan where id in (select cpid from select_course where sid = #{id}))

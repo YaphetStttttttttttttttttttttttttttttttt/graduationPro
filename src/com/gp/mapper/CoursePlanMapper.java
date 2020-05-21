@@ -15,7 +15,7 @@ public interface CoursePlanMapper {
 	
 	public int getCountByTid(@Param("tid") long tid);
 	
-	public List<CoursePlan> stuSelect(@Param("id") long id);
+	public List<CoursePlan> stuSelect(@Param("id") long id, @Param("start") int start);
 	
 	public int stuSelectCount(@Param("id") long id);
 }

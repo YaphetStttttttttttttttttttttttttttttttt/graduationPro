@@ -12,18 +12,7 @@ var pageSize = 10;//每页记录数
 
 $(document).ready(function () {
 	console.log("ajaxRequest");
-	$.ajax("${pageContext.request.contextPath}/studentSC",// 发送请求的URL字符串。
-			{
-		type : "post", //  请求方式 POST或GET
-		success : function(data) {
-			var jsonObj = eval('(' + data + ')');
-			tablePro(jsonObj["listCoursePlans"],jsonObj["listTimes"]);
-		},
-		error : function(data){
-			
-		}
-	});
-	getTotle();
+	show();
 });
 function getTotle(){
 	$.ajax("${pageContext.request.contextPath}/totlePageStuSC",// 发送请求的URL字符串。
@@ -124,7 +113,7 @@ function lastPage() {
     show();
 }
 function show() {
-	$.ajax("${pageContext.request.contextPath}/getTeachers",// 发送请求的URL字符串。
+	$.ajax("${pageContext.request.contextPath}/studentSC",// 发送请求的URL字符串。
 			{
 		type : "post", //  请求方式 POST或GET
 		data:{
@@ -133,7 +122,8 @@ function show() {
 		},
 		success : function(data) {
 			$("#tableList").empty();
-			tablePro(data);
+			var jsonObj = eval('(' + data + ')');
+			tablePro(jsonObj["listCoursePlans"],jsonObj["listTimes"]);
 		},
 		error : function(data){
 			
@@ -143,18 +133,9 @@ function show() {
 }
 function tablePro(data, times){
 	for(var index in data){
-		var type,typeNum=data[index]["cid"]["type"]["typeNum"];
-		if(typeNum==1){
-			type = "必修";
-		}else if(typeNum==2){
-			type = "选修";
-		}else if(typeNum==3){
-			type = "限选";
-		}else if(typeNum==4){
-			type = "任选";
-		}else {
-			type = "公选";
-		}
+		var typeName = ['必修', '选修', '限选', '任选', '公选'];
+		var typeNum=data[index]["cid"]["type"]["typeNum"];
+		var type = typeName[typeNum - 1];
 		var nowPage = $("#nowPage").val()
 		html =  
 		"<tr>" +

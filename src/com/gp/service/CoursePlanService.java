@@ -15,7 +15,7 @@ public interface CoursePlanService {
 	
 	int getCountByTid(long tid);
 	
-	List<CoursePlan> stuSelect(long id);
+	List<CoursePlan> stuSelect(long id, int start);
 	
 	int stuSelectCount(long id);
 }
