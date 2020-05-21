@@ -12,4 +12,8 @@ public interface TimeAndPlaceService {
 	int add(TimeAndPlace time);
 	
 	int addMany(List<TimeAndPlace> listTimes);
+	
+	int getStuSCFlag(TimeAndPlace time, long sid);
+	
+	TimeAndPlace getById(int id);
 }

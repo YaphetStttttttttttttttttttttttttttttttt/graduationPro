@@ -4,13 +4,44 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
     <mapper namespace="com.gp.mapper.SelectCourseMapper">
-        <select id="get" resultType="SelectCourse">
-        	select * from select_course
+        <select id="getByStudent" resultType="SelectCourse">
+        	select * from select_course where sid = #{sid}
         </select>
-        <insert id="add" parameterType="SelectCourse" >
-        	insert into select_course(sid, cpid) values(#{sid.id}, #{cpid.id})
+        <insert id="add" >
+        	insert into select_course(sid, cpid) values(#{sid}, #{cpid})
         </insert>
-        <delete id="delete" parameterType="SelectCourse">
-        	delete from select_course where sid = #{sid.id} and cpid = #{cpid.id}
+        <delete id="delete" >
+        	delete from select_course where sid = #{sid} and cpid = #{cpid}
         </delete>
+        <resultMap id="StudentScoreBean" type="SelectCourse">
+    		<result column="f_grade" property="fGrade" />
+    		<result column="s_grade" property="sGrade" />
+    		<result column="t_grade" property="tGrade" />
+    		<association property="cpid" javaType="CoursePlan">
+    			<association property="cid" javaType="Course">
+    				<result column="id" property="id"/>
+    				<result column="name" property="name"/>
+    				<result column="credit" property="credit"/>
+    				<association property="type" javaType="com.gp.model.vo.CourseType">
+    					<result column="type" property="typeNum"/>
+    				</association>
+    			</association>
+    			<association property="time_place1" javaType="TimeAndPlace">
+    				<result column="school_year" property="schoolYear"/>
+    				<association property="schoolTerm" javaType="com.gp.model.vo.SchoolTerm">
+    					<result column="school_term" property="termNum"/>
+    				</association>
+    			</association>
+    		</association>
+    	</resultMap>
+        <select id="getStuScore" resultMap="StudentScoreBean">
+        	select sc.*,cp.*,c.*,tp.* from select_course sc 
+        	left join course_plan cp on sc.cpid = cp.id
+        	left join course c on c.id = cp.cid 
+        	left join time_place tp on cp.time_place1 = tp.id 
+        	where sc.sid = #{sid}
+        </select>
+        <select id="getStuScoreCount" resultType="int">
+        	select count(*) from select_course where sid = #{sid}
+        </select>
     </mapper>

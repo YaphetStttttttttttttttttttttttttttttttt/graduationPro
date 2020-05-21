@@ -101,8 +101,7 @@ public class StudentController {
 	}
 	@ResponseBody
 	@RequestMapping("_studentInfo")
-//	public Object Manager_TeacherMana(HttpSession session, HttpServletRequest request) {
-	public void Manager_TeacherMana(HttpSession session, HttpServletResponse httpServletResponse) throws IOException {
+	public void _studentInfo(HttpSession session, HttpServletResponse httpServletResponse) throws IOException {
 		StudentUser user = (StudentUser) session.getAttribute("user");
 		JSONObject jsonObj = new JSONObject();
 		if(user != null) {

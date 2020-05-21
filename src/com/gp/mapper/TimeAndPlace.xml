@@ -23,4 +23,18 @@
 			(weeks 	&amp; #{weeks}) and tid=#{tid} and week=#{week} and 
 			(time 	&amp; #{time}) and place=#{place.id} and school_term = #{schoolTerm.termNum} and school_year=#{schoolYear}
         </select>
+        <select id="getStuSCFlag" resultType="int">
+        	select count(*) from time_place where id in 
+        	(select time_place1 as tp from course_plan where id in (select cpid from select_course where sid = #{sid})
+        	union 
+        	select time_place2 as tp from course_plan where id in (select cpid from select_course where sid = #{sid})
+        	union 
+        	select time_place3 as tp from course_plan where id in (select cpid from select_course where sid = #{sid})) and
+			(weeks 	&amp; #{tap.weeks}) and tid=#{tap.tid} and week=#{tap.week} and 
+			(time 	&amp; #{tap.time}) and place=#{tap.place.id} and school_term = #{tap.schoolTerm.termNum} and school_year=#{tap.schoolYear}
+        </select>
+        
+        <select id="getById" resultType="TimeAndPlace">
+        	select * from time_place where id = #{id}
+        </select>
     </mapper>

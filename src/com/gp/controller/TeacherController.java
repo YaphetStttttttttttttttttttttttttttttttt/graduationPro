@@ -27,6 +27,7 @@ import com.gp.bean.ExcelValueBean;
 import com.gp.bean.GlobalName;
 import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Department;
+import com.gp.model.pojo.StudentUser;
 import com.gp.model.pojo.Teacher;
 import com.gp.model.pojo.TeacherUser;
 import com.gp.model.vo.GetExcelValue;
@@ -253,6 +254,20 @@ public class TeacherController {
 		httpServletResponse.setCharacterEncoding("utf8");
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
+	}
+	@ResponseBody
+	@RequestMapping("_teacherInfo")
+	public void _teacherInfo(HttpSession session, HttpServletResponse httpServletResponse) throws IOException {
+		TeacherUser user = (TeacherUser) session.getAttribute("user");
+		JSONObject jsonObj = new JSONObject();
+		if(user != null) {
+			jsonObj.put("teacherInfo", user.getUsername());
+		}
+		String jsonString = JSONObject.toJSONString(jsonObj);
+		
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(jsonString);
 	}
 	@RequestMapping("addTeacherExcel")
 	public void addTeacherExcel(@RequestParam("file") MultipartFile file,HttpServletResponse httpServletResponse) throws IOException {

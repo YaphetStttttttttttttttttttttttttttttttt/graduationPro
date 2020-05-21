@@ -5,6 +5,36 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
+$(document).ready(function () {
+	console.log("ajaxRequest");
+	show();
+});
+function show(){
+	$.ajax("${pageContext.request.contextPath}/_teacherInfo",// 发送请求的URL字符串。
+			{
+		type : "post", //  请求方式 POST或GET
+		success : function(data) {
+			var jsonObj = eval('(' + data + ')');
+			teacherInfo(jsonObj["teacherInfo"]);
+		},
+		error : function(data){
+			
+		}
+	});
+}
+function teacherInfo(data){
+	document.getElementById("tid").value = data["id"];
+	document.getElementById("tname").value = data["name"];
+	if(data["sex"]["num"] == 1){
+		document.getElementById("sex").value = "男";
+	}else{
+		document.getElementById("sex").value = "女";
+	}
+	document.getElementById("department").value = data["deid"]["name"];
+	document.getElementById("title").value = data["title"];
+	document.getElementById("tel").value = data["tel"];
+	document.getElementById("e_mail").value = data["e_mail"];
+}
 $(function(){
 $("#project2").on("click", "li", function(){
 		$("#sex").val($(this).text());
@@ -74,12 +104,7 @@ function validateForm() {
     if(tid == "" || !reg.test(tid) ){ 
     	alert('教师编号不能为空且只能为数字！'); 
     	return false; 
-    } 
-    var reg=/^[\u0391-\uFFE5]+$/; 
-    if(tname == "" || !reg.test(tname) ){ 
-    	alert('姓名不能为空且只能为中文！');
-    	return false; 
-    } 
+    }
     var reg = /^男$|^女$/; 
     if(sex == '' || !reg.test(sex)){ 
     	alert('性别不能为空且只能为男或女');

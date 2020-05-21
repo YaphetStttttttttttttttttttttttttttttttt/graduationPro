@@ -53,9 +53,9 @@ $(function() {
 			break;
 		}
 		$("#content").load(pathn); //加载相对应的内容  
-	}/*
+	}
 	var sId = window.location.hash;
-	loadInner(sId);*/
+	loadInner(sId);
 });
 </script>
  

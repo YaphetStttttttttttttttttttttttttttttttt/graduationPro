@@ -32,6 +32,7 @@ import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Classroom;
 import com.gp.model.pojo.Course;
 import com.gp.model.pojo.CoursePlan;
+import com.gp.model.pojo.SelectCourse;
 import com.gp.model.pojo.StudentUser;
 import com.gp.model.pojo.Teacher;
 import com.gp.model.pojo.TimeAndPlace;
@@ -42,6 +43,7 @@ import com.gp.model.vo.SchoolTerm;
 import com.gp.service.ClassroomService;
 import com.gp.service.CoursePlanService;
 import com.gp.service.CourseService;
+import com.gp.service.SelectCourseService;
 import com.gp.service.TeacherService;
 import com.gp.service.TimeAndPlaceService;
 
@@ -57,6 +59,8 @@ public class CoursePlanController {
 	ClassroomService classroomService;
 	@Autowired
 	TimeAndPlaceService tapService;
+	@Autowired
+	SelectCourseService scService;
 	
 	@RequestMapping("addCoursePlanExcel")
 	public void addCoursePlanExcel(@RequestParam("file") MultipartFile file,HttpServletResponse httpServletResponse) throws IOException {
@@ -108,7 +112,7 @@ public class CoursePlanController {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(s);
+		//System.out.println(s);
 		httpServletResponse.setCharacterEncoding("utf8");
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(s);
@@ -245,6 +249,7 @@ public class CoursePlanController {
 		int i = 0;
 		List<String> listTimes = new ArrayList<String>();
 		for(CoursePlan cp : listCoursePlans) {
+			//System.out.println(cp.getTime_place1().getId() + "\t" + cp.getTime_place2().getId() + "\t" + cp.getTime_place3().getId());
 			String times = TimeIntToString(cp.getTime_place1(), 1) + TimeIntToString(cp.getTime_place2(), 2) + TimeIntToString(cp.getTime_place3(), 3);
 			listTimes.add(times);
 			i++;
@@ -257,9 +262,36 @@ public class CoursePlanController {
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(jsonString);
 	}
+	
+	@RequestMapping("studentSelectCp")
+	public void studentSelectCp(HttpSession session, HttpServletResponse httpServletResponse,HttpServletRequest request) throws IOException {
+		String[] array = request.getParameterValues("tp[]");
+		long cpid = Long.valueOf(request.getParameter("cpid"));
+		StudentUser user = (StudentUser) session.getAttribute("user");
+		String msg = "", s = "";
+		int flag = 1;
+		for(int i = 0; i < 3; i++) {
+			TimeAndPlace tap = tapService.getById(Integer.valueOf(array[i]));
+			flag = tapService.getStuSCFlag(tap, user.getUsername().getId());
+			if(flag == 1) {
+				msg = "课程时间冲突，无法选课.";
+				s = "{\"success\":\"" + false +"\",\"msg\":\"" + msg + "\"}";
+				break;
+			}
+		}
+		if(flag == 0) {
+			flag = scService.add(user.getUsername().getId(), cpid);
+			//System.out.println(flag);
+			msg = "选课成功";
+			s = "{\"success\":\"" + true +"\",\"msg\":\"" + msg + "\"}";
+		}
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(s);
+	}
 	@ResponseBody
 	@RequestMapping("totlePageStuSC")
-	public Object getStuSCTotlePage(HttpSession session, HttpServletRequest request) {
+	public Object getStuSCTotlePage(HttpSession session) {
 		StudentUser user = (StudentUser) session.getAttribute("user");
 		int totle = 0;
 		if(user != null) {
@@ -491,7 +523,7 @@ public class CoursePlanController {
 	}
 	//将输入的x-y周转换成int类型
 	public static int weeksTime(String weeks, int single) {
-		System.out.println(weeks + "\t" +single);
+		//System.out.println(weeks + "\t" +single);
 		int weeksTimeInt = 0, beginTime = 0, endTime = 0;
 		for(int i = 0; i < weeks.length(); i++) {
 			char ch = weeks.charAt(i);
@@ -511,7 +543,7 @@ public class CoursePlanController {
 				}
 			}
 		}
-		System.out.println(beginTime + "\t" + endTime);
+		//System.out.println(beginTime + "\t" + endTime);
 		String bitString = "";
 		for(int i = 0; i < 20; i++) {
 			if(i >= beginTime - 1 && i <= endTime - 1) {
@@ -523,7 +555,7 @@ public class CoursePlanController {
 				bitString += '0';
 			}
 		}
-		System.out.println(bitString);
+		//System.out.println(bitString);
 		weeksTimeInt = Integer.valueOf(bitString, 2);
 		return weeksTimeInt;
 	}
@@ -579,7 +611,7 @@ public class CoursePlanController {
 			weeks = toWeeks(weeks);
 			String times = Integer.toBinaryString(time.getTime());
 			times = toTime(times);
-			System.out.println(weeks);
+			//System.out.println(weeks);
 			for(int i = 0; i < weeks.length(); i++) {
 				char ch = weeks.charAt(i);
 				if(weeksStartNum == 0 && ch == '1') {

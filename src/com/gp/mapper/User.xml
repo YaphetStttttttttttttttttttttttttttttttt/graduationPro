@@ -43,6 +43,9 @@
                 <association property="sex" javaType="com.gp.model.vo.Sex">
                 	<result column="sex" property="num"/>
                 </association>
+                <association property="deid" javaType="Department">
+                	<result column="dename" property="name"/>
+                </association>
             </association >	
     	</resultMap>
         <select id="slogin" resultMap="StudentUserBean">
@@ -52,8 +55,9 @@
             	where user.username = #{username} and password = #{password}
         </select>
         <select id="tlogin" resultMap="TeacherUserBean">
-            select t.*,user.* from t_user user 
+            select t.*,user.*,de.*,de.name 'dename' from t_user user 
             	left join teacher t on t.id = user.username
+            	left join department de on de.id = t.deid
             	where username = #{username} and password = #{password}
         </select>
         <select id="alogin" resultType="Admin">

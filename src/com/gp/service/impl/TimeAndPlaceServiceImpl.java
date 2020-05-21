@@ -37,4 +37,10 @@ public class TimeAndPlaceServiceImpl implements TimeAndPlaceService {
 		}
 		return flag;
 	}
+	public int getStuSCFlag(TimeAndPlace time, long sid) {
+		return tapMapper.getStuSCFlag(time, sid);
+	}
+	public TimeAndPlace getById(int id) {
+		return tapMapper.getById(id);
+	}
 }

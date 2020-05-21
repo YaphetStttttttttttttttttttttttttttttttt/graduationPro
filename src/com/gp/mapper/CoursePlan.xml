@@ -20,6 +20,7 @@
     			<result column="tidname" property="name"/>
     		</association>
     		<association property="time_place1" javaType="TimeAndPlace">
+    			<id column="id1" property="id" />
     			<result column="weeks1" property="weeks"/>
     			<result column="week1" property="week"/>
     			<result column="time1" property="time"/>
@@ -28,6 +29,7 @@
     			</association>
     		</association>
     		<association property="time_place2" javaType="TimeAndPlace">
+    			<id column="id2" property="id" />
     			<result column="weeks2" property="weeks"/>
     			<result column="week2" property="week"/>
     			<result column="time2" property="time"/>
@@ -36,6 +38,7 @@
     			</association>
     		</association>
     		<association property="time_place3" javaType="TimeAndPlace">
+    			<id column="id3" property="id" />
     			<result column="weeks3" property="weeks"/>
     			<result column="week3" property="week"/>
     			<result column="time3" property="time"/>
@@ -58,9 +61,9 @@
         </select>
         <select id="stuSelect" resultMap="stuSelectBean">
         	select cp.*,sc.*,c.*,t.*,tp1.*,tp2.*,tp3.*,p1.*,p2.*,p3.*,c.id 'cidid',c.name 'cidname',t.name 'tidname',
-        	tp1.weeks 'weeks1',tp1.week 'week1',tp1.time 'time1',tp1.place 'place1',p1.name 'name1',
-        	tp2.weeks 'weeks2',tp2.week 'week2',tp2.time 'time2',tp2.place 'place2',p2.name 'name2',
-        	tp3.weeks 'weeks3',tp3.week 'week3',tp3.time 'time3',tp3.place 'place3',p3.name 'name3'
+        	tp1.id 'id1',tp1.weeks 'weeks1',tp1.week 'week1',tp1.time 'time1',tp1.place 'place1',p1.name 'name1',
+        	tp2.id 'id2',tp2.weeks 'weeks2',tp2.week 'week2',tp2.time 'time2',tp2.place 'place2',p2.name 'name2',
+        	tp3.id 'id3',tp3.weeks 'weeks3',tp3.week 'week3',tp3.time 'time3',tp3.place 'place3',p3.name 'name3'
         	from course_plan cp
 			left join select_course sc on sc.cpid = cp.id
 			left join course c on c.id = cp.cid

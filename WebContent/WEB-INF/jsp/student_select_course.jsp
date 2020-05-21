@@ -11,7 +11,6 @@ var pageNumber = 1;//默认起始记录
 var pageSize = 10;//每页记录数
 
 $(document).ready(function () {
-	console.log("ajaxRequest");
 	show();
 });
 function getTotle(){
@@ -136,6 +135,8 @@ function tablePro(data, times){
 		var typeName = ['必修', '选修', '限选', '任选', '公选'];
 		var typeNum=data[index]["cid"]["type"]["typeNum"];
 		var type = typeName[typeNum - 1];
+		var tp = [data[index]["time_place1"]["id"],data[index]["time_place2"]["id"],data[index]["time_place3"]["id"]];
+		//console.log(tp[0] + "" + tp[1] + "" + tp[2])
 		var nowPage = $("#nowPage").val()
 		html =  
 		"<tr>" +
@@ -146,17 +147,41 @@ function tablePro(data, times){
 		"<td>" + times[index] + "</td>" + 
 		"<td>" + data[index]["cid"]["credit"] + "</td>" + 
 		"<td>" + data[index]["cid"]["cycle"] + "</td>" + 
-		"<td><center><button type=\"button\" class=\"btn btn-primary\" onclick=\"selectCoursePlan(\""+ data[index]["id"] +"\")\">选课</button></center></td>" +
+		"<td><center><button type=\"button\" class=\"btn btn-primary\" onclick=\"selectCoursePlan(" + data[index]["id"] + "," + tp + ")\">选课</button></center></td>" +
 		"</tr>";
 		$("#tableList").append(html);
 	}
+}
+function selectCoursePlan(cpid, tp1, tp2, tp3){
+	var tp = [tp1, tp2, tp3]
+	console.log(tp[0] + "" + tp[1] + "" + tp[2])
+	$.ajax("${pageContext.request.contextPath}/studentSelectCp",// 发送请求的URL字符串。
+			{
+		type : "post", //  请求方式 POST或GET
+		data:{
+			"cpid":cpid,
+			"tp":tp
+		},
+		success : function(data) {
+			var resq = eval("(" + data + ")");
+			if(resq.success == "false"){
+				alert(resq.msg);
+			}else{
+				alert(resq.msg);
+				show();
+			}
+		},
+		error : function(data){
+			
+		}
+	});
 }
 </script>
 <div  class="panel panel-primary" style="height:550px;width:100%;">
 <div class="panel-heading" style="height:auto;">
  当前位置：学生>学生选课
 </div>
-<div class="panel-body"  style="margin:50px; height:550px;">
+<div class="panel-body"  style="height:550px;">
 <table class="table table-striped table-bordered table-hover  table-condensed">
 <thead>
 	<th>课程代码</th>
