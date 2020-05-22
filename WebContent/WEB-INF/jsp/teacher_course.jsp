@@ -143,16 +143,13 @@ function tablePro(data, times){
 		"<td>" + data[index]["sid"]["id"] + "</td>" + 
 		"<td>" + data[index]["sid"]["name"] + "</td>" + 
 		"<td>" + data[index]["tGrade"] + "</td>" + 
-		"<td><center><button type=\"button\" class=\"btn btn-primary\" onclick=\"getAllStudent(" + array + ")\">编辑</button></center></td>" +
+		"<td><center><button type=\"button\" class=\"btn btn-primary\" onclick=\"updateTGrade(" + array + ")\">编辑</button></center></td>" +
 		"</tr>";
 		$("#tableList").append(html);
 	}
 }
-function getAllStudent(sid,cpid){
+function updateTGrade(sid,cpid){
 	var score=prompt("输入平时成绩","");
-	console.log(score);
-	console.log(sid);
-	console.log(cpid);
 	$.ajax("${pageContext.request.contextPath}/updateTGrade",// 发送请求的URL字符串。
 			{
 		type : "post", //  请求方式 POST或GET

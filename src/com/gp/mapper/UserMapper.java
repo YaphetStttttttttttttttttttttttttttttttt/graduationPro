@@ -20,4 +20,6 @@ public interface UserMapper {
 	public int addAdmin(@Param("username") String username);
 	
 	public int deleteTeacher(@Param("username") long username);
+	
+	public int deleteStudent(@Param("username") long username);
 }

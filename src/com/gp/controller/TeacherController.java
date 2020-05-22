@@ -27,7 +27,6 @@ import com.gp.bean.ExcelValueBean;
 import com.gp.bean.GlobalName;
 import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Department;
-import com.gp.model.pojo.StudentUser;
 import com.gp.model.pojo.Teacher;
 import com.gp.model.pojo.TeacherUser;
 import com.gp.model.vo.GetExcelValue;
@@ -152,7 +151,6 @@ public class TeacherController {
 	}
 	@ResponseBody
 	@RequestMapping("_teacher")
-//	public Object Manager_TeacherMana(HttpSession session, HttpServletRequest request) {
 	public void Manager_TeacherMana(HttpSession session, HttpServletResponse httpServletResponse) throws IOException {
 		Admin user = (Admin) session.getAttribute("user");
 		List<Teacher> listTeachers = new ArrayList<Teacher>();

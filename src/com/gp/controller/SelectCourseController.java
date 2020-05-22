@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.SelectCourse;
 import com.gp.model.pojo.StudentUser;
 import com.gp.model.pojo.TeacherUser;
@@ -71,6 +72,50 @@ public class SelectCourseController {
 		return jsonObj;
 	}
 	@ResponseBody
+	@RequestMapping("manageerTotlePageStuList")
+	public Object manageerTotlePageStuList(HttpSession session, HttpServletRequest request) throws IOException {
+		long sid = 0, cpid = 0;
+		Admin user = (Admin) session.getAttribute("user");
+		int totle = 0;
+		if(user != null) {
+			if(request.getParameter("sid") != null && request.getParameter("sid") != "" && !request.getParameter("sid").equals("")) {
+				sid = Long.valueOf(request.getParameter("id"));
+			}
+			if(request.getParameter("cpid") != null && request.getParameter("cpid") != "" && !request.getParameter("cpid").equals("")) {
+				cpid = Long.valueOf(request.getParameter("cpid"));
+			}
+			totle = scService.getManageerStuListCount(sid, cpid);
+		}
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("totle", totle);
+		return jsonObj;
+	}
+	@ResponseBody
+	@RequestMapping("manageerStuList")
+	public void manageerStuList(HttpSession session, HttpServletResponse httpServletResponse,HttpServletRequest request) throws IOException {
+		long sid = 0, cpid = 0;
+		Admin user = (Admin) session.getAttribute("user");
+		int start = Integer.valueOf(request.getParameter("pageNumber"));
+		List<SelectCourse> listStudents = new ArrayList<SelectCourse>();
+		JSONObject jsonObj = new JSONObject();
+		if(user != null) {
+			if(request.getParameter("sid") != null && request.getParameter("sid") != "" && !request.getParameter("sid").equals("")) {
+				sid = Long.valueOf(request.getParameter("id"));
+			}
+			if(request.getParameter("cpid") != null && request.getParameter("cpid") != "" && !request.getParameter("cpid").equals("")) {
+				cpid = Long.valueOf(request.getParameter("cpid"));
+			}
+			listStudents = scService.getManageerStuList(sid, cpid, (start - 1) * 10);
+		}
+		jsonObj.put("listStudents", listStudents);
+		String jsonString = JSONObject.toJSONString(jsonObj);
+		
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(jsonString);
+	}
+	@ResponseBody
 	@RequestMapping("stuList")
 	public void stuList(HttpSession session, HttpServletResponse httpServletResponse,HttpServletRequest request) throws IOException {
 		TeacherUser user = (TeacherUser) session.getAttribute("user");
@@ -88,13 +133,50 @@ public class SelectCourseController {
 		httpServletResponse.getWriter().print(jsonString);
 	}
 	@ResponseBody
+	@RequestMapping("manaUpdateFGrade")
+	public void manaUpdateFGrade(HttpSession session, HttpServletRequest request) throws IOException {
+		Admin user = (Admin) session.getAttribute("user");
+		long sid = Long.valueOf(request.getParameter("sid"));
+		long cpid = Long.valueOf(request.getParameter("cpid"));
+		int score = 0;
+		if(user != null && request.getParameter("score") != null) {
+			score = Integer.valueOf(request.getParameter("score"));
+			int flag = scService.updateFGrade(sid, cpid, score);
+		}
+	}
+	@ResponseBody
+	@RequestMapping("manaUpdateSGrade")
+	public void manaUpdateSGrade(HttpSession session, HttpServletRequest request) throws IOException {
+		Admin user = (Admin) session.getAttribute("user");
+		long sid = Long.valueOf(request.getParameter("sid"));
+		long cpid = Long.valueOf(request.getParameter("cpid"));
+		int score = 0;
+		if(user != null && request.getParameter("score") != null) {
+			score = Integer.valueOf(request.getParameter("score"));
+			int flag = scService.updateSGrade(sid, cpid, score);
+		}
+	}
+	@ResponseBody
+	@RequestMapping("manaUpdateTGrade")
+	public void manaUpdateTGrade(HttpSession session, HttpServletRequest request) throws IOException {
+		Admin user = (Admin) session.getAttribute("user");
+		long sid = Long.valueOf(request.getParameter("sid"));
+		long cpid = Long.valueOf(request.getParameter("cpid"));
+		int score = 0;
+		if(user != null && request.getParameter("score") != null) {
+			score = Integer.valueOf(request.getParameter("score"));
+			int flag = scService.updateTGrade(sid, cpid, score);
+		}
+	}
+	@ResponseBody
 	@RequestMapping("updateTGrade")
 	public void updateTGrade(HttpSession session, HttpServletRequest request) throws IOException {
 		TeacherUser user = (TeacherUser) session.getAttribute("user");
 		long sid = Long.valueOf(request.getParameter("sid"));
 		long cpid = Long.valueOf(request.getParameter("cpid"));
-		int score = Integer.valueOf(request.getParameter("score"));
-		if(user != null) {
+		int score = 0;
+		if(user != null && request.getParameter("score") != null) {
+			score = Integer.valueOf(request.getParameter("score"));
 			int flag = scService.updateTGrade(sid, cpid, score);
 		}
 	}

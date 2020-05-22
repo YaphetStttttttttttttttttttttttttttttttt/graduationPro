@@ -75,4 +75,7 @@
         <delete id="deleteTeacher">
         	delete from t_user where username = #{username}
         </delete>
+        <delete id="deleteStudent">
+        	delete from s_user where username = #{username}
+        </delete>
     </mapper>

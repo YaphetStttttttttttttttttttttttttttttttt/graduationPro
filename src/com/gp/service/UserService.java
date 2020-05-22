@@ -18,4 +18,6 @@ public interface UserService {
 	int addAdmin(String username);
 	
 	int deleteTeacher(long username);
+	
+	int deleteStudent(long username);
 }

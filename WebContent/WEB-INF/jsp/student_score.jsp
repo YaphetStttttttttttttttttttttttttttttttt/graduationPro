@@ -139,9 +139,9 @@ function tablePro(data){
 		var tp = data[index]["cpid"]["time_place1"]["schoolYear"] + "年" + yearName[data[index]["cpid"]["time_place1"]["schoolTerm"]["termNum"] - 1];
 		var f_grade = data[index]["fGrade"], s_grade = data[index]["sGrade"], t_grade = data[index]["tGrade"];
 		var goal = 0.;
-		if(f_grade > 60.){
-			goal = (f_grade - 60)/10;
-		}else if(s_grade > 60){
+		if(f_grade >= 60.){
+			goal = (f_grade - 50)/10;
+		}else if(s_grade >= 60){
 			goal = 1.0;
 		}else {
 			goal = 0;
@@ -197,7 +197,7 @@ function tablePro(data){
      <th>绩点</th>
      <th>期末成绩</th>
      <th>补考成绩</th>
-     <th>重修成绩</th>
+     <th>平时成绩</th>
    
 </thead>
 <tbody id="tableList">

@@ -70,4 +70,52 @@
         <select id="getStudent" resultType="Student">
         	select * from student where id in (select sid from select_course where cpid = #{cpid})
         </select>
+        <resultMap id="StudentBean" type="Student">
+    		<id column="id" property="id" />
+    		<result column="name" property="name" />
+    		<result column="age" property="age" />
+    		<result column="tel" property="tel" />
+    		<result column="address" property="address" />
+    		<result column="e_mail" property="e_mail" />
+    		<association property="cid" javaType="Classes">
+    			<result column="cname" property="name"/>
+    		</association>
+    		<association property="sex" javaType="com.gp.model.vo.Sex">
+    			<result column="sex" property="num"/>
+    		</association>
+    	</resultMap>
+        <select id="getAll" resultMap="StudentBean">
+        	select s.*, c.*, c.name 'cname' from student s 
+        	left join classes c on s.cid = c.id limit 0,10
+        </select>
+        <select id="getBySelect" resultMap="StudentBean">
+        	select s.*, c.*, c.name 'cname' from student s 
+        	left join classes c on s.cid = c.id
+        	<trim prefix="where" prefixOverrides="and">
+        		<if test="id != null and id != '' and id != 0">
+        			and s.id like concat('%',#{id},'%')
+        		</if>
+        		<if test="name != null and name != '' ">
+        			and s.name like concat('%',#{name},'%')
+        		</if>
+        		<if test="cid != null and cid != '' and cid != 0">
+        			and s.cid like concat('%',#{cid},'%')
+        		</if>
+        	</trim>
+        	limit  #{start},10
+        </select>
+        <select id="totleCount" resultType="int">
+        	select count(*) from student
+        	<trim prefix="where" prefixOverrides="and">
+        		<if test="id != null and id != '' and id != 0">
+        			and id like concat('%',#{id},'%')
+        		</if>
+        		<if test="name != null and name != '' ">
+        			and name like concat('%',#{name},'%')
+        		</if>
+        		<if test="cid != null and cid != '' and cid != 0">
+        			and cid like concat('%',#{cid},'%')
+        		</if>
+        	</trim>
+        </select>
     </mapper>

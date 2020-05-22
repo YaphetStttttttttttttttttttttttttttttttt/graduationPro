@@ -21,5 +21,13 @@ public interface SelectCourseMapper {
 	
 	public int getStuListCount(@Param("tid") long tid);
 	
+	public int updateFGrade(@Param("sid") long sid,@Param("cpid") long cpid,@Param("score") int score);
+	public int updateSGrade(@Param("sid") long sid,@Param("cpid") long cpid,@Param("score") int score);
 	public int updateTGrade(@Param("sid") long sid,@Param("cpid") long cpid,@Param("score") int score);
+	
+	public int getCountBySid(@Param("sid") long sid);
+	
+	public List<SelectCourse> getManageerStuList(@Param("sid") long sid, @Param("cpid") long cpid, @Param("start") int start);
+	
+	public int getManageerStuListCount(@Param("sid") long sid, @Param("cpid") long cpid);
 }

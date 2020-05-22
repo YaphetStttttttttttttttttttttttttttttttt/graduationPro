@@ -39,7 +39,22 @@ public class SelectCourseServiceImpl implements SelectCourseService {
 	public int getStuListCount(long tid) {
 		return scMapper.getStuListCount(tid);
 	}
+	public int updateFGrade(long sid, long cpid, int score) {
+		return scMapper.updateFGrade(sid, cpid, score);
+	}
+	public int updateSGrade(long sid, long cpid, int score) {
+		return scMapper.updateSGrade(sid, cpid, score);
+	}
 	public int updateTGrade(long sid, long cpid, int score) {
 		return scMapper.updateTGrade(sid, cpid, score);
+	}
+	public int getCountBySid(long sid) {
+		return scMapper.getCountBySid(sid);
+	}
+	public List<SelectCourse> getManageerStuList(long sid, long cpid, int start){
+		return scMapper.getManageerStuList(sid, cpid, start);
+	}
+	public int getManageerStuListCount(long sid, long cpid) {
+		return scMapper.getManageerStuListCount(sid, cpid);
 	}
 }

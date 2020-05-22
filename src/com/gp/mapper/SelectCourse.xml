@@ -78,7 +78,44 @@
         <select id="getStuListCount" resultType="int">
         	select count(*) from select_course where cpid in (select id from course_plan where tid = #{tid})
         </select>
+        <update id="updateFGrade">
+        	update select_course set f_grade = #{score} where sid=#{sid} and cpid=#{cpid}
+        </update>
+        <update id="updateSGrade">
+        	update select_course set s_grade = #{score} where sid=#{sid} and cpid=#{cpid}
+        </update>
         <update id="updateTGrade">
         	update select_course set t_grade = #{score} where sid=#{sid} and cpid=#{cpid}
         </update>
+        <select id="getCountBySid" resultType="int">
+        	select count(*) from select_course where sid=#{sid}
+        </select>
+        <select id="getManageerStuListCount" resultType="int">
+        	select count(*) from select_course
+        	<trim prefix="where" prefixOverrides="and">
+        		<if test="sid != null and sid != '' and sid != 0">
+        			and sid like concat('%',#{sid},'%')
+        		</if>
+        		<if test="cpid != null and cpid != '' ">
+        			and cpid like concat('%',#{cpid},'%')
+        		</if>
+        	</trim>
+        </select>
+        <select id="getManageerStuList" resultMap="stuListBean">
+        	select sc.*,cp.*,c.*,tp.*,s.*,s.name 'sname',s.id 'sid',c.id 'cid',c.name 'cname' 
+			from select_course sc 
+        	left join course_plan cp on sc.cpid = cp.id 
+        	left join course c on c.id = cp.cid 
+			left join student s on s.id = sc.sid 
+        	left join time_place tp on cp.time_place1 = tp.id 
+        	<trim prefix="where" prefixOverrides="and">
+        		<if test="sid != null and sid != '' and sid != 0">
+        			and sc.sid like concat('%',#{sid},'%')
+        		</if>
+        		<if test="cpid != null and cpid != '' ">
+        			and sc.cpid like concat('%',#{cpid},'%')
+        		</if>
+        	</trim>
+        	limit #{start},10
+        </select>
     </mapper>

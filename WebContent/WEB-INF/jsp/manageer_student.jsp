@@ -26,7 +26,6 @@ $(document).ready(function () {
 		success : function(data) {
 			var jsonObj = eval('(' + data + ')');
 			tablePro(jsonObj["listStudents"]);
-			
 		},
 		error : function(data){
 			
@@ -35,8 +34,6 @@ $(document).ready(function () {
 	getTotle();
 	initArray();
 });
-
-
 //初始化存储教师ID的数组
 function initArray(){
 	for(var i = 1; i<=page; i++){
@@ -46,7 +43,6 @@ function initArray(){
 		}
 	}
 }
-
 function getTotle(){
 	var id = "", name = "", classes = "";
 	if(selectFlag){
@@ -57,6 +53,7 @@ function getTotle(){
 	$.ajax("${pageContext.request.contextPath}/totlePageStudent",// 发送请求的URL字符串。
 			{
 		type : "post", //  请求方式 POST或GET
+		async:  false , // 默认设置下，所有请求均为异步请求。如果设置为false，则发送同步请求
 		data:{
 			"id":id,
 			"name":name,
@@ -162,20 +159,19 @@ function show() {
 		name = document.getElementById("select_input_name").value;
 		classes = document.getElementById("select_input_classes").value;
 	}
-	$.ajax("${pageContext.request.contextPath}/getStudents",// 发送请求的URL字符串。
+	$.ajax("${pageContext.request.contextPath}/_student",// 发送请求的URL字符串。
 			{
 		type : "post", //  请求方式 POST或GET
 		data:{
 			"id":id,
 			"name":name,
-			"cname":classes,
-			"pageNumber":$("#nowPage").val(),
-			"Size":10
+			"classes":classes,
+			"pageNumber":$("#nowPage").val()
 		},
 		success : function(data) {
-			console.log("sueecss");
 			$("#tableList").empty();
-			tablePro(data);
+			var jsonObj = eval('(' + data + ')');
+			tablePro(jsonObj["listStudents"]);
 		},
 		error : function(data){
 			
@@ -183,15 +179,14 @@ function show() {
 	});
 	getTotle();
 }
-
-
 function tablePro(data){
+	var selected_num = 0;
 	for(var index in data){
 		var title,tel,address,email,sex;
 		if(data[index]["age"]==null){
 			age = '';
 		}else{
-			title = data[index]["age"];
+			age = data[index]["age"];
 		}
 		if(data[index]["tel"] == 0){
 			tel = '';
@@ -213,7 +208,6 @@ function tablePro(data){
 		}else{
 			sex = "女";
 		}
-		
 		var nowPage = $("#nowPage").val()
 		var td_style = "style=\"display:none;\"";//默认是隐藏
 		var input_checked = "";//默认是未选中
@@ -246,7 +240,7 @@ function tablePro(data){
 		"<td>" +
 			"<center>" +
 			"<button type=\"button\" name=\"Update\" class=\"btn btn-info\" onclick='updateStudent(\"" + data[index]["id"] + "\", \"" + data[index]["name"] + "\", \"" + sex + "\"," + 
-			"\"" + data[index]["cid"]["name"] + "\", \"" + age + "\", \"" + tel + "\",\"" + adress + "\", \"" + email + "\")'>" + 
+			"\"" + data[index]["cid"]["name"] + "\", \"" + age + "\", \"" + tel + "\",\"" + address + "\", \"" + email + "\")'>" + 
 			"<span class=\"glyphicon glyphicon-wrench\" aria-hidden=\"true\"></span>修改" +
 			"</button>" + 
 			"<button type=\"button\" name=\"Delete\" class=\"btn btn-danger\" style=\"display:none;\" onclick=\"deleteStudent(" + data[index]["id"] + ")\">" +
@@ -317,6 +311,16 @@ $(function(){
 		$("#StudentFormData").show(); 
 	});
 });
+function setFormData(id, name, sex, classes, age, tel, address, email){
+	document.getElementById("sid").value = id;
+	document.getElementById("sname").value = name;
+	document.getElementById("sex").value = sex;
+	document.getElementById("classes").value = classes;
+	document.getElementById("age").value = age;
+	document.getElementById("address").value = address;
+	document.getElementById("tel").value = tel;
+	document.getElementById("e_mail").value = email;
+}
 function updateStudent(id, name, sex, classes, age, tel, address, email) {
 	document.getElementById('sid').setAttribute('disabled', 'disabled')
 	setFormData(id, name, sex, classes, age, tel, address, email);
@@ -342,6 +346,26 @@ $(function(){
 		$("#StudentFormData_ConfirmBtn").hide();
 		$("#StudentExcelInput").hide();
 	});
+	setInterval(function(){
+		var arr = document.getElementsByName("ids");
+		var selected_num = 0;
+		var nowPage = $("#nowPage").val();
+        for(var i = 0; i<arr.length; i++){
+            var checkbox = arr[i];
+            if(checkbox.checked){
+            	array[nowPage][i] = checkbox.value;
+            	selected_num++;
+            }else{
+            	array[nowPage][i] = 0;
+            }
+        }
+        if(selected_num == 10) {
+    		$("#select_all_input").prop("checked",true);
+    	}
+    	else {
+    		$("#select_all_input").prop("checked",false);
+    	}
+    },500);
 });
 function inputStudent(){
 	var formData = new FormData();
@@ -389,13 +413,12 @@ function putFormData(){
 			var tel = document.getElementById("tel").value;
 			var address = document.getElementById("address").value;
 			var e_mail = document.getElementById("e_mail").value;
-			alert(sid + sname + sex + classes + age + tel + address + e_mail);
-			$.ajax("${pageContext.request.contextPath}/updateStudent",// 发送请求的URL字符串。
+			$.ajax("${pageContext.request.contextPath}/addStudent",// 发送请求的URL字符串。
 					{
 				type : "post", //  请求方式 POST或GET
 				data:{
-					'sid':tid,
-					'sname':tname,
+					'sid':sid,
+					'sname':sname,
 					'sex':sex,
 					'classes':classes,
 					'age':age,
@@ -420,7 +443,7 @@ function putFormData(){
 						$("#StudentFormData_UpdateBtn").hide();
 						$("#StudentFormData_ConfirmBtn").hide();
 						$("#StudentExcelInput").hide();
-						show();
+						location.reload();
 					}
 				},
 				error : function(data){
@@ -447,8 +470,8 @@ function updateFormData(){
 					{
 				type : "post", //  请求方式 POST或GET
 				data:{
-					'sid':tid,
-					'sname':tname,
+					'sid':sid,
+					'sname':sname,
 					'sex':sex,
 					'classes':classes,
 					'age':age,
@@ -473,7 +496,7 @@ function updateFormData(){
 						$("#StudentFormData_UpdateBtn").hide();
 						$("#StudentFormData_ConfirmBtn").hide();
 						$("#StudentExcelInput").hide();
-						show();
+						location.reload();
 					}
 				},
 				error : function(data){
@@ -525,7 +548,7 @@ function deleteFormData() {
 			$.ajax("${pageContext.request.contextPath}/deleteStudents",// 发送请求的URL字符串。
 					{
 				type : "post", //  请求方式 POST或GET
-				data:{"array":seleted},
+				data:{"array":selected},
 				contentType: "application/x-www-form-urlencoded",
 				success : function(data) {
 					var resq = eval("(" + data + ")");
@@ -570,15 +593,21 @@ function validateForm() {
     return true
 }
 $(function(){
-
+	$("#project").on("click", "li", function(){
+		 $("#department").val($(this).text());
+	});
+	$("#project1").on("click", "li", function(){
+		selectFlag = false;
+		$("#select_input_department").val($(this).text());
+	});
 	$("#project2").on("click", "li", function(){
 		selectFlag = false;
 		$("#sex").val($(this).text());
 	});
 });//下拉菜单选中的值赋值给input输入框！
-
-
-
+function url(){
+	window.location.href= "images/addStudent.xlsx";
+}
 </script>
 <div  class="panel panel-primary" style="height:700px;width:100%;">
 <div class="panel-heading" style="height:auto;">
@@ -741,6 +770,7 @@ $(function(){
 	   通过excel表单添加：
 	<input id="StudentExcelFile" name="excelFile" type="file" class="form-control" style="width:45%; display: inline;" />
 	<input id="insertStudentExcelButton" type="button" class="btn btn-primary" onclick="inputStudent()" style="width: 15%;height: 35px;" value="上传" />
+	<input id="outPut" type="button" class="btn btn-primary" onclick="url()" style="width: 15%;height: 35px;" value="下载" />
 	</div>
 </div>
 <div id="MultiDelete"style="display:none;margin-top:580px;margin-left:40%;">

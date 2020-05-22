@@ -19,5 +19,13 @@ public interface SelectCourseService {
 	
 	int getStuListCount(long tid);
 	
+	int updateFGrade(long sid, long cpid, int score);
+	int updateSGrade(long sid, long cpid, int score);
 	int updateTGrade(long sid, long cpid, int score);
+	
+	int getCountBySid(long sid);
+	
+	List<SelectCourse> getManageerStuList(long sid, long cpid, int start);
+	
+	int getManageerStuListCount(long sid, long cpid);
 }

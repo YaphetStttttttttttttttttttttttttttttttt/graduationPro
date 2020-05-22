@@ -35,4 +35,7 @@ public class UserServiceImpl implements UserService {
 	public int deleteTeacher(long username) {
 		return userMapper.deleteTeacher(username);
 	}
+	public int deleteStudent(long username) {
+		return userMapper.deleteStudent(username);
+	}
 }

@@ -604,7 +604,7 @@ $(function(){
 	});
 });//下拉菜单选中的值赋值给input输入框！
 function url(){
-	window.location.href= "images/addCourse.xlsx";
+	window.location.href= "images/addTeacher.xlsx";
 }
 </script>
 <div  class="panel panel-primary" style="height:700px;width:100%;">

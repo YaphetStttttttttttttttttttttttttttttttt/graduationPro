@@ -11,7 +11,7 @@ public interface StudentMapper {
     
     public int getById(@Param("id") long id); 
 	
-    public void delete(int id); 
+    public int delete(Student student); 
       
     public int update(Student student);  
         
@@ -20,4 +20,10 @@ public interface StudentMapper {
     public int count();
     
     public List<Student> getStudent(@Param("cpid") long cpid);
+    
+    public List<Student> getAll();
+    
+    public List<Student> getBySelect(@Param("id") long id, @Param("name") String name, @Param("cid") int cid, @Param("start") int start);
+
+	public int totleCount(@Param("id") long id, @Param("name") String name, @Param("cid") int cid);
 }

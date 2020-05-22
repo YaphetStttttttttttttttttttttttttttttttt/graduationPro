@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.gp.mapper.ClassesMapper;
 import com.gp.model.pojo.Classes;
-import com.gp.model.pojo.Teacher;
 import com.gp.service.ClassesService;
 
 @Service
