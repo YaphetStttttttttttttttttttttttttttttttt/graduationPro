@@ -11,7 +11,13 @@ public interface SelectCourseService {
 	
 	int delete(long sid, long cpid);
 	
-	List<SelectCourse> getStuScore(long sid);
+	List<SelectCourse> getStuScore(long sid, int start);
 	
 	int getStuScoreCount(long sid);
+	
+	List<SelectCourse> getStuList(long tid, int start);
+	
+	int getStuListCount(long tid);
+	
+	int updateTGrade(long sid, long cpid, int score);
 }

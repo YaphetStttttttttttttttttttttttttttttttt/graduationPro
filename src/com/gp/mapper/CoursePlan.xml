@@ -47,6 +47,45 @@
     			</association>
     		</association>
     	</resultMap>
+    	<resultMap id="teaSelectBean" type="CoursePlan">
+    		<id column="id" property="id" />
+    		<association property="cid" javaType="Course">
+    			<id column="cidid" property="id" />
+    			<result column="cidname" property="name"/>
+    			<result column="credit" property="credit"/>
+    			<result column="cycle" property="cycle"/>
+    			<association property="type" javaType="com.gp.model.vo.CourseType">
+    				<result column="type" property="typeNum"/>
+    			</association>
+    		</association>
+    		<association property="time_place1" javaType="TimeAndPlace">
+    			<id column="id1" property="id" />
+    			<result column="weeks1" property="weeks"/>
+    			<result column="week1" property="week"/>
+    			<result column="time1" property="time"/>
+    			<association property="place" javaType="Classroom">
+    				<result column="name1" property="name"/>
+    			</association>
+    		</association>
+    		<association property="time_place2" javaType="TimeAndPlace">
+    			<id column="id2" property="id" />
+    			<result column="weeks2" property="weeks"/>
+    			<result column="week2" property="week"/>
+    			<result column="time2" property="time"/>
+    			<association property="place" javaType="Classroom">
+    				<result column="name2" property="name"/>
+    			</association>
+    		</association>
+    		<association property="time_place3" javaType="TimeAndPlace">
+    			<id column="id3" property="id" />
+    			<result column="weeks3" property="weeks"/>
+    			<result column="week3" property="week"/>
+    			<result column="time3" property="time"/>
+    			<association property="place" javaType="Classroom">
+    				<result column="name3" property="name"/>
+    			</association>
+    		</association>
+    	</resultMap>
         <insert id="add" parameterType="CoursePlan">
         	insert into course_plan(id,cid,tid,time_place1,time_place2,time_place3) values(#{id}, #{cid.id}, #{tid.id}, #{time_place1.id}, #{time_place2.id}, #{time_place3.id})
         </insert>
@@ -77,7 +116,27 @@
 			where cid not in (select cid from course_plan where id in (select cpid from select_course where sid = #{id})) 
 			limit #{start},10
         </select>
+        <select id="teaSelect" resultMap="teaSelectBean">
+        	select cp.*,sc.*,c.*,tp1.*,tp2.*,tp3.*,p1.*,p2.*,p3.*,c.id 'cidid',c.name 'cidname',
+        	tp1.id 'id1',tp1.weeks 'weeks1',tp1.week 'week1',tp1.time 'time1',tp1.place 'place1',p1.name 'name1',
+        	tp2.id 'id2',tp2.weeks 'weeks2',tp2.week 'week2',tp2.time 'time2',tp2.place 'place2',p2.name 'name2',
+        	tp3.id 'id3',tp3.weeks 'weeks3',tp3.week 'week3',tp3.time 'time3',tp3.place 'place3',p3.name 'name3'
+        	from course_plan cp
+			left join select_course sc on sc.cpid = cp.id
+			left join course c on c.id = cp.cid
+			left join time_place tp1 on tp1.id = cp.time_place1
+			left join time_place tp2 on tp2.id = cp.time_place2
+			left join time_place tp3 on tp3.id = cp.time_place3
+			left join classroom p1 on p1.id = tp1.place
+			left join classroom p2 on p2.id = tp2.place
+			left join classroom p3 on p3.id = tp3.place
+			where cp.tid = #{id}
+			limit #{start},10
+        </select>
         <select id="stuSelectCount" resultType="int">
         	select count(*) from course_plan where cid not in (select cid from course_plan where id in (select cpid from select_course where sid = #{id}))
+        </select>
+        <select id="teaSelectCount" resultType="int">
+        	select count(*) from course_plan where tid = #{id}
         </select>
     </mapper>

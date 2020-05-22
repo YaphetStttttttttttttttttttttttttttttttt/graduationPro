@@ -42,4 +42,7 @@ public class StudentServiceImpl implements StudentService {
     public int update(Student student) {
     	return studentMapper.update(student);
     }
+    public List<Student> getStudent(long cpid){
+    	return studentMapper.getStudent(cpid);
+    }
 }

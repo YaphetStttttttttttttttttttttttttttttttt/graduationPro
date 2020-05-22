@@ -18,4 +18,8 @@ public interface CoursePlanMapper {
 	public List<CoursePlan> stuSelect(@Param("id") long id, @Param("start") int start);
 	
 	public int stuSelectCount(@Param("id") long id);
+	
+	public List<CoursePlan> teaSelect(@Param("id") long id, @Param("start") int start);
+	
+	public int teaSelectCount(@Param("id") long id);
 }

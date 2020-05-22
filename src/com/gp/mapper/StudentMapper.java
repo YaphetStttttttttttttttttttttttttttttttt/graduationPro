@@ -17,5 +17,7 @@ public interface StudentMapper {
         
     public List<Student> list();
      
-    public int count(); 
+    public int count();
+    
+    public List<Student> getStudent(@Param("cpid") long cpid);
 }

@@ -113,6 +113,20 @@ public class StudentController {
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(jsonString);
 	}
+	@ResponseBody
+	@RequestMapping("getStudents")
+	public void getStudent(HttpServletRequest request, HttpServletResponse httpServletResponse) throws IOException {
+	//	long cpid = session.getAttribute("cpid");
+		long cpid = Long.valueOf(request.getParameter("cpid"));
+		JSONObject jsonObj = new JSONObject();
+		List<Student> listStudents = studentService.getStudent(cpid);
+		jsonObj.put("listStudents", listStudents);
+		String jsonString = JSONObject.toJSONString(jsonObj);
+		
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(jsonString);
+	}
 	@RequestMapping("addStudentExcel")
 	public void addStudentExcel(@RequestParam("file") MultipartFile file,HttpServletResponse httpServletResponse) throws IOException {
 		boolean rowFlag = true;

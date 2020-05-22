@@ -66,5 +66,8 @@
         </update>
         <select id="list" resultType="Student">
             select * from student     
-        </select>   
+        </select>
+        <select id="getStudent" resultType="Student">
+        	select * from student where id in (select sid from select_course where cpid = #{cpid})
+        </select>
     </mapper>

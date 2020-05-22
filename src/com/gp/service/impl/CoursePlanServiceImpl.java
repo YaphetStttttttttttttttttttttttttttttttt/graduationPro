@@ -49,6 +49,9 @@ public class CoursePlanServiceImpl implements CoursePlanService {
 	public List<CoursePlan> stuSelect(long id, int start){
 		return coursePlanMapper.stuSelect(id, start);
 	}
+	public List<CoursePlan> teaSelect(long id, int start){
+		return coursePlanMapper.teaSelect(id, start);
+	}
 	private TimeAndPlace addTimes(TimeAndPlace time) {
 		if(time == null) {
 			time = new TimeAndPlace();
@@ -61,5 +64,8 @@ public class CoursePlanServiceImpl implements CoursePlanService {
 	}
 	public int stuSelectCount(long id) {
 		return coursePlanMapper.stuSelectCount(id);
+	}
+	public int teaSelectCount(long id) {
+		return coursePlanMapper.teaSelectCount(id);
 	}
 }

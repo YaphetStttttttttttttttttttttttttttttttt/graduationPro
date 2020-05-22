@@ -14,4 +14,6 @@ public interface StudentService {
 	int getById(long id);
 	
 	int update(Student student);
+	
+	List<Student> getStudent(long id);
 }

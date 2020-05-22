@@ -18,4 +18,8 @@ public interface CoursePlanService {
 	List<CoursePlan> stuSelect(long id, int start);
 	
 	int stuSelectCount(long id);
+	
+	List<CoursePlan> teaSelect(long id, int start);
+	
+	int teaSelectCount(long id);
 }

@@ -12,13 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,13 +26,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSONObject;
 import com.gp.bean.ExcelValueBean;
 import com.gp.bean.GlobalName;
-import com.gp.model.pojo.Admin;
 import com.gp.model.pojo.Classroom;
 import com.gp.model.pojo.Course;
 import com.gp.model.pojo.CoursePlan;
-import com.gp.model.pojo.SelectCourse;
 import com.gp.model.pojo.StudentUser;
 import com.gp.model.pojo.Teacher;
+import com.gp.model.pojo.TeacherUser;
 import com.gp.model.pojo.TimeAndPlace;
 import com.gp.model.vo.CoursePlanFormData;
 import com.gp.model.vo.CoursePlanVo;
@@ -235,7 +232,6 @@ public class CoursePlanController {
 	}
 	@ResponseBody
 	@RequestMapping("studentSC")
-//	public Object Manager_TeacherMana(HttpSession session, HttpServletRequest request) {
 	public void studentSC(HttpSession session, HttpServletResponse httpServletResponse,HttpServletRequest request) throws IOException {
 		StudentUser user = (StudentUser) session.getAttribute("user");
 		int start = Integer.valueOf(request.getParameter("pageNumber"));
@@ -246,13 +242,11 @@ public class CoursePlanController {
 		if(user != null) {
 			listCoursePlans = coursePlanService.stuSelect(user.getUsername().getId(), (start - 1) * 10);
 		}
-		int i = 0;
 		List<String> listTimes = new ArrayList<String>();
 		for(CoursePlan cp : listCoursePlans) {
 			//System.out.println(cp.getTime_place1().getId() + "\t" + cp.getTime_place2().getId() + "\t" + cp.getTime_place3().getId());
 			String times = TimeIntToString(cp.getTime_place1(), 1) + TimeIntToString(cp.getTime_place2(), 2) + TimeIntToString(cp.getTime_place3(), 3);
 			listTimes.add(times);
-			i++;
 		}
 		jsonObj.put("listTimes", listTimes);
 		jsonObj.put("listCoursePlans", listCoursePlans);
@@ -262,7 +256,32 @@ public class CoursePlanController {
 		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
 		httpServletResponse.getWriter().print(jsonString);
 	}
-	
+	@ResponseBody
+	@RequestMapping("teacherSC")
+	public void teacherSC(HttpSession session, HttpServletResponse httpServletResponse,HttpServletRequest request) throws IOException {
+		TeacherUser user = (TeacherUser) session.getAttribute("user");
+		int start = Integer.valueOf(request.getParameter("pageNumber"));
+		//int size = Integer.valueOf(request.getParameter("Size"));
+		List<CoursePlan> listCoursePlans = new ArrayList<CoursePlan>();
+		JSONObject jsonObj = new JSONObject();
+		//System.out.println(user != null);
+		if(user != null) {
+			listCoursePlans = coursePlanService.teaSelect(user.getUsername().getId(), (start - 1) * 10);
+		}
+		List<String> listTimes = new ArrayList<String>();
+		for(CoursePlan cp : listCoursePlans) {
+			//System.out.println(cp.getTime_place1().getId() + "\t" + cp.getTime_place2().getId() + "\t" + cp.getTime_place3().getId());
+			String times = TimeIntToString(cp.getTime_place1(), 1) + TimeIntToString(cp.getTime_place2(), 2) + TimeIntToString(cp.getTime_place3(), 3);
+			listTimes.add(times);
+		}
+		jsonObj.put("listTimes", listTimes);
+		jsonObj.put("listCoursePlans", listCoursePlans);
+		String jsonString = JSONObject.toJSONString(jsonObj);
+		
+		httpServletResponse.setCharacterEncoding("utf8");
+		httpServletResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+		httpServletResponse.getWriter().print(jsonString);
+	}
 	@RequestMapping("studentSelectCp")
 	public void studentSelectCp(HttpSession session, HttpServletResponse httpServletResponse,HttpServletRequest request) throws IOException {
 		String[] array = request.getParameterValues("tp[]");
@@ -296,6 +315,19 @@ public class CoursePlanController {
 		int totle = 0;
 		if(user != null) {
 			totle = coursePlanService.stuSelectCount(user.getUsername().getId());
+		}
+		
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("totle", totle);
+		return jsonObj;
+	}
+	@ResponseBody
+	@RequestMapping("totlePageTeaSC")
+	public Object getTeaSCTotlePage(HttpSession session) {
+		TeacherUser user = (TeacherUser) session.getAttribute("user");
+		int totle = 0;
+		if(user != null) {
+			totle = coursePlanService.teaSelectCount(user.getUsername().getId());
 		}
 		
 		JSONObject jsonObj = new JSONObject();

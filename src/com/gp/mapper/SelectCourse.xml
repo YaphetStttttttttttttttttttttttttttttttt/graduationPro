@@ -34,14 +34,51 @@
     			</association>
     		</association>
     	</resultMap>
+    	<resultMap id="stuListBean" type="SelectCourse">
+    		<result column="f_grade" property="fGrade" />
+    		<result column="s_grade" property="sGrade" />
+    		<result column="t_grade" property="tGrade" />
+    		<association property="sid" javaType="Student">
+    			<id column="sid" property="id" />
+    			<result column="sname" property="name"/>
+    		</association>
+    		<association property="cpid" javaType="CoursePlan">
+    			<id column="cpid" property="id" />
+    			<association property="cid" javaType="Course">
+    				<result column="cid" property="id"/>
+    				<result column="cname" property="name"/>
+    			</association>
+    			<association property="time_place1" javaType="TimeAndPlace">
+    				<result column="school_year" property="schoolYear"/>
+    				<association property="schoolTerm" javaType="com.gp.model.vo.SchoolTerm">
+    					<result column="school_term" property="termNum"/>
+    				</association>
+    			</association>
+    		</association>
+    	</resultMap>
         <select id="getStuScore" resultMap="StudentScoreBean">
         	select sc.*,cp.*,c.*,tp.* from select_course sc 
         	left join course_plan cp on sc.cpid = cp.id
         	left join course c on c.id = cp.cid 
         	left join time_place tp on cp.time_place1 = tp.id 
-        	where sc.sid = #{sid}
+        	where sc.sid = #{sid} limit #{start},10
         </select>
         <select id="getStuScoreCount" resultType="int">
         	select count(*) from select_course where sid = #{sid}
         </select>
+        <select id="getStuList" resultMap="stuListBean">
+        	select sc.*,cp.*,c.*,tp.*,s.*,s.name 'sname',s.id 'sid',c.id 'cid',c.name 'cname' 
+			from select_course sc 
+        	left join course_plan cp on sc.cpid = cp.id 
+        	left join course c on c.id = cp.cid 
+			left join student s on s.id = sc.sid 
+        	left join time_place tp on cp.time_place1 = tp.id 
+        	where sc.cpid in (select id from course_plan where cp.tid = #{tid}) limit #{start},10
+        </select>
+        <select id="getStuListCount" resultType="int">
+        	select count(*) from select_course where cpid in (select id from course_plan where tid = #{tid})
+        </select>
+        <update id="updateTGrade">
+        	update select_course set t_grade = #{score} where sid=#{sid} and cpid=#{cpid}
+        </update>
     </mapper>

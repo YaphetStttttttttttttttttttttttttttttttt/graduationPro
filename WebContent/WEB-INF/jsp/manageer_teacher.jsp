@@ -770,6 +770,5 @@ function url(){
 	<button type="button" id="MultiDeleteBtn"  class="btn btn-danger"  onclick="deleteFormData()">批量删除</button>
 	<button type="button" id="MultiDeleteCancelBtn" class="btn btn-warning"  >取消</button>
 </div>
-
 </div>
 </div>

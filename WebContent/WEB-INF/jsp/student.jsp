@@ -6,9 +6,8 @@
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript">
 function exit(){
-	console.log("123");
 	if (confirm("确定退出？")) {
-		$.ajax("${pageContext.request.contextPath}/stuExit",// 发送请求的URL字符串。
+		$.ajax("${pageContext.request.contextPath}/ExitBtn",// 发送请求的URL字符串。
 				{
 			type : "post", //  请求方式 POST或GET
 			async: false,

@@ -75,7 +75,7 @@ public class LoginController {
 	public String student() {
 		return "index";
 	}
-	@RequestMapping("stuExit")
+	@RequestMapping("ExitBtn")
 	public String exit(HttpSession session) {
 		session.setAttribute("user", null);
 		return "index";

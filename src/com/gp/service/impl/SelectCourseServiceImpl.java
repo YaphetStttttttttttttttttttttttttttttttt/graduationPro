@@ -26,11 +26,20 @@ public class SelectCourseServiceImpl implements SelectCourseService {
 		return scMapper.delete(sid, cpid);
 	}
 	
-	public List<SelectCourse> getStuScore(long sid){
-		return scMapper.getStuScore(sid);
+	public List<SelectCourse> getStuScore(long sid, int start){
+		return scMapper.getStuScore(sid, start);
 	}
 	
 	public int getStuScoreCount(long sid) {
 		return scMapper.getStuScoreCount(sid);
+	}
+	public List<SelectCourse> getStuList(long tid, int start){
+		return scMapper.getStuList(tid, start);
+	}
+	public int getStuListCount(long tid) {
+		return scMapper.getStuListCount(tid);
+	}
+	public int updateTGrade(long sid, long cpid, int score) {
+		return scMapper.updateTGrade(sid, cpid, score);
 	}
 }

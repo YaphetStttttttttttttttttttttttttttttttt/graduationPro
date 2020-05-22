@@ -8,7 +8,7 @@
  
 <div  class="panel panel-primary">
   <div class="panel-heading" style="height:140px;">
-    <h1 >成绩查询系统</h1>当前位置：教师 <button type="button" class="btn btn-default btn-lg" style="float:right;">
+    <h1 >成绩查询系统</h1>当前位置：教师 <button type="button" class="btn btn-default btn-lg" style="float:right;" onclick="exit()">
   <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销
 </button>
   </div>
@@ -30,6 +30,21 @@
   </div>
 </div>
 <script>
+function exit(){
+	if (confirm("确定退出？")) {
+		$.ajax("${pageContext.request.contextPath}/ExitBtn",// 发送请求的URL字符串。
+				{
+			type : "post", //  请求方式 POST或GET
+			async: false,
+			success : function(data) {
+				location.href="index";
+			},
+			error : function(){
+				
+			}
+		});
+	}
+}
     $(function() {
 
         $(".list-group").on("click", "li", function() {

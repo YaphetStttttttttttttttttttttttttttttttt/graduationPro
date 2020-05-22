@@ -13,7 +13,13 @@ public interface SelectCourseMapper {
 	
 	public int delete(@Param("sid") long sid, @Param("cpid") long cpid);
 	
-	public List<SelectCourse> getStuScore(@Param("sid") long sid);
+	public List<SelectCourse> getStuScore(@Param("sid") long sid, @Param("start") int start);
 	
 	public int getStuScoreCount(@Param("sid") long sid);
+	
+	public List<SelectCourse> getStuList(@Param("tid") long tid, @Param("start") int start);
+	
+	public int getStuListCount(@Param("tid") long tid);
+	
+	public int updateTGrade(@Param("sid") long sid,@Param("cpid") long cpid,@Param("score") int score);
 }
