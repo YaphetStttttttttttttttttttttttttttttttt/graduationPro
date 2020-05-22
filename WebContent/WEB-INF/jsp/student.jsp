@@ -61,7 +61,7 @@ $(function() {
  
 <div  class="panel panel-primary">
   <div class="panel-heading" style="height:140px;">
-    <h1 >成绩查询系统</h1>当前位置：学生 
+    <h1 >成绩查询系统</h1>${sessionScope.user.username.name }
     <button type="button" class="btn btn-default btn-lg" style="float:right;" onclick="exit()">
     	<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 注销
     </button>
