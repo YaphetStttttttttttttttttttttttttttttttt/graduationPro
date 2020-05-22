@@ -603,6 +603,9 @@ $(function(){
 		$("#sex").val($(this).text());
 	});
 });//下拉菜单选中的值赋值给input输入框！
+function url(){
+	window.location.href= "images/addCourse.xlsx";
+}
 </script>
 <div  class="panel panel-primary" style="height:700px;width:100%;">
 <div class="panel-heading" style="height:auto;">
@@ -760,6 +763,7 @@ $(function(){
 	   通过excel表单添加：
 	<input id="TeacherExcelFile" name="excelFile" type="file" class="form-control" style="width:45%; display: inline;" />
 	<input id="insertTeacherExcelButton" type="button" class="btn btn-primary" onclick="inputTeacher()" style="width: 15%;height: 35px;" value="上传" />
+	<input id="outPut" type="button" class="btn btn-primary" onclick="url()" style="width: 15%;height: 35px;" value="下载" />
 	</div>
 </div>
 <div id="MultiDelete"style="display:none;margin-top:580px;margin-left:40%;">
