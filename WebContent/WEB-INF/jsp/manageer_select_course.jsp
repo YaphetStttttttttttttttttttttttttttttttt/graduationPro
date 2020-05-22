@@ -261,12 +261,6 @@ function inputSelect_Course(){
 	<button type="button" class="btn btn-warning" onclick="selectSC()"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询</button>
 </div>
 
-<div class="form-group" id="Select_Course" class="col-sm-10" style="float: left; margin-left: 200px;margin-top: 35px;">
-	通过excel表单添加：
-	<input id="Select_CourseExcelFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
-	<input id="insertSelect_CourseExcelButton" type="button" class="btn btn-primary" onclick="inputSelect_Course()" style="width: 60px;height: 35px;" value="上传" />
-	<input id="outPut" type="button" class="btn btn-primary" onclick="url()" style="width: 15%;height: 35px;" value="下载" />
-</div>
 <div class="panel-body" style="height:1000px;" >
 <table class="table table-striped table-bordered table-hover  table-condensed">
 <thead>
